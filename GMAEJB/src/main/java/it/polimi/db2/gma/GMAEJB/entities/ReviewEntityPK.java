@@ -1,4 +1,4 @@
-package it.polimi.db2.gma.GMAEJB;
+package it.polimi.db2.gma.GMAEJB.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Id;

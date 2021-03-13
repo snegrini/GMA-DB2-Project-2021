@@ -5,16 +5,16 @@
              version="2.2">
     <persistence-unit name="GMAEJB" transaction-type="JTA">
         <jta-data-source>CLupDB</jta-data-source>
-        <class>it.polimi.db2.gma.GMAEJB.AnswerEntity</class>
-        <class>it.polimi.db2.gma.GMAEJB.EntryEntity</class>
-        <class>it.polimi.db2.gma.GMAEJB.LoginlogEntity</class>
-        <class>it.polimi.db2.gma.GMAEJB.OffensivewordEntity</class>
-        <class>it.polimi.db2.gma.GMAEJB.ProductEntity</class>
-        <class>it.polimi.db2.gma.GMAEJB.QuestionEntity</class>
-        <class>it.polimi.db2.gma.GMAEJB.QuestionnaireEntity</class>
-        <class>it.polimi.db2.gma.GMAEJB.ReviewEntity</class>
-        <class>it.polimi.db2.gma.GMAEJB.StatsEntity</class>
-        <class>it.polimi.db2.gma.GMAEJB.UserEntity</class>
+        <class>it.polimi.db2.gma.GMAEJB.entities.AnswerEntity</class>
+        <class>it.polimi.db2.gma.GMAEJB.entities.EntryEntity</class>
+        <class>it.polimi.db2.gma.GMAEJB.entities.LoginlogEntity</class>
+        <class>it.polimi.db2.gma.GMAEJB.entities.OffensivewordEntity</class>
+        <class>it.polimi.db2.gma.GMAEJB.entities.ProductEntity</class>
+        <class>it.polimi.db2.gma.GMAEJB.entities.QuestionEntity</class>
+        <class>it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity</class>
+        <class>it.polimi.db2.gma.GMAEJB.entities.ReviewEntity</class>
+        <class>it.polimi.db2.gma.GMAEJB.entities.StatsEntity</class>
+        <class>it.polimi.db2.gma.GMAEJB.entities.UserEntity</class>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
             <property name="eclipselink.jdbc.url" value="jdbc:mysql://localhost:3306/gma"/>

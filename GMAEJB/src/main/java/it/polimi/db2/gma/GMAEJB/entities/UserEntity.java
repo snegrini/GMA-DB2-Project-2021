@@ -1,9 +1,12 @@
-package it.polimi.db2.gma.GMAEJB;
+package it.polimi.db2.gma.GMAEJB.entities;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "user")
+@NamedQueries({
+        @NamedQuery(name = "UserEntity.findByUsername", query = "SELECT u FROM UserEntity u WHERE u.username = :username"),
+})
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
