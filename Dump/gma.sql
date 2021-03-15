@@ -54,6 +54,7 @@ CREATE TABLE `answer` (
   `EntryId` int NOT NULL,
   `QuestionId` int NOT NULL,
   `Answer` varchar(45) NOT NULL,
+  PRIMARY KEY (`EntryId`,`QuestionId`),
   KEY `EntryFK_idx` (`EntryId`),
   KEY `QuestionFK_idx` (`QuestionId`),
   CONSTRAINT `EntryFK` FOREIGN KEY (`EntryId`) REFERENCES `entry` (`Id`),
@@ -316,4 +317,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-03-13 22:04:34
+-- Dump completed on 2021-03-15 15:15:27

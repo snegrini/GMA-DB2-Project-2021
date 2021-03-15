@@ -1,10 +1,10 @@
-package it.polimi.db2.gma.GMAWEB;
+package it.polimi.db2.gma.GMAWEB.controllers;
 
 import java.io.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 
-@WebServlet(name = "helloServlet", value = "/hello-servlet")
+@WebServlet(name = "IndexServlet", value = "/hello-servlet")
 public class HelloServlet extends HttpServlet {
     private String message;
 
