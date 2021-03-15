@@ -10,23 +10,17 @@
 </header>
 <br>
 
-<div class="container">
-
-    <form id="loginform">
+<div>
+    <form method="post" action="login">
         <fieldset>
             <legend>Sign in</legend>
 
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+            <label>Username:<input type="text" name="username" required></label><br><br>
+            <label>Password:<input type="password" name="password" required></label><br>
 
-            <br>
-            <br>
+            <div data-th-text="${errorMessage}"></div>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <br>
-
-            <input id="loginbutton" type="button" value="Login">
+            <input type="submit">
         </fieldset>
     </form>
 

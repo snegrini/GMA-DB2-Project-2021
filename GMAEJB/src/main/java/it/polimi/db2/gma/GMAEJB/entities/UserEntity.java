@@ -6,7 +6,7 @@ import java.util.List;
 @Entity
 @Table(name = "user")
 @NamedQueries({
-        @NamedQuery(name = "UserEntity.findByUsername", query = "SELECT u FROM UserEntity u WHERE u.username = :username"),
+        @NamedQuery(name = "UserEntity.checkCredentials", query = "SELECT u FROM UserEntity u WHERE u.username = :username AND u.password = :password"),
 })
 public class UserEntity {
     @Id
@@ -29,7 +29,7 @@ public class UserEntity {
     @Column(name = "IsBlocked", nullable = true)
     private Byte isBlocked;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<ReviewEntity> reviews;
 
 

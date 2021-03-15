@@ -6,7 +6,7 @@
 
     <filter-mapping>
         <filter-name>AuthChecker</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/homepage</url-pattern>
     </filter-mapping>
 
     <filter-mapping>
