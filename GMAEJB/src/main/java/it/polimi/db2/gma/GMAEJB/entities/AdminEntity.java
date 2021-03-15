@@ -4,6 +4,9 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "admin")
+@NamedQueries({
+        @NamedQuery(name = "AdminEntity.findByUsername", query = "SELECT a FROM AdminEntity a WHERE a.username = :username"),
+})
 public class AdminEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +19,7 @@ public class AdminEntity {
     @Column(name = "Password", nullable = false, length = 45)
     private String password;
 
+    
     public int getId() {
         return id;
     }
