@@ -47,7 +47,7 @@ public class LoginServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String username = StringEscapeUtils.escapeJava(req.getParameter("usercode"));
+        String username = StringEscapeUtils.escapeJava(req.getParameter("username"));
         String password = StringEscapeUtils.escapeJava(req.getParameter("password"));
 
         if (username == null || password == null || username.isEmpty() || password.isEmpty()) {

@@ -12,7 +12,7 @@ public class ReviewEntity {
     private String review;
 
     @ManyToOne
-    @JoinColumn(name = "UserId")
+    @JoinColumn(name = "UserId", insertable = false, updatable = false)
     private UserEntity user;
 
     public ReviewEntityPK getReviewEntityPK() {

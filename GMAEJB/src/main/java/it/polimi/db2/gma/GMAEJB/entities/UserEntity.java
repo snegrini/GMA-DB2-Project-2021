@@ -29,7 +29,7 @@ public class UserEntity {
     @Column(name = "IsBlocked", nullable = true)
     private Byte isBlocked;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<ReviewEntity> reviews;
 
 
