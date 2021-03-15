@@ -1,6 +1,7 @@
 package it.polimi.db2.gma.GMAEJB.entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -27,6 +28,9 @@ public class UserEntity {
 
     @Column(name = "IsBlocked", nullable = true)
     private Byte isBlocked;
+
+    @OneToMany(mappedBy = "user")
+    private List<ReviewEntity> reviews;
 
 
     public int getId() {

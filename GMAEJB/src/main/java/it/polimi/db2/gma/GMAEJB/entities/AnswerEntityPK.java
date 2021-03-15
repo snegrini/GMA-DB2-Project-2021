@@ -1,15 +1,15 @@
 package it.polimi.db2.gma.GMAEJB.entities;
 
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.persistence.Id;
 import java.io.Serializable;
 
+@Embeddable
 public class AnswerEntityPK implements Serializable {
     private int entryId;
     private int questionId;
 
-    @Column(name = "EntryId", nullable = false)
-    @Id
     public int getEntryId() {
         return entryId;
     }
@@ -18,8 +18,6 @@ public class AnswerEntityPK implements Serializable {
         this.entryId = entryId;
     }
 
-    @Column(name = "QuestionId", nullable = false)
-    @Id
     public int getQuestionId() {
         return questionId;
     }
