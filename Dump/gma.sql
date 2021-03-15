@@ -263,7 +263,7 @@ CREATE TABLE `stats` (
   `EntryId` int NOT NULL,
   `Age` varchar(45) DEFAULT NULL,
   `Sex` varchar(45) DEFAULT NULL,
-  `ExpertiseLevel` varchar(45) DEFAULT NULL,
+  `ExpertiseLevel` enum('LOW','MEDIUM','HIGH') DEFAULT NULL,
   PRIMARY KEY (`Id`),
   KEY `EntryFK2_idx` (`EntryId`),
   CONSTRAINT `EntryFK2` FOREIGN KEY (`EntryId`) REFERENCES `entry` (`Id`)
@@ -317,4 +317,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-03-15 15:15:27
+-- Dump completed on 2021-03-15 22:53:42

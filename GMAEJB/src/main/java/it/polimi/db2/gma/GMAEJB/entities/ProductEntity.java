@@ -1,6 +1,7 @@
 package it.polimi.db2.gma.GMAEJB.entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "product")
@@ -15,6 +16,14 @@ public class ProductEntity {
 
     @Column(name = "Image", nullable = false, length = 45)
     private String image;
+
+    @OneToMany(mappedBy = "product")
+    private List<ReviewEntity> reviews;
+
+    @OneToMany(mappedBy = "product")
+    private List<ReviewEntity> questionnaires;
+
+
 
 
     public int getId() {

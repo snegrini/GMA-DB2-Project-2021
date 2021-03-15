@@ -1,6 +1,7 @@
 package it.polimi.db2.gma.GMAEJB.entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "entry")
@@ -18,6 +19,17 @@ public class EntryEntity {
 
     @Column(name = "IsSubmitted", nullable = true)
     private Byte isSubmitted;
+
+    @ManyToOne
+    @JoinColumn(name = "QuestionnaireId")
+    private QuestionnaireEntity questionnaire;
+
+    @OneToMany(mappedBy = "entry")
+    private List<StatsEntity> stats;
+
+    @OneToMany(mappedBy = "entry")
+    private List<AnswerEntity> answers;
+
 
     public int getId() {
         return id;
