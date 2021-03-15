@@ -1,8 +1,8 @@
 package it.polimi.db2.gma.GMAEJB.entities;
 
+import it.polimi.db2.gma.GMAEJB.enums.ExpertiseLevel;
+
 import javax.persistence.*;
-import java.util.List;
-import java.util.Map;
 
 @Entity
 @Table(name = "stats")
@@ -18,20 +18,14 @@ public class StatsEntity {
     @Column(name = "Sex", nullable = true, length = 45)
     private String sex;
 
-    @Column(name = "ExpertiseLevel", nullable = true, length = 45)
-    private String expertiseLevel;
+    @Column(name = "ExpertiseLevel", nullable = true)
+    @Enumerated(EnumType.STRING)
+    private ExpertiseLevel expertiseLevel;
 
     @ManyToOne
     @JoinColumn(name = "EntryId")
     private EntryEntity entity;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getAge() {
         return age;
@@ -49,11 +43,11 @@ public class StatsEntity {
         this.sex = sex;
     }
 
-    public String getExpertiseLevel() {
+    public ExpertiseLevel getExpertiseLevel() {
         return expertiseLevel;
     }
 
-    public void setExpertiseLevel(String expertiseLevel) {
+    public void setExpertiseLevel(ExpertiseLevel expertiseLevel) {
         this.expertiseLevel = expertiseLevel;
     }
 }
