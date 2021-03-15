@@ -1,6 +1,8 @@
 package it.polimi.db2.gma.GMAEJB.entities;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "stats")
@@ -19,6 +21,9 @@ public class StatsEntity {
     @Column(name = "ExpertiseLevel", nullable = true, length = 45)
     private String expertiseLevel;
 
+    @ManyToOne
+    @JoinColumn(name = "EntryId")
+    private EntryEntity entity;
 
     public int getId() {
         return id;

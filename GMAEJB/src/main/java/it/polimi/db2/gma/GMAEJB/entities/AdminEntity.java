@@ -19,7 +19,7 @@ public class AdminEntity {
     @Column(name = "Password", nullable = false, length = 45)
     private String password;
 
-    
+
     public int getId() {
         return id;
     }
