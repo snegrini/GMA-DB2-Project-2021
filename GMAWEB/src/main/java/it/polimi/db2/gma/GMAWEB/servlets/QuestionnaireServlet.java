@@ -1,13 +1,10 @@
 package it.polimi.db2.gma.GMAWEB.servlets;
 
-
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
-import javax.ejb.EJB;
-import javax.persistence.NonUniqueResultException;
 import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,13 +25,14 @@ public class QuestionnaireServlet extends HttpServlet {
         templateResolver.setSuffix(".html");
     }
 
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("text/html");
 
-        String path;
-        path = getServletContext().getContextPath() + "/questionnairepage";
-        resp.sendRedirect(path);
+        ServletContext servletContext = getServletContext();
+        WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
+        String path = "/WEB-INF/questionnairepage.html";
 
+        templateEngine.process(path, ctx, resp.getWriter());
     }
 }
-
