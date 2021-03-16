@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gamified Marketing Application</title>
+</head>
+<body>
+<header>
+    <h1>Welcome to the Gamified Marketing Application</h1>
+</header>
+<br>
+
+<div>
+    <form method="post" action="login">
+        <fieldset>
+            <legend>Sign in</legend>
+
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username" required>
+
+            <br><br>
+
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" required>
+
+            <br><br>
+
+            <div data-th-text="${errorMessage}"></div>
+
+            <br><br>
+
+            <input type="submit">
+        </fieldset>
+    </form>
+</div>
+
+</body>
+</html>
