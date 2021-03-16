@@ -1,4 +1,4 @@
-package it.polimi.db2.gma.GMAWEB.servlets;
+package it.polimi.db2.gma.GMAWEB.controllers;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;

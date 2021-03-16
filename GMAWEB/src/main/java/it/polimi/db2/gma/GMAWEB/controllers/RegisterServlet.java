@@ -1,4 +1,4 @@
-package it.polimi.db2.gma.GMAWEB.servlets;
+package it.polimi.db2.gma.GMAWEB.controllers;
 
 import it.polimi.db2.gma.GMAEJB.entities.UserEntity;
 import it.polimi.db2.gma.GMAEJB.exceptions.CredentialsException;
