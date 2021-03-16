@@ -20,7 +20,6 @@ import java.io.IOException;
 
 @WebServlet(name = "LoginServlet", value = "/login")
 public class LoginServlet extends HttpServlet {
-    private final String indexPath = "/WEB-INF/index.html";
     private TemplateEngine templateEngine;
 
     @EJB(name = "it.polimi.db2.gma.GMAEJB.services/UserService")
@@ -65,7 +64,7 @@ public class LoginServlet extends HttpServlet {
             final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
             ctx.setVariable("errorMessage", "Incorrect username or password.");
 
-            templateEngine.process(indexPath, ctx, resp.getWriter());
+            templateEngine.process("/WEB-INF/index.html", ctx, resp.getWriter());
         } else {
             req.getSession().setAttribute("user", user);
             resp.sendRedirect(getServletContext().getContextPath() + "/homepage");
