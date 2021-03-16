@@ -7,6 +7,8 @@ import java.util.List;
 @Table(name = "user")
 @NamedQueries({
         @NamedQuery(name = "UserEntity.checkCredentials", query = "SELECT u FROM UserEntity u WHERE u.username = :username AND u.password = :password"),
+        @NamedQuery(name = "UserEntity.findByUsername", query = "SELECT u FROM UserEntity u WHERE u.username = :username"),
+        @NamedQuery(name = "UserEntity.findByEmail", query = "SELECT u FROM UserEntity u WHERE u.email = :email"),
 })
 public class UserEntity {
     @Id
@@ -32,6 +34,16 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<ReviewEntity> reviews;
 
+
+    public UserEntity(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
+    public UserEntity() {
+
+    }
 
     public int getId() {
         return id;

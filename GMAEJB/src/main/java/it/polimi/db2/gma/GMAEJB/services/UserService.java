@@ -15,6 +15,25 @@ public class UserService {
     @PersistenceContext(unitName = "GMAEJB")
     private EntityManager em;
 
+
+    public UserEntity findUserByUsername(String username) {
+        return em.createNamedQuery("UserEntity.findByUsername", UserEntity.class)
+                .setParameter("username", username)
+                .setMaxResults(1)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+    }
+
+    public UserEntity findUserByEmail(String email) {
+        return em.createNamedQuery("UserEntity.findByEmail", UserEntity.class)
+                .setParameter("email", email)
+                .setMaxResults(1)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+    }
+
     /**
      * Checks user credentials against those saved in the database.
      *
@@ -45,4 +64,19 @@ public class UserService {
         throw new NonUniqueResultException("More than one user registered with same credentials.");
     }
 
+
+    public UserEntity addNewUser(String username, String password, String email) throws CredentialsException {
+        if (findUserByUsername(username) != null) {
+            throw new CredentialsException("Username already in use!");
+        }
+
+        if (findUserByEmail(email) != null) {
+            throw new CredentialsException("Email already in use!");
+        }
+
+        UserEntity newUser = new UserEntity(username, password, email);
+        em.persist(newUser);
+
+        return newUser;
+    }
 }
