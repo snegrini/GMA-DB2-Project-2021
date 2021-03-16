@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(filterName = "AuthFilter")
-public class AuthFilter implements Filter {
+@WebFilter(filterName = "NotAuthFilter")
+public class NotAuthFilter implements Filter {
     public void destroy() {
     }
 
@@ -17,14 +17,14 @@ public class AuthFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) resp;
 
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("user") == null) {
-            response.sendRedirect(request.getContextPath() + "/"); // No logged-in user found, so redirect to login page.
+        if (session != null && session.getAttribute("user") != null) {
+            response.sendRedirect(request.getContextPath() + "/homepage"); // Logged-in user found, redirect to home page.
         } else {
-            chain.doFilter(req, resp); // Logged-in user found, so just continue request.
+            chain.doFilter(req, resp); // Not logged-in user found, so just continue request.
         }
     }
 
-    public void init(FilterConfig config) throws ServletException {
+    public void init(FilterConfig config) {
 
     }
 }

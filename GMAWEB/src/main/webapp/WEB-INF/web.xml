@@ -10,6 +10,13 @@
     </filter-mapping>
 
     <filter-mapping>
+        <filter-name>NotAuthFilter</filter-name>
+        <url-pattern>/</url-pattern>
+        <url-pattern>/login</url-pattern>
+        <url-pattern>/register</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
         <filter-name>AdminFilter</filter-name>
         <servlet-name>AdminHomeServlet</servlet-name>
     </filter-mapping>
