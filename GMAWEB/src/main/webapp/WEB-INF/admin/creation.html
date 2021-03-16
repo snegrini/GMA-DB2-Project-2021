@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Creation Page</title>
+</head>
+<body>
+    <header>
+        <h1>Admin Creation Page</h1>
+    </header>
+
+    <br>
+
+    <div>
+        <form method="post" action="login">
+            <fieldset>
+                <legend>Add a new questionnaire for a product of the day.</legend>
+
+                <label for="date">Date:</label>
+                <input type="date" name="date" id="date" required>
+
+                <br><br>
+
+                
+
+                <div data-th-text="${errorMessage}"></div>
+
+                <br><br>
+
+                <input type="submit">
+            </fieldset>
+        </form>
+    </div>
+
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-package it.polimi.db2.gma.GMAWEB.servlets;
+package it.polimi.db2.gma.GMAWEB.controllers.admin;
 
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "QuestionnaireServlet", value = "/questionnaire")
-public class QuestionnaireServlet extends HttpServlet {
+@WebServlet(name = "AdminHomepageServlet", value = "/admin/homepage")
+public class HomepageServlet extends HttpServlet {
     private TemplateEngine templateEngine;
 
     public void init() {
@@ -31,7 +31,7 @@ public class QuestionnaireServlet extends HttpServlet {
 
         ServletContext servletContext = getServletContext();
         WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-        String path = "/WEB-INF/questionnairepage.html";
+        String path = "/WEB-INF/admin/homepage.html";
 
         templateEngine.process(path, ctx, resp.getWriter());
     }

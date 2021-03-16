@@ -1,4 +1,4 @@
-package it.polimi.db2.gma.GMAWEB.servlets;
+package it.polimi.db2.gma.GMAWEB.controllers.admin;
 
 import it.polimi.db2.gma.GMAEJB.entities.UserEntity;
 import it.polimi.db2.gma.GMAEJB.exceptions.CredentialsException;
@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "LoginServlet", value = "/login")
+@WebServlet(name = "AdminLoginServlet", value = "/admin/login")
 public class LoginServlet extends HttpServlet {
     private final String indexPath = "/WEB-INF/index.html";
     private TemplateEngine templateEngine;
@@ -38,7 +38,12 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.sendRedirect(getServletContext().getContextPath());
+        resp.setContentType("text/html");
+
+        ServletContext servletContext = getServletContext();
+        WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
+
+        templateEngine.process(indexPath, ctx, resp.getWriter());
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -58,6 +63,7 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
+        String path;
         if (user == null) {
             resp.setContentType("text/html");
 
@@ -68,7 +74,8 @@ public class LoginServlet extends HttpServlet {
             templateEngine.process(indexPath, ctx, resp.getWriter());
         } else {
             req.getSession().setAttribute("user", user);
-            resp.sendRedirect(getServletContext().getContextPath() + "/homepage");
+            path = getServletContext().getContextPath() + "/homepage";
+            resp.sendRedirect(path);
         }
     }
 }
