@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(filterName = "AdminChecker")
-public class AdminChecker implements Filter {
+@WebFilter(filterName = "AdminFilter")
+public class AdminFilter implements Filter {
     public void destroy() {
     }
 

@@ -24,8 +24,15 @@ public class StatsEntity {
 
     @ManyToOne
     @JoinColumn(name = "EntryId")
-    private EntryEntity entity;
+    private EntryEntity entry;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getAge() {
         return age;

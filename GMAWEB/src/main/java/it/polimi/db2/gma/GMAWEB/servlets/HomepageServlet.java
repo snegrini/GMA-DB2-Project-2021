@@ -1,4 +1,4 @@
-package it.polimi.db2.gma.GMAWEB.controllers;
+package it.polimi.db2.gma.GMAWEB.servlets;
 
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -10,12 +10,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(name = "IndexServlet", value = "")
-public class IndexServlet extends HttpServlet {
-
+@WebServlet(name = "HomepageServlet", value = "/homepage")
+public class HomepageServlet extends HttpServlet {
     private TemplateEngine templateEngine;
 
     public void init() {
@@ -27,19 +25,14 @@ public class IndexServlet extends HttpServlet {
         templateResolver.setSuffix(".html");
     }
 
+    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        HttpSession session = req.getSession(false);
+        resp.setContentType("text/html");
 
-        if (session == null || session.getAttribute("user") == null) { // No logged-in user found, so redirect to login page.
-            resp.setContentType("text/html");
+        ServletContext servletContext = getServletContext();
+        WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
+        String path = "/WEB-INF/homepage.html";
 
-            ServletContext servletContext = getServletContext();
-            WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-            String path = "/WEB-INF/index.html";
-
-            templateEngine.process(path, ctx, resp.getWriter());
-        } else {
-            resp.sendRedirect(req.getContextPath() + "/homepage");
-        }
+        templateEngine.process(path, ctx, resp.getWriter());
     }
 }

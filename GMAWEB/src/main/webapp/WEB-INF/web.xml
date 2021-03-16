@@ -5,12 +5,12 @@
          version="4.0">
 
     <filter-mapping>
-        <filter-name>AuthChecker</filter-name>
+        <filter-name>AuthFilter</filter-name>
         <url-pattern>/homepage</url-pattern>
     </filter-mapping>
 
     <filter-mapping>
-        <filter-name>AdminChecker</filter-name>
+        <filter-name>AdminFilter</filter-name>
         <servlet-name>AdminHomeServlet</servlet-name>
     </filter-mapping>
 </web-app>

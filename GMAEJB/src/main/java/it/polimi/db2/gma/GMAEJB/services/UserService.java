@@ -20,7 +20,7 @@ public class UserService {
      *
      * @param username the username of the user.
      * @param password the password of the user.
-     * @return the {@code UserEntity} linked to the usercode and password if the user is found and password matches, {@code null} otherwise.
+     * @return the {@code UserEntity} linked to the username and password if the user is found and password matches, {@code null} otherwise.
      * @throws CredentialsException     when the connection with the database fails or when there are more than one user registered with same credentials.
      * @throws NonUniqueResultException when there are more than one user registered with same credentials.
      */

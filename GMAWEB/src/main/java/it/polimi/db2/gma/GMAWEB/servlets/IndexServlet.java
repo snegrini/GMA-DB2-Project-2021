@@ -1,5 +1,4 @@
-package it.polimi.db2.gma.GMAWEB.servlets.admin;
-
+package it.polimi.db2.gma.GMAWEB.servlets;
 
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -7,15 +6,16 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(name = "AdminHomeServlet", value = "/dashboard/admin")
-public class HomeServlet extends HttpServlet {
+@WebServlet(name = "IndexServlet", value = "")
+public class IndexServlet extends HttpServlet {
+
     private TemplateEngine templateEngine;
 
     public void init() {
@@ -27,14 +27,19 @@ public class HomeServlet extends HttpServlet {
         templateResolver.setSuffix(".html");
     }
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html");
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        HttpSession session = req.getSession(false);
 
-        ServletContext servletContext = getServletContext();
-        WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-        String path = "/WEB-INF/admin/index.html";
+        if (session == null || session.getAttribute("user") == null) { // No logged-in user found, so redirect to login page.
+            resp.setContentType("text/html");
 
-        templateEngine.process(path, ctx, response.getWriter());
+            ServletContext servletContext = getServletContext();
+            WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
+            String path = "/WEB-INF/index.html";
+
+            templateEngine.process(path, ctx, resp.getWriter());
+        } else {
+            resp.sendRedirect(req.getContextPath() + "/homepage");
+        }
     }
 }
