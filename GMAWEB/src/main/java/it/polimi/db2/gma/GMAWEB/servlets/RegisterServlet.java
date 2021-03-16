@@ -1,5 +1,8 @@
 package it.polimi.db2.gma.GMAWEB.servlets;
 
+import it.polimi.db2.gma.GMAEJB.entities.UserEntity;
+import it.polimi.db2.gma.GMAEJB.exceptions.CredentialsException;
+import it.polimi.db2.gma.GMAEJB.services.UserService;
 import it.polimi.db2.gma.GMAWEB.exceptions.InputException;
 import org.apache.commons.text.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
@@ -7,17 +10,22 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import javax.ejb.EJB;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
+@WebServlet(name = "RegisterServlet", value = "/register")
 public class RegisterServlet extends HttpServlet {
     private final String registerPath = "/WEB-INF/register.html";
     private TemplateEngine templateEngine;
+
+    @EJB(name = "it.polimi.db2.gma.GMAEJB.services/UserService")
+    private UserService userService;
 
     @Override
     public void init() {
@@ -52,42 +60,30 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
+        UserEntity user = null;
+        String error = "";
+
         try {
             checkInputs(username, password, confirmPassword, email);
-            // TODO Check if email or username already exists
-        } catch (InputException e) {
-            resp.setContentType("text/html");
-
-            ServletContext servletContext = getServletContext();
-            final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-            ctx.setVariable("errorMessage", e.getMessage());
-
-            templateEngine.process(registerPath, ctx, resp.getWriter());
+            user = userService.addNewUser(username, password, email);
+        } catch (InputException | CredentialsException e) {
+            error = e.getMessage();
+        } catch (Exception e) {
+            error = "Could not complete the registration!";
         }
 
-        /*
-        UserEntity user;
-        try {
-            user = userService.checkCredentials(username, password);
-        } catch (CredentialsException | NonUniqueResultException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not check credentials.");
-            return;
-        }
-
-        String path;
         if (user == null) {
             resp.setContentType("text/html");
 
             ServletContext servletContext = getServletContext();
             final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-            ctx.setVariable("errorMessage", "Incorrect username or password.");
+            ctx.setVariable("errorMessage", error);
 
-            templateEngine.process(indexPath, ctx, resp.getWriter());
+            templateEngine.process(registerPath, ctx, resp.getWriter());
         } else {
             req.getSession().setAttribute("user", user);
-            path = getServletContext().getContextPath() + "/homepage";
-            resp.sendRedirect(path);
-        }*/
+            resp.sendRedirect(getServletContext().getContextPath() + "/homepage");
+        }
     }
 
     private void checkInputs(String username, String password, String confirmPassword, String email) throws InputException {

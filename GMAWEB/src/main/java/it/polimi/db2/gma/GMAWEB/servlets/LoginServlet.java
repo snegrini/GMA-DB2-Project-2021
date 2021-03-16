@@ -38,12 +38,7 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.setContentType("text/html");
-
-        ServletContext servletContext = getServletContext();
-        WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-
-        templateEngine.process(indexPath, ctx, resp.getWriter());
+        resp.sendRedirect(getServletContext().getContextPath());
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -63,7 +58,6 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        String path;
         if (user == null) {
             resp.setContentType("text/html");
 
@@ -74,8 +68,7 @@ public class LoginServlet extends HttpServlet {
             templateEngine.process(indexPath, ctx, resp.getWriter());
         } else {
             req.getSession().setAttribute("user", user);
-            path = getServletContext().getContextPath() + "/homepage";
-            resp.sendRedirect(path);
+            resp.sendRedirect(getServletContext().getContextPath() + "/homepage");
         }
     }
 }
