@@ -101,7 +101,7 @@ public class RegisterServlet extends HttpServlet {
         }
 
         if (password.length() > 45 || password.length() < 8) {
-            throw new InputException("Username is too long (min 8 max 45 chars)!");
+            throw new InputException("Password length not valid (min 8 max 45 chars)!");
         }
 
         if (!confirmPassword.equals(password)) {

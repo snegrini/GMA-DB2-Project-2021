@@ -28,18 +28,12 @@ public class IndexServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        HttpSession session = req.getSession(false);
+        resp.setContentType("text/html");
 
-        if (session == null || session.getAttribute("user") == null) { // No logged-in user found, so redirect to login page.
-            resp.setContentType("text/html");
+        ServletContext servletContext = getServletContext();
+        WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
+        String path = "/WEB-INF/index.html";
 
-            ServletContext servletContext = getServletContext();
-            WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-            String path = "/WEB-INF/index.html";
-
-            templateEngine.process(path, ctx, resp.getWriter());
-        } else {
-            resp.sendRedirect(req.getContextPath() + "/homepage");
-        }
+        templateEngine.process(path, ctx, resp.getWriter());
     }
 }

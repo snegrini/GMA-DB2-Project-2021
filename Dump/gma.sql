@@ -291,8 +291,8 @@ CREATE TABLE `user` (
   `Username` varchar(45) NOT NULL,
   `Password` varchar(45) NOT NULL,
   `Email` varchar(90) NOT NULL,
-  `Points` int DEFAULT NULL,
-  `IsBlocked` tinyint DEFAULT NULL,
+  `Points` int DEFAULT '0',
+  `IsBlocked` tinyint DEFAULT '0',
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Username_UNIQUE` (`Username`),
   UNIQUE KEY `Email_UNIQUE` (`Email`)
