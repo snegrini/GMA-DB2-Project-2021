@@ -17,6 +17,7 @@ public class AuthFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) resp;
 
         HttpSession session = request.getSession(false);
+
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/"); // No logged-in user found, so redirect to login page.
         } else {

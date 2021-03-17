@@ -1,8 +1,8 @@
 package it.polimi.db2.gma.GMAWEB.controllers.admin;
 
-import it.polimi.db2.gma.GMAEJB.entities.UserEntity;
+import it.polimi.db2.gma.GMAEJB.entities.AdminEntity;
 import it.polimi.db2.gma.GMAEJB.exceptions.CredentialsException;
-import it.polimi.db2.gma.GMAEJB.services.UserService;
+import it.polimi.db2.gma.GMAEJB.services.AdminService;
 import org.apache.commons.text.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -20,11 +20,10 @@ import java.io.IOException;
 
 @WebServlet(name = "AdminLoginServlet", value = "/admin/login")
 public class LoginServlet extends HttpServlet {
-    private final String indexPath = "/WEB-INF/index.html";
     private TemplateEngine templateEngine;
 
-    @EJB(name = "it.polimi.db2.gma.GMAEJB.services/UserService")
-    private UserService userService;
+    @EJB(name = "it.polimi.db2.gma.GMAEJB.services/AdminService")
+    private AdminService adminService;
 
     @Override
     public void init() {
@@ -38,44 +37,38 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.setContentType("text/html");
-
-        ServletContext servletContext = getServletContext();
-        WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-
-        templateEngine.process(indexPath, ctx, resp.getWriter());
+        resp.sendRedirect(getServletContext().getContextPath() + "/admin");
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String username = StringEscapeUtils.escapeJava(req.getParameter("username"));
         String password = StringEscapeUtils.escapeJava(req.getParameter("password"));
+        String username = StringEscapeUtils.escapeJava(req.getParameter("username"));
 
         if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing credential value.");
             return;
         }
 
-        UserEntity user;
+        AdminEntity admin;
         try {
-            user = userService.checkCredentials(username, password);
+            admin = adminService.checkCredentials(username, password);
         } catch (CredentialsException | NonUniqueResultException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not check credentials.");
             return;
         }
 
-        String path;
-        if (user == null) {
+        if (admin == null) {
             resp.setContentType("text/html");
 
             ServletContext servletContext = getServletContext();
             final WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
             ctx.setVariable("errorMessage", "Incorrect username or password.");
 
-            templateEngine.process(indexPath, ctx, resp.getWriter());
+            templateEngine.process("/WEB-INF/admin/index.html", ctx, resp.getWriter());
         } else {
-            req.getSession().setAttribute("user", user);
-            path = getServletContext().getContextPath() + "/homepage";
-            resp.sendRedirect(path);
+            req.getSession().setAttribute("admin", admin);
+
+            resp.sendRedirect(getServletContext().getContextPath() + "/admin/homepage");
         }
     }
 }
