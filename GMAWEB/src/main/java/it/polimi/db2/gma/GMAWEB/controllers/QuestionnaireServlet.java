@@ -1,6 +1,5 @@
 package it.polimi.db2.gma.GMAWEB.controllers;
 
-
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
@@ -25,13 +24,14 @@ public class QuestionnaireServlet extends HttpServlet {
         templateResolver.setSuffix(".html");
     }
 
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("text/html");
 
-        String path;
-        path = getServletContext().getContextPath() + "/questionnairepage";
-        resp.sendRedirect(path);
+        ServletContext servletContext = getServletContext();
+        WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
+        String path = "/WEB-INF/questionnairepage.html";
 
+        templateEngine.process(path, ctx, resp.getWriter());
     }
 }
-
