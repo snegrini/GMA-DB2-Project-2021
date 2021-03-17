@@ -1,7 +1,5 @@
 package it.polimi.db2.gma.GMAWEB.filters;
 
-import it.polimi.db2.gma.GMAEJB.entities.UserEntity;
-
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -19,11 +17,9 @@ public class AdminFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) resp;
 
         HttpSession session = request.getSession(false);
-        UserEntity user = (UserEntity) session.getAttribute("user");
 
-        // FIXME
-        if (user == null /*|| !user.getRole().equals(UserRole.ADMIN)*/) {
-            response.sendRedirect(request.getContextPath()); // Unauthorized access request, redirect to home page.
+        if (session == null || session.getAttribute("admin") == null) {
+            response.sendRedirect(request.getContextPath() + "/admin"); // Unauthorized access request, redirect to admin home page.
         } else {
             chain.doFilter(req, resp);
         }

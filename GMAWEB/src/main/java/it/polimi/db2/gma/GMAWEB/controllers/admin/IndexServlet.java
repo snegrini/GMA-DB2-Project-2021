@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(name = "IndexServlet", value = "")
+@WebServlet(name = "AdminIndexServlet", value = "/admin")
 public class IndexServlet extends HttpServlet {
 
     private TemplateEngine templateEngine;
@@ -30,16 +30,16 @@ public class IndexServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession(false);
 
-        if (session == null || session.getAttribute("user") == null) { // No logged-in user found, so redirect to login page.
+        if (session == null || session.getAttribute("admin") == null) { // No logged-in user found, so redirect to login page.
             resp.setContentType("text/html");
 
             ServletContext servletContext = getServletContext();
             WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-            String path = "/WEB-INF/index.html";
+            String path = "/WEB-INF/admin/index.html";
 
             templateEngine.process(path, ctx, resp.getWriter());
         } else {
-            resp.sendRedirect(req.getContextPath() + "/homepage");
+            resp.sendRedirect(req.getContextPath() + "/admin/homepage");
         }
     }
 }
