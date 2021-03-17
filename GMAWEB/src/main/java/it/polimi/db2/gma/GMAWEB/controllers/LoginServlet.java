@@ -41,6 +41,7 @@ public class LoginServlet extends HttpServlet {
         resp.sendRedirect(getServletContext().getContextPath());
     }
 
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String username = StringEscapeUtils.escapeJava(req.getParameter("username"));
         String password = StringEscapeUtils.escapeJava(req.getParameter("password"));

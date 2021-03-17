@@ -18,6 +18,6 @@
 
     <filter-mapping>
         <filter-name>AdminFilter</filter-name>
-        <servlet-name>AdminHomeServlet</servlet-name>
+        <servlet-name>AdminHomepageServlet</servlet-name>
     </filter-mapping>
 </web-app>

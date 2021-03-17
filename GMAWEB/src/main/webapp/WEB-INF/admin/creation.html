@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin Creation Page</title>
+
+    <script src="../../creation.js" data-th-src="@{/js/creation.js}"></script>
 </head>
 <body>
     <header>
@@ -12,7 +14,7 @@
     <br>
 
     <div>
-        <form method="post" action="login">
+        <form method="post" action="@{/creation}">
             <fieldset>
                 <legend>Add a new questionnaire for a product of the day.</legend>
 
@@ -21,7 +23,16 @@
 
                 <br><br>
 
-                
+                <label for="product"></label>
+                <select data-th-remove="all-but-first" name="product" id="product">
+                    <option value="volvo" data-th-each="product : ${products}" data-th-value="${product.name}" data-th-text="${product.name}">Volvo</option>
+                    <option value="saab">Saab</option>
+                    <option value="mercedes">Mercedes</option>
+                    <option value="audi">Audi</option>
+                </select>
+
+                <label for="question"></label>
+                <input type="text" name="question" id="question" size="45" required>
 
                 <div data-th-text="${errorMessage}"></div>
 

@@ -29,9 +29,8 @@ CREATE TABLE `admin` (
   `Username` varchar(45) NOT NULL,
   `Password` varchar(45) NOT NULL,
   PRIMARY KEY (`Id`),
-  UNIQUE KEY `Username_UNIQUE` (`Username`),
-  UNIQUE KEY `Password_UNIQUE` (`Password`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `Username_UNIQUE` (`Username`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,6 +39,7 @@ CREATE TABLE `admin` (
 
 LOCK TABLES `admin` WRITE;
 /*!40000 ALTER TABLE `admin` DISABLE KEYS */;
+INSERT INTO `admin` VALUES (1,'admin','admin');
 /*!40000 ALTER TABLE `admin` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -53,12 +53,12 @@ DROP TABLE IF EXISTS `answer`;
 CREATE TABLE `answer` (
   `EntryId` int NOT NULL,
   `QuestionId` int NOT NULL,
-  `Answer` varchar(45) NOT NULL,
+  `Answer` varchar(200) NOT NULL,
   PRIMARY KEY (`EntryId`,`QuestionId`),
   KEY `EntryFK_idx` (`EntryId`),
   KEY `QuestionFK_idx` (`QuestionId`),
-  CONSTRAINT `EntryFK` FOREIGN KEY (`EntryId`) REFERENCES `entry` (`Id`),
-  CONSTRAINT `QuestionFK` FOREIGN KEY (`QuestionId`) REFERENCES `question` (`Id`)
+  CONSTRAINT `fk_answer_entry_entryid` FOREIGN KEY (`EntryId`) REFERENCES `entry` (`Id`),
+  CONSTRAINT `fk_answer_question_questionid` FOREIGN KEY (`QuestionId`) REFERENCES `question` (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -82,11 +82,13 @@ CREATE TABLE `entry` (
   `Id` int NOT NULL AUTO_INCREMENT,
   `UserId` int NOT NULL,
   `QuestionnaireId` int NOT NULL,
-  `Points` int DEFAULT NULL,
-  `IsSubmitted` tinyint DEFAULT NULL,
+  `Points` int NOT NULL DEFAULT '0',
+  `IsSubmitted` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`Id`),
   KEY `QuestionnaireFK2_idx` (`QuestionnaireId`),
-  CONSTRAINT `QuestionnaireFK2` FOREIGN KEY (`QuestionnaireId`) REFERENCES `questionnaire` (`Id`)
+  KEY `UserFK_idx` (`UserId`),
+  CONSTRAINT `fk_entry_questionnaire_questionnaireid` FOREIGN KEY (`QuestionnaireId`) REFERENCES `questionnaire` (`Id`),
+  CONSTRAINT `fk_entry_user_userid` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -108,9 +110,11 @@ DROP TABLE IF EXISTS `loginlog`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `loginlog` (
   `Id` int NOT NULL AUTO_INCREMENT,
-  `UserId` int DEFAULT NULL,
-  `LogTime` datetime DEFAULT NULL,
-  PRIMARY KEY (`Id`)
+  `UserId` int NOT NULL,
+  `LogTime` datetime NOT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `fk_loginlog_user_userid_idx` (`UserId`),
+  CONSTRAINT `fk_loginlog_user_userid` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -133,7 +137,8 @@ DROP TABLE IF EXISTS `offensiveword`;
 CREATE TABLE `offensiveword` (
   `Id` int NOT NULL AUTO_INCREMENT,
   `Word` varchar(45) NOT NULL,
-  PRIMARY KEY (`Id`)
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `Word_UNIQUE` (`Word`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -159,7 +164,7 @@ CREATE TABLE `product` (
   `Image` varchar(45) NOT NULL,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Name_UNIQUE` (`Name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -168,6 +173,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
+INSERT INTO `product` VALUES (1,'Rasoio','rasoio.jpg'),(2,'Schiuma','schiuma.jpg'),(3,'Pennello','pennello.jpg');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -181,10 +187,10 @@ DROP TABLE IF EXISTS `question`;
 CREATE TABLE `question` (
   `Id` int NOT NULL AUTO_INCREMENT,
   `QuestionnaireId` int NOT NULL,
-  `Question` varchar(45) NOT NULL,
+  `Question` varchar(200) NOT NULL,
   PRIMARY KEY (`Id`),
   KEY `QuestionnaireFK_idx` (`QuestionnaireId`),
-  CONSTRAINT `QuestionnaireFK` FOREIGN KEY (`QuestionnaireId`) REFERENCES `questionnaire` (`Id`)
+  CONSTRAINT `fk_question_questionnaire_questionnaireid` FOREIGN KEY (`QuestionnaireId`) REFERENCES `questionnaire` (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -211,7 +217,7 @@ CREATE TABLE `questionnaire` (
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Date_UNIQUE` (`Date`),
   KEY `ProductFK2_idx` (`ProductId`),
-  CONSTRAINT `ProductFK2` FOREIGN KEY (`ProductId`) REFERENCES `product` (`Id`)
+  CONSTRAINT `fk_questionnaire_product_productid` FOREIGN KEY (`ProductId`) REFERENCES `product` (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -234,11 +240,11 @@ DROP TABLE IF EXISTS `review`;
 CREATE TABLE `review` (
   `ProductId` int NOT NULL,
   `UserId` int NOT NULL,
-  `Review` varchar(45) NOT NULL,
+  `Review` varchar(200) NOT NULL,
   PRIMARY KEY (`ProductId`,`UserId`),
   KEY `UserFK_idx` (`UserId`),
-  CONSTRAINT `ProductFK` FOREIGN KEY (`ProductId`) REFERENCES `product` (`Id`),
-  CONSTRAINT `UserFK` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`)
+  CONSTRAINT `fk_review_product_productid` FOREIGN KEY (`ProductId`) REFERENCES `product` (`Id`),
+  CONSTRAINT `fk_review_user_userid` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -261,12 +267,12 @@ DROP TABLE IF EXISTS `stats`;
 CREATE TABLE `stats` (
   `Id` int NOT NULL AUTO_INCREMENT,
   `EntryId` int NOT NULL,
-  `Age` varchar(45) DEFAULT NULL,
-  `Sex` varchar(45) DEFAULT NULL,
+  `Age` int DEFAULT NULL,
+  `Sex` enum('FEMALE','MALE','OTHER') DEFAULT NULL,
   `ExpertiseLevel` enum('LOW','MEDIUM','HIGH') DEFAULT NULL,
   PRIMARY KEY (`Id`),
   KEY `EntryFK2_idx` (`EntryId`),
-  CONSTRAINT `EntryFK2` FOREIGN KEY (`EntryId`) REFERENCES `entry` (`Id`)
+  CONSTRAINT `fk_stats_entry_entryid` FOREIGN KEY (`EntryId`) REFERENCES `entry` (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -291,12 +297,12 @@ CREATE TABLE `user` (
   `Username` varchar(45) NOT NULL,
   `Password` varchar(45) NOT NULL,
   `Email` varchar(90) NOT NULL,
-  `Points` int DEFAULT '0',
-  `IsBlocked` tinyint DEFAULT '0',
+  `Points` int NOT NULL DEFAULT '0',
+  `IsBlocked` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Username_UNIQUE` (`Username`),
   UNIQUE KEY `Email_UNIQUE` (`Email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -305,6 +311,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,'user1','password','user1@example.org',0,0),(2,'user2','password','user2@example.org',0,0);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -317,4 +324,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-03-15 22:53:42
+-- Dump completed on 2021-03-17 23:07:52

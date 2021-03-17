@@ -34,6 +34,8 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<ReviewEntity> reviews;
 
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private List<LoginlogEntity> loginlogs;
 
     public UserEntity(String username, String password, String email) {
         this.username = username;

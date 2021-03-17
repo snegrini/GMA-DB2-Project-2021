@@ -5,6 +5,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "product")
+@NamedQueries({
+        @NamedQuery(name = "ProductEntity.findAll", query = "SELECT p FROM ProductEntity p"),
+})
 public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,8 +25,6 @@ public class ProductEntity {
 
     @OneToMany(mappedBy = "product")
     private List<ReviewEntity> questionnaires;
-
-
 
 
     public int getId() {

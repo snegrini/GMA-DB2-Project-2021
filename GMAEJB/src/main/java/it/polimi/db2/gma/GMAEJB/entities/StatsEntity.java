@@ -1,6 +1,7 @@
 package it.polimi.db2.gma.GMAEJB.entities;
 
 import it.polimi.db2.gma.GMAEJB.enums.ExpertiseLevel;
+import it.polimi.db2.gma.GMAEJB.enums.Sex;
 
 import javax.persistence.*;
 
@@ -12,11 +13,12 @@ public class StatsEntity {
     @Column(name = "Id", nullable = false)
     private int id;
 
-    @Column(name = "Age", nullable = true, length = 45)
-    private String age;
+    @Column(name = "Age", nullable = true)
+    private Integer age;
 
-    @Column(name = "Sex", nullable = true, length = 45)
-    private String sex;
+    @Column(name = "Sex", nullable = true)
+    @Enumerated(EnumType.STRING)
+    private Sex sex;
 
     @Column(name = "ExpertiseLevel", nullable = true)
     @Enumerated(EnumType.STRING)
@@ -34,19 +36,19 @@ public class StatsEntity {
         this.id = id;
     }
 
-    public String getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(String age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
-    public String getSex() {
+    public Sex getSex() {
         return sex;
     }
 
-    public void setSex(String sex) {
+    public void setSex(Sex sex) {
         this.sex = sex;
     }
 
