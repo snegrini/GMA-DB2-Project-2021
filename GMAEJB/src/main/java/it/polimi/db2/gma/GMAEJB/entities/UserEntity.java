@@ -9,6 +9,7 @@ import java.util.List;
         @NamedQuery(name = "UserEntity.checkCredentials", query = "SELECT u FROM UserEntity u WHERE u.username = :username AND u.password = :password"),
         @NamedQuery(name = "UserEntity.findByUsername", query = "SELECT u FROM UserEntity u WHERE u.username = :username"),
         @NamedQuery(name = "UserEntity.findByEmail", query = "SELECT u FROM UserEntity u WHERE u.email = :email"),
+        //@NamedQuery(name = "UserEntity.getLeaderboard", query = "SELECT u FROM UserEntity u JOIN  WHERE u.email = :email"),
 })
 public class UserEntity {
     @Id

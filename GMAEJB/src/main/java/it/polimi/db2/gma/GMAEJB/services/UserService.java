@@ -79,4 +79,8 @@ public class UserService {
 
         return newUser;
     }
+
+    public void getUsersLeaderboard() {
+
+    }
 }
