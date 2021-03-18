@@ -11,12 +11,12 @@ public class LoginlogEntity {
     @Column(name = "Id", nullable = false)
     private int id;
 
-    @Column(name = "UserId", nullable = true)
-    private Integer userId;
-
     @Column(name = "LogTime", nullable = true)
     private Timestamp logTime;
 
+    @ManyToOne
+    @JoinColumn(name = "UserId")
+    private UserEntity user;
 
     public int getId() {
         return id;
@@ -24,14 +24,6 @@ public class LoginlogEntity {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
     }
 
     public Timestamp getLogTime() {
