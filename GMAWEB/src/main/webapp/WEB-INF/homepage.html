@@ -11,16 +11,17 @@
 <br>
 
 <div>
-    <form method="post" action="questionnaire">
-        <fieldset>
-            <legend>Product of the day</legend>
 
-            <img src=product.GetImage/>
-            <br>
+    <fieldset>
+        <legend>Product of the day</legend>
 
-            <button type="submit">Here</button>
-        </fieldset>
-    </form>
+        <img src=product.GetImage/>
+
+        <br>
+
+        <p>Wanna fill the questionnaire? <a id="questionnaireanchor" data-th-href="@{'/questionnaire'}"
+                                            href="questionnaire">Go to!</a></p>
+    </fieldset>
 
 </div>
 

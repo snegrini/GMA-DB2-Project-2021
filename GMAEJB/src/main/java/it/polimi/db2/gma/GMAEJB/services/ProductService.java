@@ -1,7 +1,6 @@
 package it.polimi.db2.gma.GMAEJB.services;
 
 import it.polimi.db2.gma.GMAEJB.entities.ProductEntity;
-import it.polimi.db2.gma.GMAEJB.entities.UserEntity;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -17,5 +16,4 @@ public class ProductService {
         return em.createNamedQuery("ProductEntity.findAll", ProductEntity.class)
                 .getResultList();
     }
-
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Questomario</title>
@@ -7,6 +7,45 @@
 <body>
 <header>
     <h1>Product of the day</h1>
+
+    <form method="post" data-th-action="@{'/questionnaire'}">
+        <fieldset>
+            <legend>Questions</legend>
+            <tr th:each="question : ${questions}">
+                <td th:text="${question.Question}">A</td>
+                <input type="text" id="answer" name="answer">
+                <br><br>
+            </tr>
+            <input type="submit" value="cancel">
+            <input type="submit" value="submit">
+        </fieldset>
+    </form>
+
+
+    <br>
+    <form method="post" data-th-action="@{'/questionnaire'}">
+        <fieldset>
+            <legend>Stats</legend>
+            <label for="age">Age:</label>
+            <input type="text" id="age" name="age">
+
+            <br>
+
+            <label for="sex">Sex:</label>
+            <input type="text" name="sex" id="sex">
+
+            <br>
+
+            <label for="eLevel">Expertise Level:</label>
+            <input type="text" name="eLevel" id="eLevel" required><br>
+
+            <br>
+            <input type="submit" value="previous">
+            <input type="submit" value="cancel">
+            <input type="submit" value="submit">
+        </fieldset>
+    </form>
+
 </header>
 </body>
 </html>
