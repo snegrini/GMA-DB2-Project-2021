@@ -2,6 +2,7 @@ package it.polimi.db2.gma.GMAEJB.services;
 
 import it.polimi.db2.gma.GMAEJB.entities.UserEntity;
 import it.polimi.db2.gma.GMAEJB.exceptions.CredentialsException;
+import it.polimi.db2.gma.GMAEJB.utils.LeaderboardRow;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -9,6 +10,7 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import java.util.*;
+import java.sql.Date;
 
 @Stateless
 public class UserService {
@@ -80,7 +82,9 @@ public class UserService {
         return newUser;
     }
 
-    public void getUsersLeaderboard() {
-
+    public List<LeaderboardRow> getUsersLeaderboard() {
+        return em.createNamedQuery("UserEntity.getLeaderboard", LeaderboardRow.class)
+                .setParameter("date", new Date(new java.util.Date().getTime()))
+                .getResultList();
     }
 }

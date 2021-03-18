@@ -11,8 +11,9 @@ public class EntryEntity {
     @Column(name = "Id", nullable = false)
     private int id;
 
-    @Column(name = "UserId", nullable = false)
-    private int userId;
+    @ManyToOne
+    @JoinColumn(name = "UserId", nullable = false)
+    private UserEntity user;
 
     @Column(name = "Points", nullable = true)
     private Integer points;
@@ -37,14 +38,6 @@ public class EntryEntity {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public Integer getPoints() {

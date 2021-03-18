@@ -8,8 +8,30 @@
 <header>
     <h1>Leaderboard</h1>
 </header>
-<br>
+<div data-th-if="${#lists.isEmpty(rows)}">Wow, such empty</div>
 
+<table data-th-unless="${#lists.isEmpty(rows)}">
+    <thead>
+    <tr>
+        <th>Username</th>
+        <th>Points</th>
+    </tr>
+    </thead>
+    <tbody data-th-remove="all-but-first">
+    <tr data-th-each="row : ${rows}">
+        <td data-th-text="${row.username}">Pippo</td>
+        <td data-th-text="${row.points}">0</td>
+    </tr>
+    <tr>
+        <td>Piero</td>
+        <td>15</td>
+    </tr>
+    <tr>
+        <td>Franco</td>
+        <td>10</td>
+    </tr>
+    </tbody>
+</table>
 
 </body>
 </html>

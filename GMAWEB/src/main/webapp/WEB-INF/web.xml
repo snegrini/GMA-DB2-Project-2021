@@ -7,6 +7,7 @@
     <filter-mapping>
         <filter-name>AuthFilter</filter-name>
         <url-pattern>/homepage</url-pattern>
+        <url-pattern>/leaderboard</url-pattern>
     </filter-mapping>
 
     <filter-mapping>
