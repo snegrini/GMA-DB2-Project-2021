@@ -25,6 +25,15 @@ public class QuestionnaireEntity {
     @OneToMany(mappedBy = "questionnaire")
     private List<EntryEntity> entries;
 
+    public QuestionnaireEntity(Date date, ProductEntity product, List<QuestionEntity> questions) {
+        this.date = date;
+        this.product = product;
+        this.questions = questions;
+    }
+
+    public QuestionnaireEntity() {
+    }
+
     public int getId() {
         return id;
     }
