@@ -3,9 +3,9 @@ package it.polimi.db2.gma.GMAEJB.utils;
 import java.util.List;
 
 public class ProductOfDay {
-    String name;
-    String image;
-    List<Review> reviews;
+    final private String name;
+    final private String image;
+    final private List<Review> reviews;
 
     public ProductOfDay(String name, String image, List<Review> reviews) {
         this.name = name;

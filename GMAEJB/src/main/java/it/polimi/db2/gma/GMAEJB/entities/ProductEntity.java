@@ -7,7 +7,7 @@ import java.util.List;
 @Table(name = "product")
 @NamedQueries({
         @NamedQuery(name = "ProductEntity.findAll", query = "SELECT p FROM ProductEntity p"),
-        @NamedQuery(name = "ProductEntity.findProductByDay", query = "SELECT p FROM ProductEntity p INNER JOIN p.questionnaires q WHERE q.date = :date"),
+        @NamedQuery(name = "ProductEntity.findByDate", query = "SELECT p FROM ProductEntity p INNER JOIN p.questionnaires q WHERE q.date = :date"),
 })
 public class ProductEntity {
     @Id

@@ -5,6 +5,12 @@ import java.util.List;
 
 @Entity
 @Table(name = "entry")
+@NamedQueries({
+        @NamedQuery(name = "EntryEntity.getQuestionsAnswers", query = "SELECT NEW it.polimi.db2.gma.GMAEJB.utils.QuestionAnswer(qu.question, a.answer) " +
+                "FROM EntryEntity e INNER JOIN e.questionnaire q INNER JOIN e.user u INNER JOIN e.answers a INNER JOIN a.question qu WHERE q.id = :qid AND u.id = :uid ORDER BY qu.id"),
+        @NamedQuery(name = "EntryEntity.getStatsAnswers", query = "SELECT NEW it.polimi.db2.gma.GMAEJB.utils.StatsAnswers(s.age, s.sex, s.expertiseLevel) " +
+                "FROM EntryEntity e INNER JOIN e.stats s INNER JOIN e.questionnaire q INNER JOIN e.user u WHERE q.id = :qid AND u.id = :uid")
+})
 public class EntryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
