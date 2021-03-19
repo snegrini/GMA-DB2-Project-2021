@@ -28,9 +28,6 @@ import java.util.List;
 public class CancelServlet extends HttpServlet {
     private TemplateEngine templateEngine;
 
-    @EJB(name = "it.polimi.db2.gma.GMAEJB.services/LoginlogService")
-    private LoginlogService loginlogService;
-
     public void init() {
         ServletContext servletContext = getServletContext();
         ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
@@ -42,14 +39,8 @@ public class CancelServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        LoginlogEntity log = new LoginlogEntity();
 
-        try { //Errore di tipo da fixare si potrebbe passare anche solo l'id
-            log = loginlogService.addLoginLog(session.getAttribute("user"));
-        } catch (PersistenceException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not cancel.");
-            return;
-        }
+        // TODO Add entry not submitted
 
         resp.setContentType("text/html");
 
