@@ -2,12 +2,14 @@ package it.polimi.db2.gma.GMAWEB.controllers;
 
 import it.polimi.db2.gma.GMAEJB.entities.LoginlogEntity;
 import it.polimi.db2.gma.GMAEJB.services.LoginlogService;
+import it.polimi.db2.gma.GMAEJB.services.QuestionnaireService;
 import org.eclipse.persistence.internal.oxm.mappings.Login;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import javax.ejb.EJB;
 import javax.persistence.PersistenceException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -26,6 +28,9 @@ import java.util.List;
 public class CancelServlet extends HttpServlet {
     private TemplateEngine templateEngine;
 
+    @EJB(name = "it.polimi.db2.gma.GMAEJB.services/LoginlogService")
+    private LoginlogService loginlogService;
+
     public void init() {
         ServletContext servletContext = getServletContext();
         ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
@@ -39,8 +44,8 @@ public class CancelServlet extends HttpServlet {
         HttpSession session = req.getSession();
         LoginlogEntity log = new LoginlogEntity();
 
-        try {
-            log = LoginlogService.addLoginLog(session.getAttribute("user"));
+        try { //Errore di tipo da fixare si potrebbe passare anche solo l'id
+            log = loginlogService.addLoginLog(session.getAttribute("user"));
         } catch (PersistenceException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not cancel.");
             return;
