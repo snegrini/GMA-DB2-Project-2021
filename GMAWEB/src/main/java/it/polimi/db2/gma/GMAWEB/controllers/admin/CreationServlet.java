@@ -1,7 +1,10 @@
 package it.polimi.db2.gma.GMAWEB.controllers.admin;
 
 import it.polimi.db2.gma.GMAEJB.entities.ProductEntity;
+import it.polimi.db2.gma.GMAEJB.exceptions.BadProductException;
+import it.polimi.db2.gma.GMAEJB.services.AdminService;
 import it.polimi.db2.gma.GMAEJB.services.ProductService;
+import it.polimi.db2.gma.GMAEJB.services.QuestionnaireService;
 import it.polimi.db2.gma.GMAEJB.services.UserService;
 import org.apache.commons.text.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
@@ -16,6 +19,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 @WebServlet(name = "AdminCreationServlet", value = "/admin/creation")
@@ -25,6 +30,9 @@ public class CreationServlet extends HttpServlet {
 
     @EJB(name = "it.polimi.db2.gma.GMAEJB.services/ProductService")
     private ProductService productService;
+
+    @EJB(name = "it.polimi.db2.gma.GMAEJB.services/QuestionnaireService")
+    private QuestionnaireService questionnaireService;
 
     public void init() {
         ServletContext servletContext = getServletContext();
@@ -51,6 +59,44 @@ public class CreationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String date = StringEscapeUtils.escapeJava(req.getParameter("date"));
+        String product = StringEscapeUtils.escapeJava(req.getParameter("product"));
 
+        String[] ques = req.getParameterValues("question[]");
+
+        if (ques == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing question.");
+            return;
+        }
+
+        List<String> questions = Arrays.asList(ques);
+        questions.forEach(StringEscapeUtils::escapeJava);
+
+        if (date == null || product == null || date.isEmpty() || product.isEmpty() || questions.isEmpty()) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing questionnaire values.");
+            return;
+        }
+
+        // Checks that date is today or later.
+        LocalDate localDate = LocalDate.parse(date);
+        if (localDate.compareTo(LocalDate.now()) < 0) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid date. Please select a valid date.");
+            return;
+        }
+
+        int productId;
+        try {
+            productId = Integer.parseInt(product);
+        } catch (NumberFormatException e)  {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid product id.  Please select a valid product.");
+            return;
+        }
+
+        try {
+            questionnaireService.addNewQuestionnaire(localDate, productId, questions);
+        } catch (BadProductException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Failed to add a new questionnaire.");
+            return;
+        }
     }
 }

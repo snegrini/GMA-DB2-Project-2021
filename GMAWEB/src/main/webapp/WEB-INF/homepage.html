@@ -18,7 +18,7 @@
 
         <h2 data-th-text="${productOfDay.name}"></h2>
 
-        <img src="https://via.placeholder.com/200x200?text=product" width="200" height="200" data-th-src="@{'/images/'+${productOfDay.image}}">
+        <img src="https://via.placeholder.com/200x200?text=product" width="200" height="200" data-th-src="@{'/images/'+${productOfDay.image}}" alt="Product Image">
 
         <br>
         <h3>Reviews</h3>
@@ -30,7 +30,10 @@
 
         <br>
 
-        <p>Wanna fill the questionnaire? <a data-th-href="@{'/questionnaire'}" href="questionnaire">Go to!</a></p>
+        <p>Wanna fill the questionnaire? </p>
+        <form method="post" data-th-action="@{'/questionnaire'}" >
+            <input type="submit" name="going" value="GoTo">
+        </form>
     </fieldset>
 
 </div>

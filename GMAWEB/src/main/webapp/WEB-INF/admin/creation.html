@@ -31,8 +31,13 @@
                     <option value="audi">Audi</option>
                 </select>
 
-                <label for="question"></label>
-                <input type="text" name="question" id="question" size="45" required>
+                <div id="questions">
+                    <label for="question1">Question 1: </label>
+                    <input type="text" name="question[]" id="question1" size="45" required>
+                </div>
+
+                <input type="button" id="addQuestionBtn" value="Add">
+                <!--<input type="button" id="removeQuestionBtn" value="Remove">-->
 
                 <div data-th-text="${errorMessage}"></div>
 
