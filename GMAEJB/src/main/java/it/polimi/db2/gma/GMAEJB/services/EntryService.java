@@ -1,10 +1,10 @@
 package it.polimi.db2.gma.GMAEJB.services;
 
+import it.polimi.db2.gma.GMAEJB.entities.EntryEntity;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadEntryException;
 import it.polimi.db2.gma.GMAEJB.utils.Entry;
 import it.polimi.db2.gma.GMAEJB.utils.QuestionAnswer;
 import it.polimi.db2.gma.GMAEJB.utils.StatsAnswers;
-import it.polimi.db2.gma.GMAEJB.utils.UserInfo;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -43,5 +43,11 @@ public class EntryService {
         }
 
         return new Entry(statsAnswers, questionAnswerList);
+    }
+
+    public EntryEntity addEmptyEntry(int questionnaireId, int userId) {
+        EntryEntity newEntry = new EntryEntity();
+        em.persist(newEntry);
+        return newEntry;
     }
 }
