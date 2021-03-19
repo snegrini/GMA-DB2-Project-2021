@@ -29,7 +29,7 @@ public class QuestionnaireService {
                 .orElse(null);
     }
 
-    public QuestionnaireEntity addNewQuestionnaire(LocalDate date, int productId, List<String> strQuestions) throws BadProductException, BadQuestionnaireException {
+    public QuestionnaireEntity addNewQuestionnaire(LocalDate localDate, int productId, List<String> strQuestions) throws BadProductException, BadQuestionnaireException {
         ProductEntity product = em.find(ProductEntity.class, productId);
 
         if (product == null) {
@@ -38,14 +38,14 @@ public class QuestionnaireService {
 
         // Check that there is no other questionnaire in the selected date.
         List<QuestionnaireEntity> entities = em.createNamedQuery("QuestionnaireEntity.findByDate", QuestionnaireEntity.class)
-                .setParameter("date", Date.valueOf(date))
+                .setParameter("date", Date.valueOf(localDate))
                 .getResultList();
 
         if (!entities.isEmpty()) {
             throw new BadQuestionnaireException("Questionnaire already registered for the selected date.");
         }
 
-        QuestionnaireEntity questionnaire = new QuestionnaireEntity(Date.valueOf(date), product);
+        QuestionnaireEntity questionnaire = new QuestionnaireEntity(Date.valueOf(localDate), product);
 
         // Build new QuestionEntity objects and add them to the questionnaire.
         for (String strQuestion : strQuestions) {
@@ -57,9 +57,15 @@ public class QuestionnaireService {
         return questionnaire;
     }
 
-    public List<QuestionEntity> getQuestionList(int questionnaireId) {
+    /*public List<QuestionEntity> getQuestionList(int questionnaireId) {
         return em.createNamedQuery("QuestionnaireEntity.getQuestionList", QuestionEntity.class)
                 .setParameter("questionnaireId", questionnaireId)
+                .getResultList();
+    }*/
+
+    public List<QuestionnaireEntity> findQuestionnairesUntil(LocalDate localDate) {
+        return em.createNamedQuery("QuestionnaireEntity.findAllUntilDate", QuestionnaireEntity.class)
+                .setParameter("date", Date.valueOf(localDate))
                 .getResultList();
     }
 }
