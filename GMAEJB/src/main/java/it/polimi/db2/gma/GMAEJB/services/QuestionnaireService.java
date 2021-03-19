@@ -41,4 +41,10 @@ public class QuestionnaireService {
         em.persist(questionnaire);
         return questionnaire;
     }
+
+    public List<QuestionEntity> getQuestionList(int questionnaireId) {
+        return em.createNamedQuery("QuestionnaireEntity.getQuestionList", QuestionEntity.class)
+                .setParameter("id", questionnaireId)
+                .getResultList();
+    }
 }
