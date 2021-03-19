@@ -8,6 +8,7 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import javax.ejb.EJB;
 import javax.persistence.PersistenceException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -23,6 +24,9 @@ import java.util.List;
 @WebServlet(name = "QuestionnaireServlet", value = "/questionnaire")
 public class QuestionnaireServlet extends HttpServlet {
     private TemplateEngine templateEngine;
+
+    @EJB(name = "it.polimi.db2.gma.GMAEJB.services/QuestionnaireService")
+    private QuestionnaireService questionnaireService;
 
     public void init() {
         ServletContext servletContext = getServletContext();
@@ -47,7 +51,7 @@ public class QuestionnaireServlet extends HttpServlet {
         List<QuestionEntity> questions;
         int questionnaireId = 1;
         try {
-            questions = QuestionnaireService.getQuestionList(questionnaireId);
+            questions = questionnaireService.getQuestionList(questionnaireId);
         } catch (PersistenceException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not retrieve the questions.");
             return;
