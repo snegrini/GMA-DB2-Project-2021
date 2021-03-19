@@ -1,26 +1,19 @@
 package it.polimi.db2.gma.GMAEJB.services;
 
-import it.polimi.db2.gma.GMAEJB.entities.ProductEntity;
 import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.sql.Date;
-import java.util.List;
 
 @Stateless
-public class ProductService {
+public class QuestionnaireService {
     @PersistenceContext(unitName = "GMAEJB")
     private EntityManager em;
 
-    public List<ProductEntity> findAllProducts() {
-        return em.createNamedQuery("ProductEntity.findAll", ProductEntity.class)
-                .getResultList();
-    }
-
-    public ProductEntity findProductByDay(Date date) {
-        return em.createNamedQuery("ProductEntity.findProductByDay", ProductEntity.class)
+    public QuestionnaireEntity findQuestionnaireByDate(Date date) {
+        return em.createNamedQuery("QuestionnaireEntity.findQuestionnaireByDate", QuestionnaireEntity.class)
                 .setParameter("date", date)
                 .setMaxResults(1)
                 .getResultStream()

@@ -173,7 +173,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,'Rasoio','rasoio.jpg'),(2,'Schiuma','schiuma.jpg'),(3,'Pennello','pennello.jpg');
+INSERT INTO `product` VALUES (1,'Rasoio','rasoio.png'),(2,'Schiuma','schiuma.png'),(3,'Pennello','pennello.png');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 

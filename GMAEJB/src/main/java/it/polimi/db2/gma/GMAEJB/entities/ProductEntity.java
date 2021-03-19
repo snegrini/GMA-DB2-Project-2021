@@ -7,6 +7,7 @@ import java.util.List;
 @Table(name = "product")
 @NamedQueries({
         @NamedQuery(name = "ProductEntity.findAll", query = "SELECT p FROM ProductEntity p"),
+        @NamedQuery(name = "ProductEntity.findProductByDay", query = "SELECT p FROM ProductEntity p INNER JOIN p.questionnaires q WHERE q.date = :date"),
 })
 public class ProductEntity {
     @Id
@@ -24,8 +25,7 @@ public class ProductEntity {
     private List<ReviewEntity> reviews;
 
     @OneToMany(mappedBy = "product")
-    private List<ReviewEntity> questionnaires;
-
+    private List<QuestionnaireEntity> questionnaires;
 
     public int getId() {
         return id;
@@ -49,5 +49,9 @@ public class ProductEntity {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public List<ReviewEntity> getReviews() {
+        return reviews;
     }
 }

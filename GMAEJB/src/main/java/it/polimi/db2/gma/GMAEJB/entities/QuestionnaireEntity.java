@@ -6,6 +6,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "questionnaire")
+@NamedQueries({
+        @NamedQuery(name = "QuestionnaireEntity.findQuestionnaireByDate", query = "SELECT q FROM QuestionnaireEntity q WHERE q.date = :date"),
+})
 public class QuestionnaireEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,5 +42,9 @@ public class QuestionnaireEntity {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public ProductEntity getProduct() {
+        return product;
     }
 }

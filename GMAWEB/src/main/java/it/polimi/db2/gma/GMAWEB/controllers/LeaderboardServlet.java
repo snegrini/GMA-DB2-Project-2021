@@ -1,6 +1,5 @@
 package it.polimi.db2.gma.GMAWEB.controllers;
 
-import it.polimi.db2.gma.GMAEJB.exceptions.CredentialsException;
 import it.polimi.db2.gma.GMAEJB.services.UserService;
 import it.polimi.db2.gma.GMAEJB.utils.LeaderboardRow;
 import org.thymeleaf.TemplateEngine;
@@ -9,7 +8,6 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.ejb.EJB;
-import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceException;
 import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebServlet;
@@ -17,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Date;
 import java.util.List;
 
 @WebServlet(name = "LeaderboardServlet", value = "/leaderboard")
@@ -39,7 +38,7 @@ public class LeaderboardServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         List<LeaderboardRow> rows;
         try {
-            rows = userService.getUsersLeaderboard();
+            rows = userService.getLeaderboardByDate(new Date(new java.util.Date().getTime()));
         } catch (PersistenceException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not retrieve the leaderboard.");
             return;

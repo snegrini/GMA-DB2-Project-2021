@@ -12,15 +12,25 @@
 
 <div>
 
-    <fieldset>
-        <legend>Product of the day</legend>
+    <div data-th-if="${productOfDay == null}">Wow, such empty</div>
 
-        <img src=product.GetImage/>
+    <fieldset data-th-if="${productOfDay != null}">
+
+        <h2 data-th-text="${productOfDay.name}"></h2>
+
+        <img src="https://via.placeholder.com/200x200?text=product" width="200" height="200" data-th-src="@{'/images/'+${productOfDay.image}}">
+
+        <br>
+        <h3>Reviews</h3>
+
+        <div data-th-each="review : ${productOfDay.reviews}">
+            <strong>Username</strong>: <span data-th-text="${review.username}">Pippo</span><br>
+            <strong>Review</strong>: <span data-th-text="${review.review}">Good</span>
+        </div>
 
         <br>
 
-        <p>Wanna fill the questionnaire? <a id="questionnaireanchor" data-th-href="@{'/questionnaire'}"
-                                            href="questionnaire">Go to!</a></p>
+        <p>Wanna fill the questionnaire? <a data-th-href="@{'/questionnaire'}" href="questionnaire">Go to!</a></p>
     </fieldset>
 
 </div>
