@@ -21,6 +21,13 @@ public class QuestionEntity {
     @OneToMany(mappedBy = "question")
     private List<AnswerEntity> answers;
 
+    public QuestionEntity(String question) {
+        this.question = question;
+    }
+
+    public QuestionEntity() {
+    }
+
     public int getId() {
         return id;
     }
@@ -35,5 +42,17 @@ public class QuestionEntity {
 
     public void setQuestion(String question) {
         this.question = question;
+    }
+
+    public QuestionnaireEntity getQuestionnaire() {
+        return questionnaire;
+    }
+
+    public void setQuestionnaire(QuestionnaireEntity questionnaire) {
+        this.questionnaire = questionnaire;
+    }
+
+    public List<AnswerEntity> getAnswers() {
+        return answers;
     }
 }
