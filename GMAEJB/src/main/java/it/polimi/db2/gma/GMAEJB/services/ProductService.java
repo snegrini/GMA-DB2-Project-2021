@@ -1,7 +1,6 @@
 package it.polimi.db2.gma.GMAEJB.services;
 
 import it.polimi.db2.gma.GMAEJB.entities.ProductEntity;
-import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
