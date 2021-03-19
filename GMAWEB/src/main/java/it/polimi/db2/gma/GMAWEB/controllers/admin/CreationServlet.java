@@ -2,6 +2,7 @@ package it.polimi.db2.gma.GMAWEB.controllers.admin;
 
 import it.polimi.db2.gma.GMAEJB.entities.ProductEntity;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadProductException;
+import it.polimi.db2.gma.GMAEJB.exceptions.BadQuestionnaireException;
 import it.polimi.db2.gma.GMAEJB.services.AdminService;
 import it.polimi.db2.gma.GMAEJB.services.ProductService;
 import it.polimi.db2.gma.GMAEJB.services.QuestionnaireService;
@@ -94,9 +95,11 @@ public class CreationServlet extends HttpServlet {
 
         try {
             questionnaireService.addNewQuestionnaire(localDate, productId, questions);
-        } catch (BadProductException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Failed to add a new questionnaire.");
+        } catch (BadProductException | BadQuestionnaireException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
             return;
         }
+
+        resp.sendRedirect(getServletContext().getContextPath() + "/admin");
     }
 }

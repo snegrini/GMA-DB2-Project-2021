@@ -2,14 +2,16 @@ package it.polimi.db2.gma.GMAEJB.entities;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "questionnaire")
 @NamedQueries({
         @NamedQuery(name = "QuestionnaireEntity.findAll", query = "SELECT q FROM QuestionnaireEntity q"),
-        @NamedQuery(name = "QuestionnaireEntity.findQuestionnaireByDate", query = "SELECT q FROM QuestionnaireEntity q WHERE q.date = :date"),
         @NamedQuery(name = "QuestionnaireEntity.getQuestionnairesInfos", query = "SELECT NEW it.polimi.db2.gma.GMAEJB.utils.QuestionnaireInfo(q.id, q.date, p.name) FROM QuestionnaireEntity q INNER JOIN q.product p ORDER BY q.date DESC"),
+        @NamedQuery(name = "QuestionnaireEntity.findQuestionnaireByDate", query = "SELECT q FROM QuestionnaireEntity q WHERE q.date = :date"),
+        @NamedQuery(name = "QuestionnaireEntity.getQuestionList", query = "SELECT q FROM QuestionnaireEntity.questions q WHERE q.id = :questionnaireId"),
 })
 public class QuestionnaireEntity {
     @Id
@@ -24,16 +26,15 @@ public class QuestionnaireEntity {
     @JoinColumn(name = "ProductId")
     private ProductEntity product;
 
-    @OneToMany(mappedBy = "questionnaire")
-    private List<QuestionEntity> questions;
+    @OneToMany(mappedBy = "questionnaire", cascade = {CascadeType.PERSIST})
+    private List<QuestionEntity> questions = new ArrayList<>();
 
     @OneToMany(mappedBy = "questionnaire")
     private List<EntryEntity> entries;
 
-    public QuestionnaireEntity(Date date, ProductEntity product, List<QuestionEntity> questions) {
+    public QuestionnaireEntity(Date date, ProductEntity product) {
         this.date = date;
         this.product = product;
-        this.questions = questions;
     }
 
     public QuestionnaireEntity() {
@@ -59,7 +60,24 @@ public class QuestionnaireEntity {
         return product;
     }
 
+    public void setProduct(ProductEntity product) {
+        this.product = product;
+    }
+
+    public List<QuestionEntity> getQuestions() {
+        return questions;
+    }
+
     public List<EntryEntity> getEntries() {
         return entries;
+    }
+
+    public void addQuestion(QuestionEntity question) {
+        getQuestions().add(question);
+        question.setQuestionnaire(this);
+    }
+
+    public void removeQuestion(QuestionEntity question) {
+        getQuestions().remove(question);
     }
 }
