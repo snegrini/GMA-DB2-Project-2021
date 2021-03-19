@@ -4,6 +4,7 @@ import it.polimi.db2.gma.GMAEJB.entities.ProductEntity;
 import it.polimi.db2.gma.GMAEJB.entities.QuestionEntity;
 import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadProductException;
+import it.polimi.db2.gma.GMAEJB.utils.QuestionnaireInfo;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -16,6 +17,15 @@ import java.util.List;
 public class QuestionnaireService {
     @PersistenceContext(unitName = "GMAEJB")
     private EntityManager em;
+
+    public QuestionnaireEntity findQuestionnaireById(int id) {
+        return em.find(QuestionnaireEntity.class, id);
+    }
+
+    public List<QuestionnaireEntity> findAllQuestionnaires() {
+        return em.createNamedQuery("QuestionnaireEntity.findAll", QuestionnaireEntity.class)
+                .getResultList();
+    }
 
     public QuestionnaireEntity findQuestionnaireByDate(Date date) {
         return em.createNamedQuery("QuestionnaireEntity.findQuestionnaireByDate", QuestionnaireEntity.class)
@@ -40,5 +50,11 @@ public class QuestionnaireService {
         QuestionnaireEntity questionnaire = new QuestionnaireEntity(Date.valueOf(date), product, questions);
         em.persist(questionnaire);
         return questionnaire;
+    }
+
+    public List<QuestionnaireInfo> getQuestionnairesInfos() {
+        return em.createNamedQuery("QuestionnaireEntity.getQuestionnairesInfos", QuestionnaireInfo.class)
+                .getResultList();
+
     }
 }

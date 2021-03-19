@@ -2,9 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Inspection Page</title>
 </head>
 <body>
+<header>
+    <h1>Inspection page</h1>
+</header>
+<div data-th-if="${#lists.isEmpty(questionnaires)}">Wow, such empty</div>
 
+<table data-th-unless="${#lists.isEmpty(questionnaires)}">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Product</th>
+        <th>Inspect</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr data-th-each="questionnaire : ${questionnaires}">
+        <td data-th-text="${questionnaire.id}">1</td>
+        <td data-th-text="${questionnaire.date}">YYYY-MM-DD</td>
+        <td data-th-text="${questionnaire.productName}">YYYY-MM-DD</td>
+        <td><a data-th-href="@{'/admin/questionnaire?id='+${questionnaire.id}}">Inspect</a></td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

@@ -48,6 +48,10 @@ public class EntryEntity {
         this.points = points;
     }
 
+    public UserEntity getUser() {
+        return user;
+    }
+
     public Byte getIsSubmitted() {
         return isSubmitted;
     }

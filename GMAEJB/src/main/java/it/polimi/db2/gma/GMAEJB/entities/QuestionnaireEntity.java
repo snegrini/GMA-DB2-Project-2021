@@ -7,7 +7,9 @@ import java.util.List;
 @Entity
 @Table(name = "questionnaire")
 @NamedQueries({
+        @NamedQuery(name = "QuestionnaireEntity.findAll", query = "SELECT q FROM QuestionnaireEntity q"),
         @NamedQuery(name = "QuestionnaireEntity.findQuestionnaireByDate", query = "SELECT q FROM QuestionnaireEntity q WHERE q.date = :date"),
+        @NamedQuery(name = "QuestionnaireEntity.getQuestionnairesInfos", query = "SELECT NEW it.polimi.db2.gma.GMAEJB.utils.QuestionnaireInfo(q.id, q.date, p.name) FROM QuestionnaireEntity q INNER JOIN q.product p ORDER BY q.date DESC"),
 })
 public class QuestionnaireEntity {
     @Id
@@ -55,5 +57,9 @@ public class QuestionnaireEntity {
 
     public ProductEntity getProduct() {
         return product;
+    }
+
+    public List<EntryEntity> getEntries() {
+        return entries;
     }
 }
