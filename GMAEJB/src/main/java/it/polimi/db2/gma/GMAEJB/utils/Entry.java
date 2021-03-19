@@ -4,18 +4,18 @@ import java.util.List;
 
 public class Entry {
     final private StatsAnswers statsAnswers;
-    final private List<QuestionAnswer> questionAnswerList;
+    final private List<QuestionAnswer> answerList;
 
-    public Entry(StatsAnswers statsAnswers, List<QuestionAnswer> questionAnswerList) {
+    public Entry(StatsAnswers statsAnswers, List<QuestionAnswer> answerList) {
         this.statsAnswers = statsAnswers;
-        this.questionAnswerList = questionAnswerList;
+        this.answerList = answerList;
     }
 
-    public StatsAnswers getStatsAnswer() {
+    public StatsAnswers getStatsAnswers() {
         return statsAnswers;
     }
 
-    public List<QuestionAnswer> getQuestionAnswerList() {
-        return questionAnswerList;
+    public List<QuestionAnswer> getAnswerList() {
+        return answerList;
     }
 }
