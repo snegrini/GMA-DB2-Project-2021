@@ -15,12 +15,13 @@
     <fieldset>
         <legend>Product of the day</legend>
 
-        <img src=product.GetImage/>
 
         <br>
 
-        <p>Wanna fill the questionnaire? <a id="questionnaireanchor" data-th-href="@{'/questionnaire'}"
-                                            href="questionnaire">Go to!</a></p>
+        <p>Wanna fill the questionnaire? </p>
+        <form method="post" data-th-action="@{'/questionnaire'}" >
+            <input type="submit" name="going" value="GoTo">
+        </form>
     </fieldset>
 
 </div>
