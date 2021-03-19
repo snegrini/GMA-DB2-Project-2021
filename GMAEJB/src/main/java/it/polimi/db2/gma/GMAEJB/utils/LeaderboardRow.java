@@ -1,8 +1,8 @@
 package it.polimi.db2.gma.GMAEJB.utils;
 
 public class LeaderboardRow {
-    String username;
-    int points;
+    final private String username;
+    final private int points;
 
     public LeaderboardRow(String username, int points) {
         this.username = username;

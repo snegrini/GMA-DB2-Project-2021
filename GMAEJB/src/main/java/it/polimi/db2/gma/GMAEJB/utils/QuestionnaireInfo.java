@@ -3,9 +3,9 @@ package it.polimi.db2.gma.GMAEJB.utils;
 import java.sql.Date;
 
 public class QuestionnaireInfo {
-    int id;
-    Date date;
-    String productName;
+    final private int id;
+    final private Date date;
+    final private String productName;
 
     public QuestionnaireInfo(int id, Date date, String productName) {
         this.id = id;

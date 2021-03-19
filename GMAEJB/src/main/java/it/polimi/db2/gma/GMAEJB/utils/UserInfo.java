@@ -1,8 +1,8 @@
 package it.polimi.db2.gma.GMAEJB.utils;
 
 public class UserInfo {
-    int id;
-    String username;
+    final private int id;
+    final private String username;
 
     public UserInfo(int id, String username) {
         this.id = id;

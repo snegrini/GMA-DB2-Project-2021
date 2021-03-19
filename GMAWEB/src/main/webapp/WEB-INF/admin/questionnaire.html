@@ -49,5 +49,26 @@
         </tbody>
     </table>
 </fieldset>
+
+<fieldset data-th-if="${entry != null}">
+    <h2>Answers</h2>
+
+    <h3>Marketing Questions</h3>
+    <div data-th-each="qa : ${questionAnswerList}">
+        <strong>Question: </strong><span data-th-text="${qa.question}"></span><br>
+        <strong>Answer: </strong><span data-th-text="${qa.answer}"></span>
+    </div>
+
+    <h3 data-th-if="${entry.statsAnswers != null}">Statistical Questions</h3>
+    <div data-th-if="${entry.statsAnswers.age != null}">
+        <strong>Age: </strong><span data-th-text="${entry.statsAnswers.age}"></span>
+    </div>
+    <div data-th-if="${entry.statsAnswers.sex != null}">
+        <strong>Sex: </strong><span data-th-text="${entry.statsAnswers.sex}"></span>
+    </div>
+    <div data-th-if="${entry.statsAnswers.expertiseLevel != null}">
+        <strong>Expertise Level: </strong><span data-th-text="${entry.statsAnswers.expertiseLevel}"></span>
+    </div>
+</fieldset>
 </body>
 </html>

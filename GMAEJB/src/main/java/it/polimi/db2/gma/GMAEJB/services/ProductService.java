@@ -19,7 +19,7 @@ public class ProductService {
     }
 
     public ProductEntity findProductByDay(Date date) {
-        return em.createNamedQuery("ProductEntity.findProductByDay", ProductEntity.class)
+        return em.createNamedQuery("ProductEntity.findByDate", ProductEntity.class)
                 .setParameter("date", date)
                 .setMaxResults(1)
                 .getResultStream()
