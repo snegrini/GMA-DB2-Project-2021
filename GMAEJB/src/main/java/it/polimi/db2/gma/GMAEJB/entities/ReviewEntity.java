@@ -37,4 +37,8 @@ public class ReviewEntity {
     public void setReview(String review) {
         this.review = review;
     }
+
+    public UserEntity getUser() {
+        return user;
+    }
 }

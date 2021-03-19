@@ -9,6 +9,7 @@ import java.util.List;
 @Table(name = "questionnaire")
 @NamedQueries({
         @NamedQuery(name = "QuestionnaireEntity.findByDate", query = "SELECT q FROM QuestionnaireEntity q WHERE q.date = :date"),
+        @NamedQuery(name = "QuestionnaireEntity.getQuestionList", query = "SELECT q FROM QuestionnaireEntity.questions q WHERE q.id = :questionnaireId"),
 })
 public class QuestionnaireEntity {
     @Id

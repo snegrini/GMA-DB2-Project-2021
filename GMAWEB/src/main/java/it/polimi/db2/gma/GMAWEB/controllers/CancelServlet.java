@@ -1,29 +1,30 @@
 package it.polimi.db2.gma.GMAWEB.controllers;
 
-import it.polimi.db2.gma.GMAEJB.services.UserService;
-import it.polimi.db2.gma.GMAEJB.utils.LeaderboardRow;
+import it.polimi.db2.gma.GMAEJB.entities.LoginlogEntity;
+import it.polimi.db2.gma.GMAEJB.services.LoginlogService;
+import org.eclipse.persistence.internal.oxm.mappings.Login;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
-import javax.ejb.EJB;
 import javax.persistence.PersistenceException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.List;
 
-@WebServlet(name = "LeaderboardServlet", value = "/leaderboard")
-public class LeaderboardServlet extends HttpServlet {
-    private TemplateEngine templateEngine;
 
-    @EJB(name = "it.polimi.db2.gma.GMAEJB.services/UserService")
-    private UserService userService;
+@WebServlet(name = "CancelServlet", value = "/cancel")
+public class CancelServlet extends HttpServlet {
+    private TemplateEngine templateEngine;
 
     public void init() {
         ServletContext servletContext = getServletContext();
@@ -34,13 +35,14 @@ public class LeaderboardServlet extends HttpServlet {
         templateResolver.setSuffix(".html");
     }
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        List<LeaderboardRow> rows;
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        LoginlogEntity log = new LoginlogEntity();
+
         try {
-            rows = userService.getLeaderboardByDate(new Date(new java.util.Date().getTime()));
+            log = LoginlogService.addLoginLog(session.getAttribute("user"));
         } catch (PersistenceException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not retrieve the leaderboard.");
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not cancel.");
             return;
         }
 
@@ -48,9 +50,9 @@ public class LeaderboardServlet extends HttpServlet {
 
         ServletContext servletContext = getServletContext();
         WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-        ctx.setVariable("rows", rows);
-        String path = "/WEB-INF/leaderboard.html";
+        String path = "/WEB-INF/homepage.html";
 
         templateEngine.process(path, ctx, resp.getWriter());
     }
+
 }

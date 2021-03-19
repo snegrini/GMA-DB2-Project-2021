@@ -20,6 +20,15 @@ public class QuestionnaireService {
     @PersistenceContext(unitName = "GMAEJB")
     private EntityManager em;
 
+    public QuestionnaireEntity findQuestionnaireByDate(Date date) {
+        return em.createNamedQuery("QuestionnaireEntity.findByDate", QuestionnaireEntity.class)
+                .setParameter("date", date)
+                .setMaxResults(1)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+    }
+
     public QuestionnaireEntity addNewQuestionnaire(LocalDate date, int productId, List<String> strQuestions) throws BadProductException, BadQuestionnaireException {
         ProductEntity product = em.find(ProductEntity.class, productId);
 
@@ -48,4 +57,9 @@ public class QuestionnaireService {
         return questionnaire;
     }
 
+    public List<QuestionEntity> getQuestionList(int questionnaireId) {
+        return em.createNamedQuery("QuestionnaireEntity.getQuestionList", QuestionEntity.class)
+                .setParameter("questionnaireId", questionnaireId)
+                .getResultList();
+    }
 }

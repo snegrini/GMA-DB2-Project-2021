@@ -18,19 +18,19 @@ public class LoginlogEntity {
     @JoinColumn(name = "UserId")
     private UserEntity user;
 
+    public LoginlogEntity() {
+    }
+
+    public LoginlogEntity(Timestamp logTime, UserEntity user) {
+        this.logTime = logTime;
+        this.user = user;
+    }
+
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public Timestamp getLogTime() {
         return logTime;
-    }
-
-    public void setLogTime(Timestamp logTime) {
-        this.logTime = logTime;
     }
 }

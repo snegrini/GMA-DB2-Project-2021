@@ -82,9 +82,9 @@ public class UserService {
         return newUser;
     }
 
-    public List<LeaderboardRow> getUsersLeaderboard() {
-        return em.createNamedQuery("UserEntity.getLeaderboard", LeaderboardRow.class)
-                .setParameter("date", new Date(new java.util.Date().getTime()))
+    public List<LeaderboardRow> getLeaderboardByDate(Date date) {
+        return em.createNamedQuery("UserEntity.getLeaderboardByDate", LeaderboardRow.class)
+                .setParameter("date", date)
                 .getResultList();
     }
 }

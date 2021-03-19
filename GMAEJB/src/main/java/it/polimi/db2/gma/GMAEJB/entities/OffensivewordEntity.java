@@ -13,7 +13,6 @@ public class OffensivewordEntity {
     @Column(name = "Word", nullable = false, length = 45)
     private String word;
 
-
     public int getId() {
         return id;
     }
