@@ -31,10 +31,10 @@ public class EntryEntity {
     @JoinColumn(name = "QuestionnaireId")
     private QuestionnaireEntity questionnaire;
 
-    @OneToMany(mappedBy = "entry")
+    @OneToMany(mappedBy = "entry", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<StatsEntity> stats;
 
-    @OneToMany(mappedBy = "entry")
+    @OneToMany(mappedBy = "entry", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<AnswerEntity> answers;
 
 
@@ -64,5 +64,12 @@ public class EntryEntity {
 
     public void setIsSubmitted(Byte isSubmitted) {
         this.isSubmitted = isSubmitted;
+    }
+
+    public void setUserEntity(UserEntity user) {
+        this.user = user;
+    }
+    public void setQuestionnaireEntity(QuestionnaireEntity questionnaire) {
+        this.questionnaire = questionnaire;
     }
 }

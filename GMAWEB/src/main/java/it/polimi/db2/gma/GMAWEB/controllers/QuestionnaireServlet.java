@@ -51,7 +51,7 @@ public class QuestionnaireServlet extends HttpServlet {
         List<QuestionEntity> questions;
         int questionnaireId = 1;
         try {
-            questions = questionnaireService.getQuestionList(questionnaireId);
+            //questions = questionnaireService.getQuestionList(questionnaireId);
         } catch (PersistenceException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not retrieve the questions.");
             return;
@@ -61,7 +61,7 @@ public class QuestionnaireServlet extends HttpServlet {
 
         ServletContext servletContext = getServletContext();
         WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-        ctx.setVariable("questions", questions);
+        //ctx.setVariable("questions", questions);
         String path = "/WEB-INF/questionnairepage.html";
 
         templateEngine.process(path, ctx, resp.getWriter());

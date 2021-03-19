@@ -1,6 +1,8 @@
 package it.polimi.db2.gma.GMAEJB.services;
 
 import it.polimi.db2.gma.GMAEJB.entities.EntryEntity;
+import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
+import it.polimi.db2.gma.GMAEJB.entities.UserEntity;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadEntryException;
 import it.polimi.db2.gma.GMAEJB.utils.Entry;
 import it.polimi.db2.gma.GMAEJB.utils.QuestionAnswer;
@@ -47,6 +49,15 @@ public class EntryService {
 
     public EntryEntity addEmptyEntry(int questionnaireId, int userId) {
         EntryEntity newEntry = new EntryEntity();
+
+        UserEntity newUser = new UserEntity();
+        newUser.setId(userId);
+        newUser.addEntries(newEntry);
+
+        QuestionnaireEntity newQuestionnaire = new QuestionnaireEntity();
+        newQuestionnaire.setId(questionnaireId);
+        newQuestionnaire.addEntries(newEntry);
+
         em.persist(newEntry);
         return newEntry;
     }

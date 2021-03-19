@@ -1,12 +1,11 @@
 package it.polimi.db2.gma.GMAWEB.controllers.admin;
 
 import it.polimi.db2.gma.GMAEJB.entities.ProductEntity;
+import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadProductException;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadQuestionnaireException;
-import it.polimi.db2.gma.GMAEJB.services.AdminService;
 import it.polimi.db2.gma.GMAEJB.services.ProductService;
 import it.polimi.db2.gma.GMAEJB.services.QuestionnaireService;
-import it.polimi.db2.gma.GMAEJB.services.UserService;
 import org.apache.commons.text.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -24,13 +23,10 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
-@WebServlet(name = "AdminCreationServlet", value = "/admin/creation")
-public class CreationServlet extends HttpServlet {
+@WebServlet(name = "AdminDeletionServlet", value = "/admin/deletion")
+public class DeletionServlet extends HttpServlet {
     private TemplateEngine templateEngine;
-    private final String creationPath = "/WEB-INF/admin/creation.html";
-
-    @EJB(name = "it.polimi.db2.gma.GMAEJB.services/ProductService")
-    private ProductService productService;
+    private final String deletionPath = "/WEB-INF/admin/deletion.html";
 
     @EJB(name = "it.polimi.db2.gma.GMAEJB.services/QuestionnaireService")
     private QuestionnaireService questionnaireService;
@@ -51,55 +47,32 @@ public class CreationServlet extends HttpServlet {
         ServletContext servletContext = getServletContext();
         WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
 
-        List<ProductEntity> products = productService.findAllProducts();
+        List<QuestionnaireEntity> questionnaires = questionnaireService.findQuestionnairesUntil(LocalDate.now());
 
-        ctx.setVariable("products", products);
+        ctx.setVariable("questionnaires", questionnaires);
 
-        templateEngine.process(creationPath, ctx, resp.getWriter());
+        templateEngine.process(deletionPath, ctx, resp.getWriter());
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String date = StringEscapeUtils.escapeJava(req.getParameter("date"));
-        String product = StringEscapeUtils.escapeJava(req.getParameter("product"));
+        String strQuestionnaireId = StringEscapeUtils.escapeJava(req.getParameter("questionnaireId"));
 
-        String[] ques = req.getParameterValues("question[]");
-
-        if (ques == null) {
-            resp.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Missing question.");
-            return;
-        }
-
-        List<String> questions = Arrays.asList(ques);
-        questions.forEach(StringEscapeUtils::escapeJava);
-
-        if (date == null || product == null || date.isEmpty() || product.isEmpty() || questions.isEmpty()) {
-            resp.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Missing questionnaire values.");
-            return;
-        }
-
-        // Checks that date is today or later.
-        LocalDate localDate = LocalDate.parse(date);
-        if (localDate.compareTo(LocalDate.now()) < 0) {
-            resp.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Invalid date. Please select a valid date.");
-            return;
-        }
-
-        int productId;
+        int questionnaireId;
         try {
-            productId = Integer.parseInt(product);
+            questionnaireId = Integer.parseInt(strQuestionnaireId);
         } catch (NumberFormatException e)  {
-            resp.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Invalid product id.  Please select a valid product.");
+            resp.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Invalid questionnaire id.");
             return;
         }
 
         try {
-            questionnaireService.addNewQuestionnaire(localDate, productId, questions);
-        } catch (BadProductException | BadQuestionnaireException e) {
+            questionnaireService.deleteQuestionnaire(questionnaireId);
+        } catch (BadQuestionnaireException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
             return;
         }
 
-        resp.sendRedirect(getServletContext().getContextPath() + "/admin/creation");
+        resp.sendRedirect(getServletContext().getContextPath() + "/admin/deletion");
     }
 }

@@ -18,7 +18,7 @@ public class QuestionEntity {
     @JoinColumn(name = "QuestionnaireId")
     private QuestionnaireEntity questionnaire;
 
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question", cascade = { CascadeType.REMOVE }, orphanRemoval = true)
     private List<AnswerEntity> answers;
 
     public QuestionEntity(String question) {

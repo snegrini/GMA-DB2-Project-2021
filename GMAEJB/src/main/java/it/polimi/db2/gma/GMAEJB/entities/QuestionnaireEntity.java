@@ -8,10 +8,11 @@ import java.util.List;
 @Entity
 @Table(name = "questionnaire")
 @NamedQueries({
+        @NamedQuery(name = "QuestionnaireEntity.findByDate", query = "SELECT q FROM QuestionnaireEntity q WHERE q.date = :date"),
+        @NamedQuery(name = "QuestionnaireEntity.findAllUntilDate", query = "SELECT q FROM QuestionnaireEntity q WHERE q.date < :date ORDER BY q.date DESC"),
+        //@NamedQuery(name = "QuestionnaireEntity.getQuestionList", query = "SELECT q FROM QuestionnaireEntity.questions q WHERE q.id = :questionnaireId"),
         @NamedQuery(name = "QuestionnaireEntity.findAll", query = "SELECT q FROM QuestionnaireEntity q"),
         @NamedQuery(name = "QuestionnaireEntity.getQuestionnairesInfos", query = "SELECT NEW it.polimi.db2.gma.GMAEJB.utils.QuestionnaireInfo(q.id, q.date, p.name) FROM QuestionnaireEntity q INNER JOIN q.product p ORDER BY q.date DESC"),
-        @NamedQuery(name = "QuestionnaireEntity.findByDate", query = "SELECT q FROM QuestionnaireEntity q WHERE q.date = :date"),
-        //@NamedQuery(name = "QuestionnaireEntity.getQuestionList", query = "SELECT q FROM QuestionnaireEntity.questions q WHERE q.id = :questionnaireId"),
 })
 public class QuestionnaireEntity {
     @Id
@@ -26,10 +27,10 @@ public class QuestionnaireEntity {
     @JoinColumn(name = "ProductId")
     private ProductEntity product;
 
-    @OneToMany(mappedBy = "questionnaire", cascade = {CascadeType.PERSIST})
+    @OneToMany(mappedBy = "questionnaire", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<QuestionEntity> questions = new ArrayList<>();
 
-    @OneToMany(mappedBy = "questionnaire")
+    @OneToMany(mappedBy = "questionnaire", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<EntryEntity> entries;
 
     public QuestionnaireEntity(Date date, ProductEntity product) {
@@ -79,5 +80,10 @@ public class QuestionnaireEntity {
 
     public void removeQuestion(QuestionEntity question) {
         getQuestions().remove(question);
+    }
+
+    public void addEntries(EntryEntity entry) {
+        getEntries().add(entry);
+        entry.setQuestionnaireEntity(this);
     }
 }
