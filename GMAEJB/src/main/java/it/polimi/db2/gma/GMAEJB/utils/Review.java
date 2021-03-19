@@ -1,8 +1,8 @@
 package it.polimi.db2.gma.GMAEJB.utils;
 
 public class Review {
-    String username;
-    String review;
+    final private String username;
+    final private String review;
 
     public Review(String username, String review) {
         this.username = username;

@@ -1,8 +1,11 @@
 package it.polimi.db2.gma.GMAEJB.services;
 
+import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
 import it.polimi.db2.gma.GMAEJB.entities.UserEntity;
+import it.polimi.db2.gma.GMAEJB.exceptions.BadQuestionnaireException;
 import it.polimi.db2.gma.GMAEJB.exceptions.CredentialsException;
 import it.polimi.db2.gma.GMAEJB.utils.LeaderboardRow;
+import it.polimi.db2.gma.GMAEJB.utils.UserInfo;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -16,7 +19,6 @@ import java.sql.Date;
 public class UserService {
     @PersistenceContext(unitName = "GMAEJB")
     private EntityManager em;
-
 
     public UserEntity findUserByUsername(String username) {
         return em.createNamedQuery("UserEntity.findByUsername", UserEntity.class)
@@ -85,6 +87,19 @@ public class UserService {
     public List<LeaderboardRow> getLeaderboardByDate(Date date) {
         return em.createNamedQuery("UserEntity.getLeaderboardByDate", LeaderboardRow.class)
                 .setParameter("date", date)
+                .getResultList();
+    }
+
+    public List<UserInfo> getQuestionnaireUserInfo(int questionnaireID, int isSubmitted) throws BadQuestionnaireException {
+        QuestionnaireEntity questionnaire = em.find(QuestionnaireEntity.class, questionnaireID);
+
+        if (questionnaire == null) {
+            throw new BadQuestionnaireException("Invalid questionnaire ID!");
+        }
+
+        return em.createNamedQuery("UserEntity.getEntriesUserInfo", UserInfo.class)
+                .setParameter("id", questionnaireID)
+                .setParameter("submitted", isSubmitted)
                 .getResultList();
     }
 }

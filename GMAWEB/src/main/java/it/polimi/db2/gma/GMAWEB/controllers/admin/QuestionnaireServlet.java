@@ -1,7 +1,10 @@
 package it.polimi.db2.gma.GMAWEB.controllers.admin;
 
 import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
+import it.polimi.db2.gma.GMAEJB.services.EntryService;
 import it.polimi.db2.gma.GMAEJB.services.QuestionnaireService;
+import it.polimi.db2.gma.GMAEJB.services.UserService;
+import it.polimi.db2.gma.GMAEJB.utils.Entry;
 import it.polimi.db2.gma.GMAEJB.utils.UserInfo;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -16,14 +19,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @WebServlet(name = "AdminQuestionnaireServlet", value = "/admin/questionnaire")
 public class QuestionnaireServlet extends HttpServlet {
     private TemplateEngine templateEngine;
 
-    @EJB(name = "it.polimi.db2.gma.GMAEJB.services/QuestionnaireService")
-    private QuestionnaireService questionnaireService;
+    @EJB(name = "it.polimi.db2.gma.GMAEJB.services/UserService")
+    private UserService userService;
+
+    @EJB(name = "it.polimi.db2.gma.GMAEJB.services/EntryService")
+    private EntryService entryService;
 
     public void init() {
         ServletContext servletContext = getServletContext();
@@ -36,31 +41,33 @@ public class QuestionnaireServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String requestId = req.getParameter("id");
-
-        // TODO Fetch user param and check validity
+        String requestQuestionnaireId = req.getParameter("id");
+        String requestUserId = req.getParameter("user");
 
         int questionnaireId;
-        QuestionnaireEntity questionnaire;
+        List<UserInfo> submittedUsers;
+        List<UserInfo> notSubmittedUsers;
         try {
-            questionnaireId = Integer.parseInt(requestId);
-            questionnaire = questionnaireService.findQuestionnaireById(questionnaireId);
+            questionnaireId = Integer.parseInt(requestQuestionnaireId);
+
+            submittedUsers = userService.getQuestionnaireUserInfo(questionnaireId, 1);
+            notSubmittedUsers = userService.getQuestionnaireUserInfo(questionnaireId, 0);
         } catch (Exception e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not retrieve the questionnaire.");
             return;
         }
 
-        List<UserInfo> submittedUsers = questionnaire.getEntries().stream()
-                .filter(e -> e.getIsSubmitted() == 1)
-                .map(e -> new UserInfo(e.getUser().getId(), e.getUser().getUsername()))
-                .collect(Collectors.toList());
-
-        List<UserInfo> notSubmittedUsers = questionnaire.getEntries().stream()
-                .filter(e -> e.getIsSubmitted() == 0)
-                .map(e -> new UserInfo(e.getUser().getId(), e.getUser().getUsername()))
-                .collect(Collectors.toList());
-
-        // TODO Fetch user answers and pass
+        int userId;
+        Entry entry = null;
+        if (requestUserId != null) {
+            try {
+                userId = Integer.parseInt(requestUserId);
+                entry = entryService.getUserQuestionnaireAnswers(questionnaireId, userId);
+            } catch (Exception e) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not retrieve the answers.");
+                return;
+            }
+        }
 
         resp.setContentType("text/html");
 
@@ -69,6 +76,11 @@ public class QuestionnaireServlet extends HttpServlet {
         ctx.setVariable("submittedUsers", submittedUsers);
         ctx.setVariable("notSubmittedUsers", notSubmittedUsers);
         ctx.setVariable("questionnaireId", questionnaireId);
+
+        if (entry != null) {
+            ctx.setVariable("entry", entry);
+        }
+
         String path = "/WEB-INF/admin/questionnaire.html";
 
         templateEngine.process(path, ctx, resp.getWriter());

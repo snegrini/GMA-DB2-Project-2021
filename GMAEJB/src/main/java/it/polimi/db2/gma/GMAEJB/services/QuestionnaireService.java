@@ -29,7 +29,7 @@ public class QuestionnaireService {
     }
 
     public QuestionnaireEntity findQuestionnaireByDate(Date date) {
-        return em.createNamedQuery("QuestionnaireEntity.findQuestionnaireByDate", QuestionnaireEntity.class)
+        return em.createNamedQuery("QuestionnaireEntity.findByDate", QuestionnaireEntity.class)
                 .setParameter("date", date)
                 .setMaxResults(1)
                 .getResultStream()
@@ -45,7 +45,7 @@ public class QuestionnaireService {
         }
 
         // Check that there is no other questionnaire in the selected date.
-        List<QuestionnaireEntity> entities = em.createNamedQuery("QuestionnaireEntity.findQuestionnaireByDate", QuestionnaireEntity.class)
+        List<QuestionnaireEntity> entities = em.createNamedQuery("QuestionnaireEntity.findByDate", QuestionnaireEntity.class)
                 .setParameter("date", Date.valueOf(date))
                 .getResultList();
 
