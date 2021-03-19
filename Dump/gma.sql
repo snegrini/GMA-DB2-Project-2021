@@ -57,7 +57,7 @@ CREATE TABLE `answer` (
   PRIMARY KEY (`EntryId`,`QuestionId`),
   KEY `EntryFK_idx` (`EntryId`),
   KEY `QuestionFK_idx` (`QuestionId`),
-  CONSTRAINT `fk_answer_entry_entryid` FOREIGN KEY (`EntryId`) REFERENCES `entry` (`Id`),
+  CONSTRAINT `fk_answer_entry_entryid` FOREIGN KEY (`EntryId`) REFERENCES `entry` (`Id`) ON DELETE CASCADE,
   CONSTRAINT `fk_answer_question_questionid` FOREIGN KEY (`QuestionId`) REFERENCES `question` (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -68,6 +68,7 @@ CREATE TABLE `answer` (
 
 LOCK TABLES `answer` WRITE;
 /*!40000 ALTER TABLE `answer` DISABLE KEYS */;
+INSERT INTO `answer` VALUES (2,3,'a1'),(2,4,'a2'),(3,3,'b1'),(3,4,'b2');
 /*!40000 ALTER TABLE `answer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -87,9 +88,9 @@ CREATE TABLE `entry` (
   PRIMARY KEY (`Id`),
   KEY `QuestionnaireFK2_idx` (`QuestionnaireId`),
   KEY `UserFK_idx` (`UserId`),
-  CONSTRAINT `fk_entry_questionnaire_questionnaireid` FOREIGN KEY (`QuestionnaireId`) REFERENCES `questionnaire` (`Id`),
+  CONSTRAINT `fk_entry_questionnaire_questionnaireid` FOREIGN KEY (`QuestionnaireId`) REFERENCES `questionnaire` (`Id`) ON DELETE CASCADE,
   CONSTRAINT `fk_entry_user_userid` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -98,6 +99,7 @@ CREATE TABLE `entry` (
 
 LOCK TABLES `entry` WRITE;
 /*!40000 ALTER TABLE `entry` DISABLE KEYS */;
+INSERT INTO `entry` VALUES (2,1,1,2,1),(3,2,1,4,1);
 /*!40000 ALTER TABLE `entry` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -190,8 +192,8 @@ CREATE TABLE `question` (
   `Question` varchar(200) NOT NULL,
   PRIMARY KEY (`Id`),
   KEY `QuestionnaireFK_idx` (`QuestionnaireId`),
-  CONSTRAINT `fk_question_questionnaire_questionnaireid` FOREIGN KEY (`QuestionnaireId`) REFERENCES `questionnaire` (`Id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `fk_question_questionnaire_questionnaireid` FOREIGN KEY (`QuestionnaireId`) REFERENCES `questionnaire` (`Id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -200,6 +202,7 @@ CREATE TABLE `question` (
 
 LOCK TABLES `question` WRITE;
 /*!40000 ALTER TABLE `question` DISABLE KEYS */;
+INSERT INTO `question` VALUES (3,1,'question1'),(4,1,'question2');
 /*!40000 ALTER TABLE `question` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -217,8 +220,8 @@ CREATE TABLE `questionnaire` (
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Date_UNIQUE` (`Date`),
   KEY `ProductFK2_idx` (`ProductId`),
-  CONSTRAINT `fk_questionnaire_product_productid` FOREIGN KEY (`ProductId`) REFERENCES `product` (`Id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `fk_questionnaire_product_productid` FOREIGN KEY (`ProductId`) REFERENCES `product` (`Id`) ON DELETE RESTRICT
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -227,8 +230,28 @@ CREATE TABLE `questionnaire` (
 
 LOCK TABLES `questionnaire` WRITE;
 /*!40000 ALTER TABLE `questionnaire` DISABLE KEYS */;
+INSERT INTO `questionnaire` VALUES (1,1,'2021-03-16'),(2,2,'2021-03-17'),(3,3,'2021-03-21');
 /*!40000 ALTER TABLE `questionnaire` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `questionnaire_BEFORE_DELETE` BEFORE DELETE ON `questionnaire` FOR EACH ROW BEGIN
+	UPDATE `user` u
+    SET u.Points = u.Points - (SELECT e1.Points FROM `entry` e1 WHERE e1.QuestionnaireId = OLD.Id AND e1.UserId = u.Id)
+    WHERE u.Id IN (SELECT e2.UserId FROM `entry` e2 WHERE e2.QuestionnaireId = OLD.Id);
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `review`
@@ -272,7 +295,7 @@ CREATE TABLE `stats` (
   `ExpertiseLevel` enum('LOW','MEDIUM','HIGH') DEFAULT NULL,
   PRIMARY KEY (`Id`),
   KEY `EntryFK2_idx` (`EntryId`),
-  CONSTRAINT `fk_stats_entry_entryid` FOREIGN KEY (`EntryId`) REFERENCES `entry` (`Id`)
+  CONSTRAINT `fk_stats_entry_entryid` FOREIGN KEY (`EntryId`) REFERENCES `entry` (`Id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -302,7 +325,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Username_UNIQUE` (`Username`),
   UNIQUE KEY `Email_UNIQUE` (`Email`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -311,7 +334,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'user1','password','user1@example.org',0,0),(2,'user2','password','user2@example.org',0,0);
+INSERT INTO `user` VALUES (1,'user1','password','user1@example.org',2,0),(2,'user2','password','user2@example.org',4,0),(3,'user3','password','user3@example.org',0,0);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -324,4 +347,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-03-17 23:07:52
+-- Dump completed on 2021-03-19 23:54:31

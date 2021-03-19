@@ -10,10 +10,6 @@ import java.io.IOException;
 @WebServlet(name = "LogoutServlet", value = "/logout")
 public class LogoutServlet extends HttpServlet {
 
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        doGet(req, resp);
-    }
-
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession(false);
 
@@ -22,5 +18,9 @@ public class LogoutServlet extends HttpServlet {
         }
 
         resp.sendRedirect(getServletContext().getContextPath());
+    }
+
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        doGet(req, resp);
     }
 }

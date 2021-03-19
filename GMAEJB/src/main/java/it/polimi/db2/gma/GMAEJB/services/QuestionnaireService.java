@@ -4,21 +4,29 @@ import it.polimi.db2.gma.GMAEJB.entities.ProductEntity;
 import it.polimi.db2.gma.GMAEJB.entities.QuestionEntity;
 import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadProductException;
+import it.polimi.db2.gma.GMAEJB.utils.QuestionnaireInfo;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadQuestionnaireException;
-import it.polimi.db2.gma.GMAEJB.utils.LeaderboardRow;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
 public class QuestionnaireService {
     @PersistenceContext(unitName = "GMAEJB")
     private EntityManager em;
+
+    public QuestionnaireEntity findQuestionnaireById(int id) {
+        return em.find(QuestionnaireEntity.class, id);
+    }
+
+    public List<QuestionnaireEntity> findAllQuestionnaires() {
+        return em.createNamedQuery("QuestionnaireEntity.findAll", QuestionnaireEntity.class)
+                .getResultList();
+    }
 
     public QuestionnaireEntity findQuestionnaireByDate(Date date) {
         return em.createNamedQuery("QuestionnaireEntity.findByDate", QuestionnaireEntity.class)
@@ -57,11 +65,33 @@ public class QuestionnaireService {
         return questionnaire;
     }
 
+    public void deleteQuestionnaire(int questionnaireId) throws BadQuestionnaireException {
+        QuestionnaireEntity questionnaire = em.find(QuestionnaireEntity.class, questionnaireId);
+
+        if (questionnaire == null) {
+            throw new BadQuestionnaireException("Questionnaire not found.");
+        }
+
+        if (questionnaire.getDate().toLocalDate().compareTo(LocalDate.now()) >= 0) {
+            throw new BadQuestionnaireException("Cannot delete the selected questionnaire.");
+        }
+
+        // Points are removed by using a trigger.
+
+        em.remove(questionnaire);
+        //em.flush(); // Ensure instant propagation to DB.
+    }
+
     /*public List<QuestionEntity> getQuestionList(int questionnaireId) {
         return em.createNamedQuery("QuestionnaireEntity.getQuestionList", QuestionEntity.class)
                 .setParameter("questionnaireId", questionnaireId)
                 .getResultList();
     }*/
+
+    public List<QuestionnaireInfo> getQuestionnairesInfos() {
+        return em.createNamedQuery("QuestionnaireEntity.getQuestionnairesInfos", QuestionnaireInfo.class)
+                .getResultList();
+    }
 
     public List<QuestionnaireEntity> findQuestionnairesUntil(LocalDate localDate) {
         return em.createNamedQuery("QuestionnaireEntity.findAllUntilDate", QuestionnaireEntity.class)

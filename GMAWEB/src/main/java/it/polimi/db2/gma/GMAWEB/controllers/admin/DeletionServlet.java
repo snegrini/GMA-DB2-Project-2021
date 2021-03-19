@@ -56,16 +56,23 @@ public class DeletionServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String strQuestionnaireId = StringEscapeUtils.escapeJava(req.getParameter("id"));
+        String strQuestionnaireId = StringEscapeUtils.escapeJava(req.getParameter("questionnaireId"));
 
         int questionnaireId;
         try {
             questionnaireId = Integer.parseInt(strQuestionnaireId);
         } catch (NumberFormatException e)  {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid questionnaire id.");
+            resp.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Invalid questionnaire id.");
             return;
         }
 
-        questionnaireService.
+        try {
+            questionnaireService.deleteQuestionnaire(questionnaireId);
+        } catch (BadQuestionnaireException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            return;
+        }
+
+        resp.sendRedirect(getServletContext().getContextPath() + "/admin/deletion");
     }
 }

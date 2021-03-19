@@ -66,7 +66,7 @@ public class CreationServlet extends HttpServlet {
         String[] ques = req.getParameterValues("question[]");
 
         if (ques == null) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing question.");
+            resp.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Missing question.");
             return;
         }
 
@@ -74,14 +74,14 @@ public class CreationServlet extends HttpServlet {
         questions.forEach(StringEscapeUtils::escapeJava);
 
         if (date == null || product == null || date.isEmpty() || product.isEmpty() || questions.isEmpty()) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing questionnaire values.");
+            resp.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Missing questionnaire values.");
             return;
         }
 
         // Checks that date is today or later.
         LocalDate localDate = LocalDate.parse(date);
         if (localDate.compareTo(LocalDate.now()) < 0) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid date. Please select a valid date.");
+            resp.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Invalid date. Please select a valid date.");
             return;
         }
 
@@ -89,7 +89,7 @@ public class CreationServlet extends HttpServlet {
         try {
             productId = Integer.parseInt(product);
         } catch (NumberFormatException e)  {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid product id.  Please select a valid product.");
+            resp.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Invalid product id.  Please select a valid product.");
             return;
         }
 
@@ -100,6 +100,6 @@ public class CreationServlet extends HttpServlet {
             return;
         }
 
-        resp.sendRedirect(getServletContext().getContextPath() + "/admin");
+        resp.sendRedirect(getServletContext().getContextPath() + "/admin/creation");
     }
 }

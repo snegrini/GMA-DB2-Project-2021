@@ -1,27 +1,24 @@
-package it.polimi.db2.gma.GMAWEB.controllers;
+package it.polimi.db2.gma.GMAWEB.controllers.admin;
 
-import it.polimi.db2.gma.GMAEJB.entities.QuestionEntity;
+import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
 import it.polimi.db2.gma.GMAEJB.services.QuestionnaireService;
-import it.polimi.db2.gma.GMAEJB.utils.LeaderboardRow;
+import it.polimi.db2.gma.GMAEJB.utils.UserInfo;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.ejb.EJB;
-import javax.persistence.PersistenceException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@WebServlet(name = "QuestionnaireServlet", value = "/questionnaire")
+@WebServlet(name = "AdminQuestionnaireServlet", value = "/admin/questionnaire")
 public class QuestionnaireServlet extends HttpServlet {
     private TemplateEngine templateEngine;
 
@@ -39,32 +36,41 @@ public class QuestionnaireServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        try {
-            doPost(req, resp);
-        } catch (ServletException e) {
-            e.printStackTrace();
-        }
-    }
+        String requestId = req.getParameter("id");
 
+        // TODO Fetch user param and check validity
 
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<QuestionEntity> questions;
-        int questionnaireId = 1;
+        int questionnaireId;
+        QuestionnaireEntity questionnaire;
         try {
-            //questions = questionnaireService.getQuestionList(questionnaireId);
-        } catch (PersistenceException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not retrieve the questions.");
+            questionnaireId = Integer.parseInt(requestId);
+            questionnaire = questionnaireService.findQuestionnaireById(questionnaireId);
+        } catch (Exception e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not retrieve the questionnaire.");
             return;
         }
+
+        List<UserInfo> submittedUsers = questionnaire.getEntries().stream()
+                .filter(e -> e.getIsSubmitted() == 1)
+                .map(e -> new UserInfo(e.getUser().getId(), e.getUser().getUsername()))
+                .collect(Collectors.toList());
+
+        List<UserInfo> notSubmittedUsers = questionnaire.getEntries().stream()
+                .filter(e -> e.getIsSubmitted() == 0)
+                .map(e -> new UserInfo(e.getUser().getId(), e.getUser().getUsername()))
+                .collect(Collectors.toList());
+
+        // TODO Fetch user answers and pass
 
         resp.setContentType("text/html");
 
         ServletContext servletContext = getServletContext();
         WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-        //ctx.setVariable("questions", questions);
-        String path = "/WEB-INF/questionnairepage.html";
+        ctx.setVariable("submittedUsers", submittedUsers);
+        ctx.setVariable("notSubmittedUsers", notSubmittedUsers);
+        ctx.setVariable("questionnaireId", questionnaireId);
+        String path = "/WEB-INF/admin/questionnaire.html";
 
         templateEngine.process(path, ctx, resp.getWriter());
     }
-
 }

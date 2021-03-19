@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inspection Page</title>
+</head>
+<body>
+<header>
+    <h1>Inspection page</h1>
+</header>
+<fieldset>
+    <h2>Users who submitted</h2>
+    <div data-th-if="${#lists.isEmpty(submittedUsers)}">Wow, such empty</div>
+
+    <table data-th-unless="${#lists.isEmpty(submittedUsers)}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Answers</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-th-each="user : ${submittedUsers}">
+            <td data-th-text="${user.id}">1</td>
+            <td data-th-text="${user.username}">asd</td>
+            <td><a data-th-href="@{'/admin/questionnaire?id='+${questionnaireId}+'&user='+${user.id}}">Inspect</a></td>
+        </tr>
+        </tbody>
+    </table>
+</fieldset>
+<br>
+<fieldset>
+    <h2>Users who did not submit</h2>
+    <div data-th-if="${#lists.isEmpty(notSubmittedUsers)}">Wow, such empty</div>
+
+    <table data-th-unless="${#lists.isEmpty(notSubmittedUsers)}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-th-each="user : ${notSubmittedUsers}">
+            <td data-th-text="${user.id}">1</td>
+            <td data-th-text="${user.username}">asd</td>
+        </tr>
+        </tbody>
+    </table>
+</fieldset>
+</body>
+</html>
