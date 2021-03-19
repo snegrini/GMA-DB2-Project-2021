@@ -80,4 +80,9 @@ public class QuestionnaireEntity {
     public void removeQuestion(QuestionEntity question) {
         getQuestions().remove(question);
     }
+
+    public void addEntries(EntryEntity entry) {
+        getEntries().add(entry);
+        entry.setQuestionnaireEntity(this);
+    }
 }

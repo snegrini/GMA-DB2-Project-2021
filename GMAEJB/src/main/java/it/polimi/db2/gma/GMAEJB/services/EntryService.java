@@ -19,6 +19,15 @@ public class EntryService {
 
     public EntryEntity addEmptyEntry(int questionnaireId, int userId) {
         EntryEntity newEntry = new EntryEntity();
+
+        UserEntity newUser = new UserEntity();
+        newUser.setId(userId);
+        newUser.addEntries(newEntry);
+
+        QuestionnaireEntity newQuestionnaire = new QuestionnaireEntity();
+        newQuestionnaire.setId(questionnaireId);
+        newQuestionnaire.addEntries(newEntry);
+
         em.persist(newEntry);
         return newEntry;
     }

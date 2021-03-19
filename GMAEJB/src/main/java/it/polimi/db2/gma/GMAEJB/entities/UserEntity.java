@@ -99,4 +99,13 @@ public class UserEntity {
     public void setIsBlocked(Byte isBlocked) {
         this.isBlocked = isBlocked;
     }
+
+    public List<EntryEntity> getEntries() {
+        return entries;
+    }
+
+    public void addEntries(EntryEntity entry) {
+        getEntries().add(entry);
+        entry.setUserEntity(this);
+    }
 }

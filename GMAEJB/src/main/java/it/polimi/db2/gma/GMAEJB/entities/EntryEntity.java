@@ -59,4 +59,11 @@ public class EntryEntity {
     public void setIsSubmitted(Byte isSubmitted) {
         this.isSubmitted = isSubmitted;
     }
+
+    public void setUserEntity(UserEntity user) {
+        this.user = user;
+    }
+    public void setQuestionnaireEntity(QuestionnaireEntity questionnaire) {
+        this.questionnaire = questionnaire;
+    }
 }

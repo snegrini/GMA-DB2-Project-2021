@@ -1,6 +1,9 @@
 package it.polimi.db2.gma.GMAWEB.controllers;
 
 import it.polimi.db2.gma.GMAEJB.entities.LoginlogEntity;
+import it.polimi.db2.gma.GMAEJB.exceptions.BadProductException;
+import it.polimi.db2.gma.GMAEJB.exceptions.BadQuestionnaireException;
+import it.polimi.db2.gma.GMAEJB.services.EntryService;
 import it.polimi.db2.gma.GMAEJB.services.LoginlogService;
 import it.polimi.db2.gma.GMAEJB.services.QuestionnaireService;
 import org.eclipse.persistence.internal.oxm.mappings.Login;
@@ -28,6 +31,9 @@ import java.util.List;
 public class CancelServlet extends HttpServlet {
     private TemplateEngine templateEngine;
 
+    @EJB(name = "it.polimi.db2.gma.GMAEJB.services/EntryService")
+    private EntryService entryService;
+
     public void init() {
         ServletContext servletContext = getServletContext();
         ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
@@ -40,15 +46,19 @@ public class CancelServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
 
+        // TODO retrieve from session
+        int qId=1;
+        int userId=1;
+
         // TODO Add entry not submitted
+        try {
+            entryService.addEmptyEntry(qId, userId);
+        } catch (PersistenceException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST,"Could not cancel.");
+            return;
+        }
 
-        resp.setContentType("text/html");
-
-        ServletContext servletContext = getServletContext();
-        WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-        String path = "/WEB-INF/homepage.html";
-
-        templateEngine.process(path, ctx, resp.getWriter());
+        resp.sendRedirect(getServletContext().getContextPath() + "/homepage");
     }
 
 }
