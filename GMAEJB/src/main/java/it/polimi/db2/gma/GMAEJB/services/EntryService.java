@@ -1,6 +1,8 @@
 package it.polimi.db2.gma.GMAEJB.services;
 
 import it.polimi.db2.gma.GMAEJB.entities.EntryEntity;
+import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
+import it.polimi.db2.gma.GMAEJB.entities.UserEntity;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadEntryException;
 import it.polimi.db2.gma.GMAEJB.utils.Entry;
 import it.polimi.db2.gma.GMAEJB.utils.QuestionAnswer;
