@@ -1,8 +1,10 @@
 package it.polimi.db2.gma.GMAWEB.controllers;
 
 import it.polimi.db2.gma.GMAEJB.entities.QuestionEntity;
+import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
 import it.polimi.db2.gma.GMAEJB.services.QuestionnaireService;
 import it.polimi.db2.gma.GMAEJB.utils.LeaderboardRow;
+import org.apache.commons.text.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @WebServlet(name = "QuestionnaireServlet", value = "/questionnaire")
@@ -39,19 +42,20 @@ public class QuestionnaireServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        try {
-            doPost(req, resp);
-        } catch (ServletException e) {
-            e.printStackTrace();
+        String date = StringEscapeUtils.escapeJava(req.getParameter("date"));
+        LocalDate localDate = LocalDate.parse(date);
+
+        if (localDate.compareTo(LocalDate.now()) < 0) {
+            resp.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Invalid date. Please select a valid date.");
+            return;
         }
-    }
 
-
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<QuestionEntity> questions;
-        int questionnaireId = 1;
+        QuestionnaireEntity questionnaire;
+        questionnaire = questionnaireService.findQuestionnaireByDate(Date.valueOf(localDate));
+
         try {
-            //questions = questionnaireService.getQuestionList(questionnaireId);
+            questions = questionnaireService.getQuestionList(questionnaire.getId());
         } catch (PersistenceException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not retrieve the questions.");
             return;
@@ -61,7 +65,8 @@ public class QuestionnaireServlet extends HttpServlet {
 
         ServletContext servletContext = getServletContext();
         WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
-        //ctx.setVariable("questions", questions);
+        ctx.setVariable("questions", questions);
+        ctx.setVariable("questionnaireId", questionnaire.getId());
         String path = "/WEB-INF/questionnairepage.html";
 
         templateEngine.process(path, ctx, resp.getWriter());

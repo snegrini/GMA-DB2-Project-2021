@@ -81,11 +81,11 @@ public class QuestionnaireService {
         em.remove(questionnaire);
     }
 
-    /*public List<QuestionEntity> getQuestionList(int questionnaireId) {
+    public List<QuestionEntity> getQuestionList(int questionnaireId) {
         return em.createNamedQuery("QuestionnaireEntity.getQuestionList", QuestionEntity.class)
                 .setParameter("questionnaireId", questionnaireId)
                 .getResultList();
-    }*/
+    }
 
     public List<QuestionnaireInfo> getQuestionnairesInfos() {
         return em.createNamedQuery("QuestionnaireEntity.getQuestionnairesInfos", QuestionnaireInfo.class)

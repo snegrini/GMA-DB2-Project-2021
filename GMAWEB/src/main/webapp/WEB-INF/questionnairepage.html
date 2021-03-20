@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Questionario</title>
@@ -8,15 +8,20 @@
 <header>
     <p><span>Product of the day</span></p>
 
-    <div th:if="${questPage}">
+    <div data-th-if="${questPage}">
         <form method="post" data-th-action="@{'/cancel'}">
             <fieldset>
                 <legend>Questions</legend>
-                <tr th:each="question : ${questions}">
-                    <td th:text="${questions.question}"></td>
-                    <input type="text" id="answer" name="answer" required>
-                    <br><br>
-                </tr>
+
+                <input type="hidden" id="questionnaireId" name="questionnaireId" value="${questionnaireId}">
+
+                <div data-th-each="question,iter : ${questions}">
+                    <label for="answer+${iter}" data-th-text="${questions.question}">Question 1: </label>
+                    <input type="text" name="answer[]" id="answer+${iter}" size="200" required>
+                </div>
+
+                <br><br>
+
                 <input type="submit" value="cancel">
                 <input type="submit" value="next">
             </fieldset>
@@ -25,7 +30,7 @@
 
 
     <br>
-    <div th:unless="${questPage}">
+    <div data-th-unless="${questPage}">
         <form method="post" data-th-action="@{'/cancel'}">
             <fieldset>
                 <legend>Stats</legend>

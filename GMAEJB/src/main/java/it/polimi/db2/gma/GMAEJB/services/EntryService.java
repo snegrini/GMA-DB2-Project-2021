@@ -61,4 +61,19 @@ public class EntryService {
         em.persist(newEntry);
         return newEntry;
     }
+
+    public EntryEntity addNewEntry(int userId, String questionnaireId, List<String> answers, String age, String sex, String eLevel) {
+        EntryEntity newEntry = new EntryEntity();
+
+        UserEntity newUser = new UserEntity();
+        newUser.setId(userId);
+        newUser.addEntries(newEntry);
+
+        QuestionnaireEntity newQuestionnaire = new QuestionnaireEntity();
+        newQuestionnaire.setId(Integer.parseInt(questionnaireId));
+        newQuestionnaire.addEntries(newEntry);
+
+        em.persist(newEntry);
+        return newEntry;
+    }
 }
