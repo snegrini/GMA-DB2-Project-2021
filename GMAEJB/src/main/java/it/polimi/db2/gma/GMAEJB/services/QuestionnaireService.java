@@ -79,7 +79,6 @@ public class QuestionnaireService {
         // Points are removed by using a trigger.
 
         em.remove(questionnaire);
-        em.flush(); // Ensure instant propagation to DB.
     }
 
     /*public List<QuestionEntity> getQuestionList(int questionnaireId) {
