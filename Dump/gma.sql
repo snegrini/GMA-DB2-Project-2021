@@ -2,7 +2,7 @@ CREATE DATABASE  IF NOT EXISTS `gma` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLL
 USE `gma`;
 -- MySQL dump 10.13  Distrib 8.0.22, for Win64 (x86_64)
 --
--- Host: localhost    Database: gma
+-- Host: 127.0.0.1    Database: gma
 -- ------------------------------------------------------
 -- Server version	8.0.23
 
@@ -57,7 +57,7 @@ CREATE TABLE `answer` (
   PRIMARY KEY (`EntryId`,`QuestionId`),
   KEY `EntryFK_idx` (`EntryId`),
   KEY `QuestionFK_idx` (`QuestionId`),
-  CONSTRAINT `fk_answer_entry_entryid` FOREIGN KEY (`EntryId`) REFERENCES `entry` (`Id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_answer_entry_entryid` FOREIGN KEY (`EntryId`) REFERENCES `entry` (`Id`) ON DELETE RESTRICT,
   CONSTRAINT `fk_answer_question_questionid` FOREIGN KEY (`QuestionId`) REFERENCES `question` (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -88,7 +88,7 @@ CREATE TABLE `entry` (
   PRIMARY KEY (`Id`),
   KEY `QuestionnaireFK2_idx` (`QuestionnaireId`),
   KEY `UserFK_idx` (`UserId`),
-  CONSTRAINT `fk_entry_questionnaire_questionnaireid` FOREIGN KEY (`QuestionnaireId`) REFERENCES `questionnaire` (`Id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_entry_questionnaire_questionnaireid` FOREIGN KEY (`QuestionnaireId`) REFERENCES `questionnaire` (`Id`) ON DELETE RESTRICT,
   CONSTRAINT `fk_entry_user_userid` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -102,6 +102,26 @@ LOCK TABLES `entry` WRITE;
 INSERT INTO `entry` VALUES (2,1,1,2,1),(3,2,1,4,1);
 /*!40000 ALTER TABLE `entry` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`dev`@`localhost`*/ /*!50003 TRIGGER `entry_BEFORE_DELETE` BEFORE DELETE ON `entry` FOR EACH ROW BEGIN
+	UPDATE `user` u
+    SET u.Points = u.Points - OLD.Points
+    WHERE u.Id = OLD.UserId
+		AND OLD.IsSubmitted = 1;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `loginlog`
@@ -192,7 +212,7 @@ CREATE TABLE `question` (
   `Question` varchar(200) NOT NULL,
   PRIMARY KEY (`Id`),
   KEY `QuestionnaireFK_idx` (`QuestionnaireId`),
-  CONSTRAINT `fk_question_questionnaire_questionnaireid` FOREIGN KEY (`QuestionnaireId`) REFERENCES `questionnaire` (`Id`) ON DELETE CASCADE
+  CONSTRAINT `fk_question_questionnaire_questionnaireid` FOREIGN KEY (`QuestionnaireId`) REFERENCES `questionnaire` (`Id`) ON DELETE RESTRICT
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -233,25 +253,6 @@ LOCK TABLES `questionnaire` WRITE;
 INSERT INTO `questionnaire` VALUES (1,1,'2021-03-16'),(2,2,'2021-03-17'),(3,3,'2021-03-21');
 /*!40000 ALTER TABLE `questionnaire` ENABLE KEYS */;
 UNLOCK TABLES;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `questionnaire_BEFORE_DELETE` BEFORE DELETE ON `questionnaire` FOR EACH ROW BEGIN
-	UPDATE `user` u
-    SET u.Points = u.Points - (SELECT e1.Points FROM `entry` e1 WHERE e1.QuestionnaireId = OLD.Id AND e1.UserId = u.Id)
-    WHERE u.Id IN (SELECT e2.UserId FROM `entry` e2 WHERE e2.QuestionnaireId = OLD.Id);
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `review`
@@ -295,7 +296,7 @@ CREATE TABLE `stats` (
   `ExpertiseLevel` enum('LOW','MEDIUM','HIGH') DEFAULT NULL,
   PRIMARY KEY (`Id`),
   KEY `EntryFK2_idx` (`EntryId`),
-  CONSTRAINT `fk_stats_entry_entryid` FOREIGN KEY (`EntryId`) REFERENCES `entry` (`Id`) ON DELETE CASCADE
+  CONSTRAINT `fk_stats_entry_entryid` FOREIGN KEY (`EntryId`) REFERENCES `entry` (`Id`) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -347,4 +348,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-03-19 23:54:31
+-- Dump completed on 2021-03-20 10:50:26

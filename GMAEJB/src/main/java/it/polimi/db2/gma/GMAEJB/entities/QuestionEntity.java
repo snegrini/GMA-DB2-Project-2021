@@ -11,7 +11,7 @@ public class QuestionEntity {
     @Column(name = "Id", nullable = false)
     private int id;
 
-    @Column(name = "Question", nullable = false, length = 45)
+    @Column(name = "Question", nullable = false, length = 200)
     private String question;
 
     @ManyToOne
