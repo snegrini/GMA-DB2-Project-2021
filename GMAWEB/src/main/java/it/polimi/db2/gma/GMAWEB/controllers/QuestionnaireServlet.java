@@ -67,9 +67,26 @@ public class QuestionnaireServlet extends HttpServlet {
         WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
         ctx.setVariable("questions", questions);
         ctx.setVariable("questionnaireId", questionnaire.getId());
-        String path = "/WEB-INF/questionnairepage.html";
+        String path = "/WEB-INF/questionnaire.html";
 
         templateEngine.process(path, ctx, resp.getWriter());
     }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        String path;
+
+        if (req.getParameter("submit") != null) {
+            path = "/submit";
+        } else if (req.getParameter("cancel") != null) {
+            path = "/cancel";
+        } else {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad submit action.");
+            return;
+        }
+
+        RequestDispatcher dispatcher = getServletContext()
+                .getRequestDispatcher(path);
+        dispatcher.forward(req, resp);
+    }
 }

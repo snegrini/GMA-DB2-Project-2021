@@ -22,8 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 
 
-@WebServlet(name = "CancelServlet", value = "/cancel")
-public class SubmitServlet extends HttpServlet {
+@WebServlet(name = "QuestionnaireSubmitServlet", value = "/submit")
+public class QuestionnaireSubmitServlet extends HttpServlet {
     private TemplateEngine templateEngine;
 
     @EJB(name = "it.polimi.db2.gma.GMAEJB.services/EntryService")
@@ -68,7 +68,6 @@ public class SubmitServlet extends HttpServlet {
             return;
         }
 
-        // TODO greetings page
         resp.sendRedirect(getServletContext().getContextPath() + "/greetings");
     }
 

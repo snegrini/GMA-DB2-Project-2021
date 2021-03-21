@@ -28,8 +28,8 @@ import java.sql.Date;
 import java.util.List;
 
 
-@WebServlet(name = "CancelServlet", value = "/cancel")
-public class CancelServlet extends HttpServlet {
+@WebServlet(name = "QuestionnaireCancelServlet", value = "/cancel")
+public class QuestionnaireCancelServlet extends HttpServlet {
     private TemplateEngine templateEngine;
 
     @EJB(name = "it.polimi.db2.gma.GMAEJB.services/LoginlogService")

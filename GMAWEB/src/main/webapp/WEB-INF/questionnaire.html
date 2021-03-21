@@ -11,12 +11,11 @@
     <p><span>Product of the day</span></p>
 
     <div data-th-if="${questPage}">
-        <form method="post" data-th-action="@{'/cancel'}">
-
-            <!-- Mandatory questions -->
-            <div id="mandatory-questions">
-                <fieldset>
-                    <legend>Questions</legend>
+        <form method="post" data-th-action="@{'/questionnaire'}">
+            <fieldset>
+                <!-- Mandatory questions -->
+                <div id="mandatory-questions">
+                    <h3>Questions</h3>
 
                     <input type="hidden" id="questionnaireId" name="questionnaireId" value="${questionnaireId}">
 
@@ -27,15 +26,13 @@
 
                     <br><br>
 
-                    <input type="button" name="btnPrev" value="Next">
-                    <input type="submit" value="Cancel">
-                </fieldset>
-            </div>
+                    <input type="submit" id="nextBtn" name="next" value="Next">
+                    <input type="submit" name="cancel" value="Cancel">
+                </div>
 
-            <!-- Optional questions -->
-            <div id="optional-questions">
-                <fieldset>
-                    <legend>Stats</legend>
+                <!-- Optional questions -->
+                <div id="optional-questions">
+                    <h3>Stats</h3>
                     <label for="age">Age:</label>
                     <input type="text" id="age" name="age">
 
@@ -46,16 +43,16 @@
 
                     <br>
 
-                    <label for="eLevel">Expertise Level:</label>
-                    <input type="text" name="eLevel" id="eLevel"><br>
+                    <label for="expLevel">Expertise Level:</label>
+                    <input type="text" name="eLevel" id="expLevel"><br>
 
                     <br>
 
-                    <input type="button" name="btnPrev" value="Previous">
-                    <input type="submit" value="Cancel">
-                    <input type="submit" value="Submit">
-                </fieldset>
-            </div>
+                    <input type="submit" id="prevBtn" name="previous" value="Previous">
+                    <input type="submit" name="cancel" value="Cancel">
+                    <input type="submit" name="submit" value="Submit">
+                </div>
+            </fieldset>
 
         </form>
     </div>
