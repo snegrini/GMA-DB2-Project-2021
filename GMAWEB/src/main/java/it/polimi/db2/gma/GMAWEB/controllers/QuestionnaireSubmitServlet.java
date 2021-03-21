@@ -54,7 +54,7 @@ public class SubmitServlet extends HttpServlet {
 
         String age = StringEscapeUtils.escapeJava(req.getParameter("age"));
         String sex = StringEscapeUtils.escapeJava(req.getParameter("sex"));
-        String eLevel = StringEscapeUtils.escapeJava(req.getParameter("eLevel"));
+        String expLevel = StringEscapeUtils.escapeJava(req.getParameter("expLevel"));
 
         // TODO retrieve from session
         UserEntity user = (UserEntity) session.getAttribute("user");
@@ -62,9 +62,9 @@ public class SubmitServlet extends HttpServlet {
 
         // TODO Add entry
         try {
-            entryService.addNewEntry(user.getId(),questionnaireId,answers,age,sex,eLevel);
+            entryService.addNewEntry(user.getId(), questionnaireId, answers, age, sex, expLevel);
         } catch (PersistenceException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST,"Could not submit your answers.");
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not submit your answers.");
             return;
         }
 
