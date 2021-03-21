@@ -5,6 +5,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "question")
+@NamedQueries({
+        @NamedQuery(name = "QuestionEntity.getQuestionList", query = "SELECT q FROM QuestionEntity q WHERE q.id = :questionnaireId")
+})
 public class QuestionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,5 +57,11 @@ public class QuestionEntity {
 
     public List<AnswerEntity> getAnswers() {
         return answers;
+    }
+
+    public void addAnswer(String answer) {
+        AnswerEntity a = new AnswerEntity();
+        a.setAnswer(answer);
+        this.answers.add(a);
     }
 }

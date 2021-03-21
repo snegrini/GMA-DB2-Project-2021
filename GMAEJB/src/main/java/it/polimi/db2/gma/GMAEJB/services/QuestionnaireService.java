@@ -82,7 +82,7 @@ public class QuestionnaireService {
     }
 
     public List<QuestionEntity> getQuestionList(int questionnaireId) {
-        return em.createNamedQuery("QuestionnaireEntity.getQuestionList", QuestionEntity.class)
+        return em.createNamedQuery("QuestionEntity.getQuestionList", QuestionEntity.class)
                 .setParameter("questionnaireId", questionnaireId)
                 .getResultList();
     }

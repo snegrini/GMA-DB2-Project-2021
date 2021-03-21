@@ -1,6 +1,7 @@
 package it.polimi.db2.gma.GMAEJB.services;
 
 import it.polimi.db2.gma.GMAEJB.entities.EntryEntity;
+import it.polimi.db2.gma.GMAEJB.entities.QuestionEntity;
 import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
 import it.polimi.db2.gma.GMAEJB.entities.UserEntity;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadEntryException;
@@ -67,11 +68,27 @@ public class EntryService {
 
         UserEntity newUser = new UserEntity();
         newUser.setId(userId);
-        newUser.addEntries(newEntry);
-
         QuestionnaireEntity newQuestionnaire = new QuestionnaireEntity();
         newQuestionnaire.setId(Integer.parseInt(questionnaireId));
-        newQuestionnaire.addEntries(newEntry);
+
+        //retrieve the questions
+        List<QuestionEntity> questions = newQuestionnaire.getQuestions();
+        //add at every question the answer
+        int i=0;
+        for (QuestionEntity q : questions) {
+            q.addAnswer(answers.get(i));
+            ++i;
+        }
+
+        //add the entry
+        int j=0;
+        for (QuestionEntity q: questions) {
+            newEntry.addAnswerEntity(answers.get(j));
+            ++j;
+        }
+        newEntry.addStatsEntity(age,sex,eLevel);
+        newEntry.setQuestionnaireEntity(newQuestionnaire);
+        newEntry.setUserEntity(newUser);
 
         em.persist(newEntry);
         return newEntry;

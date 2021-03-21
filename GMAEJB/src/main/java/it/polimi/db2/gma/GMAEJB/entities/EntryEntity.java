@@ -1,5 +1,8 @@
 package it.polimi.db2.gma.GMAEJB.entities;
 
+import it.polimi.db2.gma.GMAEJB.enums.ExpertiseLevel;
+import it.polimi.db2.gma.GMAEJB.enums.Sex;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -69,7 +72,22 @@ public class EntryEntity {
     public void setUserEntity(UserEntity user) {
         this.user = user;
     }
+
     public void setQuestionnaireEntity(QuestionnaireEntity questionnaire) {
         this.questionnaire = questionnaire;
+    }
+
+    public void addAnswerEntity(String answer) {
+        AnswerEntity a = new AnswerEntity();
+        a.setAnswer(answer);
+        this.answers.add(a);
+    }
+
+    public void addStatsEntity(String age, String sex, String eLevel) {
+        StatsEntity s = new StatsEntity();
+        s.setAge(Integer.valueOf(age));
+        s.setExpertiseLevel(ExpertiseLevel.valueOf(eLevel));
+        s.setSex(Sex.valueOf(sex));
+        this.stats.add(s);
     }
 }
