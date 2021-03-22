@@ -16,6 +16,12 @@
     </filter-mapping>
 
     <filter-mapping>
+        <filter-name>BannedFilter</filter-name>
+        <url-pattern>/homepage</url-pattern>
+        <url-pattern>/leaderboard</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
         <filter-name>NotAuthFilter</filter-name>
         <url-pattern>/</url-pattern>
         <url-pattern>/login</url-pattern>
