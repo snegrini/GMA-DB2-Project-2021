@@ -3,10 +3,8 @@ package it.polimi.db2.gma.GMAWEB.controllers.admin;
 import it.polimi.db2.gma.GMAEJB.entities.ProductEntity;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadProductException;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadQuestionnaireException;
-import it.polimi.db2.gma.GMAEJB.services.AdminService;
 import it.polimi.db2.gma.GMAEJB.services.ProductService;
 import it.polimi.db2.gma.GMAEJB.services.QuestionnaireService;
-import it.polimi.db2.gma.GMAEJB.services.UserService;
 import org.apache.commons.text.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -23,11 +21,12 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @WebServlet(name = "AdminCreationServlet", value = "/admin/creation")
 public class CreationServlet extends HttpServlet {
     private TemplateEngine templateEngine;
-    private final String creationPath = "/WEB-INF/admin/creation.html";
 
     @EJB(name = "it.polimi.db2.gma.GMAEJB.services/ProductService")
     private ProductService productService;
@@ -55,6 +54,7 @@ public class CreationServlet extends HttpServlet {
 
         ctx.setVariable("products", products);
 
+        String creationPath = "/WEB-INF/admin/creation.html";
         templateEngine.process(creationPath, ctx, resp.getWriter());
     }
 
@@ -71,6 +71,7 @@ public class CreationServlet extends HttpServlet {
         }
 
         List<String> questions = Arrays.asList(ques);
+        questions = questions.stream().filter(Predicate.not(String::isEmpty)).collect(Collectors.toList());
         questions.forEach(StringEscapeUtils::escapeJava);
 
         if (date == null || product == null || date.isEmpty() || product.isEmpty() || questions.isEmpty()) {
@@ -88,7 +89,7 @@ public class CreationServlet extends HttpServlet {
         int productId;
         try {
             productId = Integer.parseInt(product);
-        } catch (NumberFormatException e)  {
+        } catch (NumberFormatException e) {
             resp.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Invalid product id.  Please select a valid product.");
             return;
         }
@@ -100,6 +101,7 @@ public class CreationServlet extends HttpServlet {
             return;
         }
 
+        // TODO Add success message
         resp.sendRedirect(getServletContext().getContextPath() + "/admin/creation");
     }
 }
