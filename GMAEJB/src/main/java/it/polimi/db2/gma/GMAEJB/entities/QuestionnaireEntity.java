@@ -30,7 +30,7 @@ public class QuestionnaireEntity {
     private List<QuestionEntity> questions = new ArrayList<>();
 
     @OneToMany(mappedBy = "questionnaire", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-    private List<EntryEntity> entries;
+    private List<EntryEntity> entries = new ArrayList<>();
 
     public QuestionnaireEntity(Date date, ProductEntity product) {
         this.date = date;
@@ -83,7 +83,7 @@ public class QuestionnaireEntity {
 
     public void addEntry(EntryEntity entry) {
         getEntries().add(entry);
-        entry.setQuestionnaireEntity(this);
+        entry.setQuestionnaire(this);
     }
 
     public void removeEntry(EntryEntity entry) {

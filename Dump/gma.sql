@@ -68,7 +68,6 @@ CREATE TABLE `answer` (
 
 LOCK TABLES `answer` WRITE;
 /*!40000 ALTER TABLE `answer` DISABLE KEYS */;
-INSERT INTO `answer` VALUES (2,3,'a1'),(2,4,'a2'),(3,3,'b1'),(3,4,'b2');
 /*!40000 ALTER TABLE `answer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -83,12 +82,15 @@ CREATE TABLE `entry` (
   `Id` int NOT NULL AUTO_INCREMENT,
   `UserId` int NOT NULL,
   `QuestionnaireId` int NOT NULL,
+  `StatsId` int NOT NULL,
   `Points` int NOT NULL DEFAULT '0',
   `IsSubmitted` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`Id`),
   KEY `QuestionnaireFK2_idx` (`QuestionnaireId`),
   KEY `UserFK_idx` (`UserId`),
+  KEY `fk_entry_stats_statsid_idx` (`StatsId`),
   CONSTRAINT `fk_entry_questionnaire_questionnaireid` FOREIGN KEY (`QuestionnaireId`) REFERENCES `questionnaire` (`Id`) ON DELETE RESTRICT,
+  CONSTRAINT `fk_entry_stats_statsid` FOREIGN KEY (`StatsId`) REFERENCES `stats` (`Id`),
   CONSTRAINT `fk_entry_user_userid` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -99,7 +101,6 @@ CREATE TABLE `entry` (
 
 LOCK TABLES `entry` WRITE;
 /*!40000 ALTER TABLE `entry` DISABLE KEYS */;
-INSERT INTO `entry` VALUES (2,1,1,2,1),(3,2,1,4,1);
 /*!40000 ALTER TABLE `entry` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -137,7 +138,7 @@ CREATE TABLE `loginlog` (
   PRIMARY KEY (`Id`),
   KEY `fk_loginlog_user_userid_idx` (`UserId`),
   CONSTRAINT `fk_loginlog_user_userid` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -146,6 +147,7 @@ CREATE TABLE `loginlog` (
 
 LOCK TABLES `loginlog` WRITE;
 /*!40000 ALTER TABLE `loginlog` DISABLE KEYS */;
+INSERT INTO `loginlog` VALUES (1,1,'2021-03-21 22:01:15'),(2,1,'2021-03-21 22:43:18'),(3,1,'2021-03-22 09:10:18'),(4,1,'2021-03-22 09:13:50'),(5,1,'2021-03-22 09:19:17'),(6,1,'2021-03-22 09:45:38'),(7,1,'2021-03-22 16:37:26'),(8,1,'2021-03-22 16:54:20');
 /*!40000 ALTER TABLE `loginlog` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -222,7 +224,6 @@ CREATE TABLE `question` (
 
 LOCK TABLES `question` WRITE;
 /*!40000 ALTER TABLE `question` DISABLE KEYS */;
-INSERT INTO `question` VALUES (3,1,'question1'),(4,1,'question2');
 /*!40000 ALTER TABLE `question` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -250,7 +251,7 @@ CREATE TABLE `questionnaire` (
 
 LOCK TABLES `questionnaire` WRITE;
 /*!40000 ALTER TABLE `questionnaire` DISABLE KEYS */;
-INSERT INTO `questionnaire` VALUES (1,1,'2021-03-16'),(2,2,'2021-03-17'),(3,3,'2021-03-21');
+INSERT INTO `questionnaire` VALUES (2,2,'2021-03-23'),(3,3,'2021-03-22');
 /*!40000 ALTER TABLE `questionnaire` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -290,13 +291,10 @@ DROP TABLE IF EXISTS `stats`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `stats` (
   `Id` int NOT NULL AUTO_INCREMENT,
-  `EntryId` int NOT NULL,
   `Age` int DEFAULT NULL,
   `Sex` enum('FEMALE','MALE','OTHER') DEFAULT NULL,
   `ExpertiseLevel` enum('LOW','MEDIUM','HIGH') DEFAULT NULL,
-  PRIMARY KEY (`Id`),
-  KEY `EntryFK2_idx` (`EntryId`),
-  CONSTRAINT `fk_stats_entry_entryid` FOREIGN KEY (`EntryId`) REFERENCES `entry` (`Id`) ON DELETE RESTRICT
+  PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -335,7 +333,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'user1','password','user1@example.org',2,0),(2,'user2','password','user2@example.org',4,0),(3,'user3','password','user3@example.org',0,0);
+INSERT INTO `user` VALUES (1,'user1','password','user1@example.org',0,0),(2,'user2','password','user2@example.org',0,0),(3,'user3','password','user3@example.org',0,0);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -348,4 +346,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-03-20 10:50:26
+-- Dump completed on 2021-03-22 17:29:11

@@ -1,7 +1,9 @@
 package it.polimi.db2.gma.GMAWEB.controllers;
 
 import it.polimi.db2.gma.GMAEJB.entities.LoginlogEntity;
+import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
 import it.polimi.db2.gma.GMAEJB.entities.UserEntity;
+import it.polimi.db2.gma.GMAEJB.exceptions.BadEntryException;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadProductException;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadQuestionnaireException;
 import it.polimi.db2.gma.GMAEJB.services.EntryService;
@@ -25,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -32,11 +35,11 @@ import java.util.List;
 public class QuestionnaireCancelServlet extends HttpServlet {
     private TemplateEngine templateEngine;
 
-    @EJB(name = "it.polimi.db2.gma.GMAEJB.services/LoginlogService")
-    private LoginlogService loginlogService;
-
     @EJB(name = "it.polimi.db2.gma.GMAEJB.services/EntryService")
     private EntryService entryService;
+
+    @EJB(name = "it.polimi.db2.gma.GMAEJB.services/QuestionnaireService")
+    private QuestionnaireService questionnaireService;
 
     public void init() {
         ServletContext servletContext = getServletContext();
@@ -49,22 +52,15 @@ public class QuestionnaireCancelServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        LoginlogEntity log = new LoginlogEntity();
-
-        try {
-            //log = loginlogService.addLoginLog(session.getAttribute("user"));
-        } catch (PersistenceException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not cancel.");
-            return;
-        }
-
-        // TODO retrieve from session
         UserEntity user = (UserEntity) session.getAttribute("user");
-        String questionnaireId = req.getParameter("questionnaireId");
 
-        // TODO Add entry not submitted
+        // Retrieve questionnaire of the day
+        QuestionnaireEntity questionnaire = questionnaireService.findQuestionnaireByDate(LocalDate.now());
+
         try {
-            entryService.addEmptyEntry(Integer.parseInt(questionnaireId), user.getId());
+            entryService.addEmptyEntry(user, questionnaire);
+        } catch(BadEntryException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         } catch (PersistenceException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST,"Could not cancel.");
             return;
@@ -72,5 +68,4 @@ public class QuestionnaireCancelServlet extends HttpServlet {
 
         resp.sendRedirect(getServletContext().getContextPath() + "/homepage");
     }
-
 }

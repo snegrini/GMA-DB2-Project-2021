@@ -1,6 +1,7 @@
 package it.polimi.db2.gma.GMAEJB.entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,10 +23,10 @@ public class ProductEntity {
     private String image;
 
     @OneToMany(mappedBy = "product")
-    private List<ReviewEntity> reviews;
+    private List<ReviewEntity> reviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "product")
-    private List<QuestionnaireEntity> questionnaires;
+    private List<QuestionnaireEntity> questionnaires = new ArrayList<>();
 
     public int getId() {
         return id;

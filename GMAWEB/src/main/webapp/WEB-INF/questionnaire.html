@@ -10,7 +10,12 @@
 <header>
     <p><span>Product of the day</span></p>
 
-    // TODO: SHOW THE PRODUCT.
+    <fieldset data-th-if="${product != null}">
+        <h2 data-th-text="${product.name}"></h2>
+        <img alt="Product Image" data-th-alt="${product.name}" data-th-src="@{'/images/'+${product.image}}" height="200" src="https://via.placeholder.com/200x200?text=product" width="200">
+    </fieldset>
+
+    <br>
 
     <form data-th-action="@{'/questionnaire'}" method="post">
         <fieldset>
@@ -19,7 +24,7 @@
                 <h3>Questions</h3>
 
                 <div data-th-each="question,iter : ${questions}">
-                    <label data-th-for="answer + ${iter}" data-th-text="${questions.question}" for="answer1">Question 1: </label>
+                    <label data-th-for="answer + ${iter}" data-th-text="${question.question}" for="answer1">Question 1: </label>
                     <input data-th-id="answer + ${iter}" id="answer1" name="answer[]" required size="200" type="text">
                 </div>
 
@@ -53,9 +58,6 @@
                 <input name="submit" type="submit" value="Submit">
             </div>
         </fieldset>
-
-        <input data-th-value="${questionnaireId}" id="questionnaireId" name="questionnaireId" type="hidden" value="1">
-
     </form>
 
 </header>

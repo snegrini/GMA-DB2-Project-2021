@@ -45,21 +45,20 @@ public class QuestionnaireServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         QuestionnaireEntity questionnaire = questionnaireService.findQuestionnaireByDate(LocalDate.now());
 
-        List<QuestionEntity> questions;
-        try {
-            questions = questionnaireService.findAllQuestionsByQuestionnaire(questionnaire.getId());
-        } catch (PersistenceException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not retrieve the questions.");
+        if (questionnaire == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST,"Could not retrieve the questionnaire.");
             return;
         }
+
+        List<QuestionEntity> questions = questionnaire.getQuestions();
 
         resp.setContentType("text/html");
 
         ServletContext servletContext = getServletContext();
         WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
 
+        ctx.setVariable("product", questionnaire.getProduct());
         ctx.setVariable("questions", questions);
-        ctx.setVariable("questionnaireId", questionnaire.getId());
 
         templateEngine.process(questionnairePath, ctx, resp.getWriter());
     }

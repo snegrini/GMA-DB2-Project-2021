@@ -1,10 +1,10 @@
 package it.polimi.db2.gma.GMAEJB.services;
 
-import it.polimi.db2.gma.GMAEJB.entities.EntryEntity;
-import it.polimi.db2.gma.GMAEJB.entities.QuestionEntity;
-import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
-import it.polimi.db2.gma.GMAEJB.entities.UserEntity;
+import it.polimi.db2.gma.GMAEJB.entities.*;
+import it.polimi.db2.gma.GMAEJB.enums.ExpertiseLevel;
+import it.polimi.db2.gma.GMAEJB.enums.Sex;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadEntryException;
+import it.polimi.db2.gma.GMAEJB.exceptions.BadProductException;
 import it.polimi.db2.gma.GMAEJB.utils.Entry;
 import it.polimi.db2.gma.GMAEJB.utils.QuestionAnswer;
 import it.polimi.db2.gma.GMAEJB.utils.StatsAnswers;
@@ -12,6 +12,7 @@ import it.polimi.db2.gma.GMAEJB.utils.StatsAnswers;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.sql.Date;
 import java.util.List;
 
 @Stateless
@@ -48,49 +49,56 @@ public class EntryService {
         return new Entry(statsAnswers, questionAnswerList);
     }
 
-    public EntryEntity addEmptyEntry(int questionnaireId, int userId) {
-        EntryEntity newEntry = new EntryEntity();
+    public EntryEntity addEmptyEntry(UserEntity user, QuestionnaireEntity questionnaire) throws BadEntryException {
+        if (user == null || questionnaire == null) {
+            throw new BadEntryException("User or questionnaire not found.");
+        }
 
-        UserEntity newUser = new UserEntity();
-        newUser.setId(userId);
-        newUser.addEntries(newEntry);
+        // Build new EntryEntity object and set the questionnaire to it.
+        EntryEntity entry = new EntryEntity();
+        entry.setQuestionnaire(questionnaire);
+        entry.setIsSubmitted((byte) 0);
 
-        QuestionnaireEntity newQuestionnaire = new QuestionnaireEntity();
-        newQuestionnaire.setId(questionnaireId);
-        newQuestionnaire.addEntry(newEntry);
-
-        em.persist(newEntry);
-        return newEntry;
+        em.persist(entry);
+        return entry;
     }
 
-    public EntryEntity addNewEntry(int userId, String questionnaireId, List<String> answers, String age, String sex, String eLevel) {
-        EntryEntity newEntry = new EntryEntity();
+    public EntryEntity addNewEntry(int userId, int questionnaireId, List<String> strAnswers, int age, Sex sex, ExpertiseLevel expLevel) throws BadEntryException {
+        UserEntity user = em.find(UserEntity.class, userId);
+        QuestionnaireEntity questionnaire = em.find(QuestionnaireEntity.class, questionnaireId);
 
-        UserEntity newUser = new UserEntity();
-        newUser.setId(userId);
-        QuestionnaireEntity newQuestionnaire = new QuestionnaireEntity();
-        newQuestionnaire.setId(Integer.parseInt(questionnaireId));
-
-        //retrieve the questions
-        List<QuestionEntity> questions = newQuestionnaire.getQuestions();
-        //add at every question the answer
-        int i=0;
-        for (QuestionEntity q : questions) {
-            q.addAnswer(answers.get(i));
-            ++i;
+        if (user == null || questionnaire == null) {
+            throw new BadEntryException("User or questionnaire not found.");
         }
 
-        //add the entry
-        int j=0;
-        for (QuestionEntity q: questions) {
-            newEntry.addAnswerEntity(answers.get(j));
-            ++j;
-        }
-        newEntry.addStatsEntity(age,sex,eLevel);
-        newEntry.setQuestionnaireEntity(newQuestionnaire);
-        newEntry.setUserEntity(newUser);
+        List<QuestionEntity> questions = questionnaire.getQuestions();
 
-        em.persist(newEntry);
-        return newEntry;
+        if (strAnswers.size() != questions.size()) {
+            throw new BadEntryException("Answers do not match questions.");
+        }
+
+        // Build new EntryEntity object and set the questionnaire and the user to it.
+        EntryEntity entry = new EntryEntity();
+        entry.setQuestionnaire(questionnaire);
+        entry.setUser(user);
+
+        entry.setIsSubmitted((byte) 1);
+
+        // Build new AnswerEntity objects and add them to the entry.
+        for (int i = 0; i < strAnswers.size(); i++) {
+            AnswerEntity answer = new AnswerEntity(strAnswers.get(i));
+            answer.setQuestion(questions.get(i));
+            entry.addAnswer(answer);
+        }
+
+        // Build new StatsEntity object and set it to the entry.
+        StatsEntity stats = new StatsEntity();
+        stats.setAge(age);
+        stats.setSex(sex);
+        stats.setExpertiseLevel(expLevel);
+        entry.setStats(stats);
+
+        em.persist(entry);
+        return entry;
     }
 }

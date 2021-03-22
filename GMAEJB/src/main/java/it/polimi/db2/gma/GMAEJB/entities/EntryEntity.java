@@ -4,6 +4,7 @@ import it.polimi.db2.gma.GMAEJB.enums.ExpertiseLevel;
 import it.polimi.db2.gma.GMAEJB.enums.Sex;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,25 +21,25 @@ public class EntryEntity {
     @Column(name = "Id", nullable = false)
     private int id;
 
+    @Column(name = "Points", nullable = true)
+    private Integer points = 0;
+
+    @Column(name = "IsSubmitted", nullable = true)
+    private Byte isSubmitted = 0;
+
     @ManyToOne
     @JoinColumn(name = "UserId", nullable = false)
     private UserEntity user;
-
-    @Column(name = "Points", nullable = true)
-    private Integer points;
-
-    @Column(name = "IsSubmitted", nullable = true)
-    private Byte isSubmitted;
 
     @ManyToOne
     @JoinColumn(name = "QuestionnaireId")
     private QuestionnaireEntity questionnaire;
 
-    @OneToMany(mappedBy = "entry", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-    private List<StatsEntity> stats;
+    @OneToOne(mappedBy = "entry", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    private StatsEntity stats;
 
     @OneToMany(mappedBy = "entry", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-    private List<AnswerEntity> answers;
+    private List<AnswerEntity> answers = new ArrayList<>();
 
 
     public int getId() {
@@ -57,10 +58,6 @@ public class EntryEntity {
         this.points = points;
     }
 
-    public UserEntity getUser() {
-        return user;
-    }
-
     public Byte getIsSubmitted() {
         return isSubmitted;
     }
@@ -69,25 +66,41 @@ public class EntryEntity {
         this.isSubmitted = isSubmitted;
     }
 
-    public void setUserEntity(UserEntity user) {
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
         this.user = user;
     }
 
-    public void setQuestionnaireEntity(QuestionnaireEntity questionnaire) {
+    public QuestionnaireEntity getQuestionnaire() {
+        return questionnaire;
+    }
+
+    public void setQuestionnaire(QuestionnaireEntity questionnaire) {
         this.questionnaire = questionnaire;
     }
 
-    public void addAnswerEntity(String answer) {
-        AnswerEntity a = new AnswerEntity();
-        a.setAnswer(answer);
-        this.answers.add(a);
+    public StatsEntity getStats() {
+        return stats;
     }
 
-    public void addStatsEntity(String age, String sex, String eLevel) {
-        StatsEntity s = new StatsEntity();
-        s.setAge(Integer.valueOf(age));
-        s.setExpertiseLevel(ExpertiseLevel.valueOf(eLevel));
-        s.setSex(Sex.valueOf(sex));
-        this.stats.add(s);
+    public void setStats(StatsEntity stats) {
+        this.stats = stats;
+        stats.setEntry(this);
+    }
+
+    public List<AnswerEntity> getAnswers() {
+        return answers;
+    }
+
+    public void addAnswer(AnswerEntity answer) {
+        getAnswers().add(answer);
+        answer.setEntry(this);
+    }
+
+    public void removeAnswer(AnswerEntity answer) {
+        getAnswers().remove(answer);
     }
 }

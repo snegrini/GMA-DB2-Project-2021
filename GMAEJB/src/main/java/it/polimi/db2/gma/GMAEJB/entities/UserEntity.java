@@ -1,6 +1,7 @@
 package it.polimi.db2.gma.GMAEJB.entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -36,13 +37,13 @@ public class UserEntity {
     private Byte isBlocked;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true)
-    private List<ReviewEntity> reviews;
+    private List<ReviewEntity> reviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", orphanRemoval = true)
-    private List<LoginlogEntity> loginlogs;
+    private List<LoginlogEntity> loginlogs = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = { CascadeType.REMOVE }, orphanRemoval = true)
-    private List<EntryEntity> entries;
+    private List<EntryEntity> entries = new ArrayList<>();
 
     public UserEntity(String username, String password, String email) {
         this.username = username;
@@ -106,8 +107,8 @@ public class UserEntity {
         return entries;
     }
 
-    public void addEntries(EntryEntity entry) {
+    public void addEntry(EntryEntity entry) {
         getEntries().add(entry);
-        entry.setUserEntity(this);
+        entry.setUser(this);
     }
 }

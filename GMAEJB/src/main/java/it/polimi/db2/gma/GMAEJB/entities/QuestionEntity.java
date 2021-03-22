@@ -1,6 +1,7 @@
 package it.polimi.db2.gma.GMAEJB.entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,7 +23,7 @@ public class QuestionEntity {
     private QuestionnaireEntity questionnaire;
 
     @OneToMany(mappedBy = "question", cascade = { CascadeType.REMOVE }, orphanRemoval = true)
-    private List<AnswerEntity> answers;
+    private List<AnswerEntity> answers = new ArrayList<>();
 
     public QuestionEntity(String question) {
         this.question = question;
@@ -59,9 +60,12 @@ public class QuestionEntity {
         return answers;
     }
 
-    public void addAnswer(String answer) {
-        AnswerEntity a = new AnswerEntity();
-        a.setAnswer(answer);
-        this.answers.add(a);
+    public void addAnswer(AnswerEntity answer) {
+        getAnswers().add(answer);
+        answer.setQuestion(this);
+    }
+
+    public void removeAnswer(AnswerEntity answer) {
+        getAnswers().remove(answer);
     }
 }

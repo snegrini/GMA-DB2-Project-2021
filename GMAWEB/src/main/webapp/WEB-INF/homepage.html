@@ -18,7 +18,7 @@
 
         <h2 data-th-text="${productOfDay.name}"></h2>
 
-        <img src="https://via.placeholder.com/200x200?text=product" width="200" height="200" data-th-src="@{'/images/'+${productOfDay.image}}" alt="Product Image">
+        <img src="https://via.placeholder.com/200x200?text=product" width="200" height="200" data-th-src="@{'/images/'+${productOfDay.image}}" alt="Product Image" data-th-alt="${productOfDay.name}">
 
         <br>
         <h3>Reviews</h3>

@@ -24,7 +24,7 @@ public class StatsEntity {
     @Enumerated(EnumType.STRING)
     private ExpertiseLevel expertiseLevel;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "EntryId")
     private EntryEntity entry;
 
@@ -58,5 +58,13 @@ public class StatsEntity {
 
     public void setExpertiseLevel(ExpertiseLevel expertiseLevel) {
         this.expertiseLevel = expertiseLevel;
+    }
+
+    public EntryEntity getEntry() {
+        return entry;
+    }
+
+    public void setEntry(EntryEntity entry) {
+        this.entry = entry;
     }
 }
