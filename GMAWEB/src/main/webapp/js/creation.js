@@ -1,23 +1,15 @@
 (function() { // Avoid variables ending up in the global scope
-
-    let incrementCounter = (function () {
-        let questionCounter = 1;
-
-        return function() {
-            questionCounter += 1;
-            return questionCounter;
-        }
-    })();
+    let questionNumber = 1;
 
     window.onload = function() { // Wait for the document to finish loading
         document.getElementById("addQuestionBtn").addEventListener("click", addQuestionField, false);
-        //document.getElementById("removeQuestionBtn").addEventListener("click", removeQuestionField, false);
+        document.getElementById("removeQuestionBtn").addEventListener("click", removeQuestionField, false);
     }
 
     function addQuestionField() {
         let questions = document.getElementById("questions");
 
-        let questionNumber = incrementCounter();
+        questionNumber++;
 
         // Create <br> tag
         let lineBreak = document.createElement("br");
@@ -29,20 +21,29 @@
 
         // Create new input field
         let questionField = document.createElement("input");
+        questionField.setAttribute("type", "text");
         questionField.setAttribute("name", "question[]");
         questionField.setAttribute("id", "question" + questionNumber);
-        questionField.setAttribute("size", 45);
+        questionField.setAttribute("size", "45");
+        questionField.required = true;
 
         questions.appendChild(lineBreak);
-        questions.appendChild(lineBreak);
+        questions.appendChild(lineBreak.cloneNode());
         questions.appendChild(questionLabel);
         questions.appendChild(questionField);
     }
 
-    /*function removeQuestionField() {
-        let questions = document.getElementById("questions");
+    function removeQuestionField() {
+        if (questionNumber > 1) {
+            let questions = document.getElementById("questions");
 
-        let questionNumber = decrementCounter();
+            questionNumber--;
 
-    }*/
+            // One for the Input, one for the input and two for the br
+            questions.removeChild(questions.lastChild);
+            questions.removeChild(questions.lastChild);
+            questions.removeChild(questions.lastChild);
+            questions.removeChild(questions.lastChild);
+        }
+    }
 })();
