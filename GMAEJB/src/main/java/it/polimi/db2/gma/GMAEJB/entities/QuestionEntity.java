@@ -5,13 +5,16 @@ import java.util.List;
 
 @Entity
 @Table(name = "question")
+@NamedQueries({
+        @NamedQuery(name = "QuestionEntity.findAllByQuestionnaire", query = "SELECT q FROM QuestionEntity q WHERE q.id = :questionnaireId")
+})
 public class QuestionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id", nullable = false)
     private int id;
 
-    @Column(name = "Question", nullable = false, length = 45)
+    @Column(name = "Question", nullable = false, length = 200)
     private String question;
 
     @ManyToOne
@@ -54,5 +57,11 @@ public class QuestionEntity {
 
     public List<AnswerEntity> getAnswers() {
         return answers;
+    }
+
+    public void addAnswer(String answer) {
+        AnswerEntity a = new AnswerEntity();
+        a.setAnswer(answer);
+        this.answers.add(a);
     }
 }

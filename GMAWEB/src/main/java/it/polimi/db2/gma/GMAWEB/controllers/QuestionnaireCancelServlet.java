@@ -1,6 +1,7 @@
 package it.polimi.db2.gma.GMAWEB.controllers;
 
 import it.polimi.db2.gma.GMAEJB.entities.LoginlogEntity;
+import it.polimi.db2.gma.GMAEJB.entities.UserEntity;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadProductException;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadQuestionnaireException;
 import it.polimi.db2.gma.GMAEJB.services.EntryService;
@@ -27,8 +28,8 @@ import java.sql.Date;
 import java.util.List;
 
 
-@WebServlet(name = "CancelServlet", value = "/cancel")
-public class CancelServlet extends HttpServlet {
+@WebServlet(name = "QuestionnaireCancelServlet", value = "/cancel")
+public class QuestionnaireCancelServlet extends HttpServlet {
     private TemplateEngine templateEngine;
 
     @EJB(name = "it.polimi.db2.gma.GMAEJB.services/LoginlogService")
@@ -58,12 +59,12 @@ public class CancelServlet extends HttpServlet {
         }
 
         // TODO retrieve from session
-        int qId=1;
-        int userId=1;
+        UserEntity user = (UserEntity) session.getAttribute("user");
+        String questionnaireId = req.getParameter("questionnaireId");
 
         // TODO Add entry not submitted
         try {
-            entryService.addEmptyEntry(qId, userId);
+            entryService.addEmptyEntry(Integer.parseInt(questionnaireId), user.getId());
         } catch (PersistenceException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST,"Could not cancel.");
             return;

@@ -41,7 +41,7 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<LoginlogEntity> loginlogs;
 
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = { CascadeType.REMOVE }, orphanRemoval = true)
     private List<EntryEntity> entries;
 
     public UserEntity(String username, String password, String email) {

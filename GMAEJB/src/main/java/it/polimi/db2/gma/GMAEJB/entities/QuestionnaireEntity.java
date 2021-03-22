@@ -10,7 +10,6 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = "QuestionnaireEntity.findByDate", query = "SELECT q FROM QuestionnaireEntity q WHERE q.date = :date"),
         @NamedQuery(name = "QuestionnaireEntity.findAllUntilDate", query = "SELECT q FROM QuestionnaireEntity q WHERE q.date < :date ORDER BY q.date DESC"),
-        //@NamedQuery(name = "QuestionnaireEntity.getQuestionList", query = "SELECT q FROM QuestionnaireEntity.questions q WHERE q.id = :questionnaireId"),
         @NamedQuery(name = "QuestionnaireEntity.findAll", query = "SELECT q FROM QuestionnaireEntity q"),
         @NamedQuery(name = "QuestionnaireEntity.getQuestionnairesInfos", query = "SELECT NEW it.polimi.db2.gma.GMAEJB.utils.QuestionnaireInfo(q.id, q.date, p.name) FROM QuestionnaireEntity q INNER JOIN q.product p ORDER BY q.date DESC"),
 })
@@ -82,8 +81,12 @@ public class QuestionnaireEntity {
         getQuestions().remove(question);
     }
 
-    public void addEntries(EntryEntity entry) {
+    public void addEntry(EntryEntity entry) {
         getEntries().add(entry);
         entry.setQuestionnaireEntity(this);
+    }
+
+    public void removeEntry(EntryEntity entry) {
+        getEntries().remove(entry);
     }
 }
