@@ -34,16 +34,6 @@ CREATE TABLE `admin` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `admin`
---
-
-LOCK TABLES `admin` WRITE;
-/*!40000 ALTER TABLE `admin` DISABLE KEYS */;
-INSERT INTO `admin` VALUES (1,'admin','admin');
-/*!40000 ALTER TABLE `admin` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `answer`
 --
 
@@ -61,15 +51,25 @@ CREATE TABLE `answer` (
   CONSTRAINT `fk_answer_question_questionid` FOREIGN KEY (`QuestionId`) REFERENCES `question` (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `answer`
---
-
-LOCK TABLES `answer` WRITE;
-/*!40000 ALTER TABLE `answer` DISABLE KEYS */;
-/*!40000 ALTER TABLE `answer` ENABLE KEYS */;
-UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`dev`@`localhost`*/ /*!50003 TRIGGER `answer_BEFORE_INSERT` BEFORE INSERT ON `answer` FOR EACH ROW BEGIN
+    IF ((SELECT COUNT(*) FROM `offensiveword` WHERE NEW.Answer LIKE CONCAT('%', LOWER(word) ,'%')) > 0) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Offensive word detected!';
+    END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `entry`
@@ -82,27 +82,15 @@ CREATE TABLE `entry` (
   `Id` int NOT NULL AUTO_INCREMENT,
   `UserId` int NOT NULL,
   `QuestionnaireId` int NOT NULL,
-  `StatsId` int NOT NULL,
   `Points` int NOT NULL DEFAULT '0',
   `IsSubmitted` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`Id`),
   KEY `QuestionnaireFK2_idx` (`QuestionnaireId`),
   KEY `UserFK_idx` (`UserId`),
-  KEY `fk_entry_stats_statsid_idx` (`StatsId`),
   CONSTRAINT `fk_entry_questionnaire_questionnaireid` FOREIGN KEY (`QuestionnaireId`) REFERENCES `questionnaire` (`Id`) ON DELETE RESTRICT,
-  CONSTRAINT `fk_entry_stats_statsid` FOREIGN KEY (`StatsId`) REFERENCES `stats` (`Id`),
   CONSTRAINT `fk_entry_user_userid` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `entry`
---
-
-LOCK TABLES `entry` WRITE;
-/*!40000 ALTER TABLE `entry` DISABLE KEYS */;
-/*!40000 ALTER TABLE `entry` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -138,18 +126,8 @@ CREATE TABLE `loginlog` (
   PRIMARY KEY (`Id`),
   KEY `fk_loginlog_user_userid_idx` (`UserId`),
   CONSTRAINT `fk_loginlog_user_userid` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `loginlog`
---
-
-LOCK TABLES `loginlog` WRITE;
-/*!40000 ALTER TABLE `loginlog` DISABLE KEYS */;
-INSERT INTO `loginlog` VALUES (1,1,'2021-03-21 22:01:15'),(2,1,'2021-03-21 22:43:18'),(3,1,'2021-03-22 09:10:18'),(4,1,'2021-03-22 09:13:50'),(5,1,'2021-03-22 09:19:17'),(6,1,'2021-03-22 09:45:38'),(7,1,'2021-03-22 16:37:26'),(8,1,'2021-03-22 16:54:20');
-/*!40000 ALTER TABLE `loginlog` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `offensiveword`
@@ -163,17 +141,8 @@ CREATE TABLE `offensiveword` (
   `Word` varchar(45) NOT NULL,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Word_UNIQUE` (`Word`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `offensiveword`
---
-
-LOCK TABLES `offensiveword` WRITE;
-/*!40000 ALTER TABLE `offensiveword` DISABLE KEYS */;
-/*!40000 ALTER TABLE `offensiveword` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `product`
@@ -192,16 +161,6 @@ CREATE TABLE `product` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `product`
---
-
-LOCK TABLES `product` WRITE;
-/*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,'Rasoio','rasoio.png'),(2,'Schiuma','schiuma.png'),(3,'Pennello','pennello.png');
-/*!40000 ALTER TABLE `product` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `question`
 --
 
@@ -215,17 +174,8 @@ CREATE TABLE `question` (
   PRIMARY KEY (`Id`),
   KEY `QuestionnaireFK_idx` (`QuestionnaireId`),
   CONSTRAINT `fk_question_questionnaire_questionnaireid` FOREIGN KEY (`QuestionnaireId`) REFERENCES `questionnaire` (`Id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `question`
---
-
-LOCK TABLES `question` WRITE;
-/*!40000 ALTER TABLE `question` DISABLE KEYS */;
-/*!40000 ALTER TABLE `question` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `questionnaire`
@@ -242,18 +192,8 @@ CREATE TABLE `questionnaire` (
   UNIQUE KEY `Date_UNIQUE` (`Date`),
   KEY `ProductFK2_idx` (`ProductId`),
   CONSTRAINT `fk_questionnaire_product_productid` FOREIGN KEY (`ProductId`) REFERENCES `product` (`Id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `questionnaire`
---
-
-LOCK TABLES `questionnaire` WRITE;
-/*!40000 ALTER TABLE `questionnaire` DISABLE KEYS */;
-INSERT INTO `questionnaire` VALUES (2,2,'2021-03-23'),(3,3,'2021-03-22');
-/*!40000 ALTER TABLE `questionnaire` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `review`
@@ -274,15 +214,6 @@ CREATE TABLE `review` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `review`
---
-
-LOCK TABLES `review` WRITE;
-/*!40000 ALTER TABLE `review` DISABLE KEYS */;
-/*!40000 ALTER TABLE `review` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `stats`
 --
 
@@ -294,18 +225,12 @@ CREATE TABLE `stats` (
   `Age` int DEFAULT NULL,
   `Sex` enum('FEMALE','MALE','OTHER') DEFAULT NULL,
   `ExpertiseLevel` enum('LOW','MEDIUM','HIGH') DEFAULT NULL,
-  PRIMARY KEY (`Id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `EntryId` int NOT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `fk_stats_entry_entryid_idx` (`EntryId`),
+  CONSTRAINT `fk_stats_entry_entryid` FOREIGN KEY (`EntryId`) REFERENCES `entry` (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `stats`
---
-
-LOCK TABLES `stats` WRITE;
-/*!40000 ALTER TABLE `stats` DISABLE KEYS */;
-/*!40000 ALTER TABLE `stats` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `user`
@@ -326,16 +251,6 @@ CREATE TABLE `user` (
   UNIQUE KEY `Email_UNIQUE` (`Email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user`
---
-
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'user1','password','user1@example.org',0,0),(2,'user2','password','user2@example.org',0,0),(3,'user3','password','user3@example.org',0,0);
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -346,4 +261,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-03-22 17:29:11
+-- Dump completed on 2021-03-22 22:38:52
