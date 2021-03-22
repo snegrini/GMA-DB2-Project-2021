@@ -15,11 +15,13 @@ public class AnswerEntity {
     private String answer;
 
     @ManyToOne
-    @JoinColumn(name = "EntryId", insertable = false, updatable = false)
+    @JoinColumn(name = "EntryId")
+    @MapsId("entryId")
     private EntryEntity entry;
 
     @ManyToOne
-    @JoinColumn(name = "QuestionId", insertable = false, updatable = false)
+    @JoinColumn(name = "QuestionId")
+    @MapsId("questionId")
     private QuestionEntity question;
 
     public AnswerEntity() {
@@ -27,6 +29,14 @@ public class AnswerEntity {
 
     public AnswerEntity(String answer) {
         this.answer = answer;
+    }
+
+    public AnswerEntityPK getAnswerEntityPK() {
+        return answerEntityPK;
+    }
+
+    public void setAnswerEntityPK(AnswerEntityPK answerEntityPK) {
+        this.answerEntityPK = answerEntityPK;
     }
 
     public String getAnswer() {

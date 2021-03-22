@@ -11,6 +11,7 @@ public class AnswerEntityPK implements Serializable {
 
     private int questionId;
 
+
     public AnswerEntityPK() {
 
     }
