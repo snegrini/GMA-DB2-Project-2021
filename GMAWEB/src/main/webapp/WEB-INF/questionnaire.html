@@ -39,17 +39,27 @@
                 <h3>Stats</h3>
 
                 <label for="age">Age:</label>
-                <input id="age" name="age" type="text">
+                <input id="age" name="age" type="number" min="0" max="130">
 
                 <br>
 
                 <label for="sex">Sex:</label>
-                <input id="sex" name="sex" type="text">
+                <select data-th-remove="all-but-first" name="sex" id="sex">
+                    <option value="volvo" data-th-each="sex : ${sexs}" data-th-value="${sex.name}" data-th-text="${sex.name}">Volvo</option>
+                    <option value="saab">Saab</option>
+                    <option value="mercedes">Mercedes</option>
+                    <option value="audi">Audi</option>
+                </select>
 
                 <br>
 
                 <label for="expLevel">Expertise Level:</label>
-                <input id="expLevel" name="expLevel" type="text"><br>
+                <select data-th-remove="all-but-first" name="expLevel" id="expLevel">
+                    <option value="volvo" data-th-each="expLevel : ${expLevels}" data-th-value="${expLevel.name}" data-th-text="${expLevel.name}">Volvo</option>
+                    <option value="saab">Saab</option>
+                    <option value="mercedes">Mercedes</option>
+                    <option value="audi">Audi</option>
+                </select>
 
                 <br>
 

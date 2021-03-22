@@ -13,6 +13,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.ejb.EJB;
+import javax.ejb.EJBTransactionRolledbackException;
 import javax.persistence.PersistenceException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -96,8 +98,12 @@ public class QuestionnaireSubmitServlet extends HttpServlet {
             entryService.addNewEntry(user.getId(), questionnaire.getId(), answers, age, sex, expLevel);
         } catch (BadEntryException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            return;
         } catch (PersistenceException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not submit your answers.");
+            return;
+        } catch (EJBTransactionRolledbackException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Offensive word detected.");
             return;
         }
 

@@ -2,6 +2,8 @@ package it.polimi.db2.gma.GMAWEB.controllers;
 
 import it.polimi.db2.gma.GMAEJB.entities.QuestionEntity;
 import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
+import it.polimi.db2.gma.GMAEJB.enums.ExpertiseLevel;
+import it.polimi.db2.gma.GMAEJB.enums.Sex;
 import it.polimi.db2.gma.GMAEJB.services.QuestionnaireService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -57,6 +59,8 @@ public class QuestionnaireServlet extends HttpServlet {
         ServletContext servletContext = getServletContext();
         WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
 
+        ctx.setVariable("sexs", Sex.values());
+        ctx.setVariable("expLevels", ExpertiseLevel.values());
         ctx.setVariable("product", questionnaire.getProduct());
         ctx.setVariable("questions", questions);
 

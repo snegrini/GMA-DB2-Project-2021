@@ -30,8 +30,18 @@ CREATE TABLE `admin` (
   `Password` varchar(45) NOT NULL,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Username_UNIQUE` (`Username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `admin`
+--
+
+LOCK TABLES `admin` WRITE;
+/*!40000 ALTER TABLE `admin` DISABLE KEYS */;
+INSERT INTO `admin` VALUES (2,'admin','password');
+/*!40000 ALTER TABLE `admin` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `answer`
@@ -51,6 +61,15 @@ CREATE TABLE `answer` (
   CONSTRAINT `fk_answer_question_questionid` FOREIGN KEY (`QuestionId`) REFERENCES `question` (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `answer`
+--
+
+LOCK TABLES `answer` WRITE;
+/*!40000 ALTER TABLE `answer` DISABLE KEYS */;
+/*!40000 ALTER TABLE `answer` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -91,6 +110,15 @@ CREATE TABLE `entry` (
   CONSTRAINT `fk_entry_user_userid` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `entry`
+--
+
+LOCK TABLES `entry` WRITE;
+/*!40000 ALTER TABLE `entry` DISABLE KEYS */;
+/*!40000 ALTER TABLE `entry` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -130,6 +158,15 @@ CREATE TABLE `loginlog` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `loginlog`
+--
+
+LOCK TABLES `loginlog` WRITE;
+/*!40000 ALTER TABLE `loginlog` DISABLE KEYS */;
+/*!40000 ALTER TABLE `loginlog` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `offensiveword`
 --
 
@@ -145,6 +182,15 @@ CREATE TABLE `offensiveword` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `offensiveword`
+--
+
+LOCK TABLES `offensiveword` WRITE;
+/*!40000 ALTER TABLE `offensiveword` DISABLE KEYS */;
+/*!40000 ALTER TABLE `offensiveword` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `product`
 --
 
@@ -157,8 +203,18 @@ CREATE TABLE `product` (
   `Image` varchar(45) NOT NULL,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Name_UNIQUE` (`Name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `product`
+--
+
+LOCK TABLES `product` WRITE;
+/*!40000 ALTER TABLE `product` DISABLE KEYS */;
+INSERT INTO `product` VALUES (4,'Rasoio','rasoio.png'),(5,'Schiuma','schiuma.png'),(6,'Pennello','pennello.png');
+/*!40000 ALTER TABLE `product` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `question`
@@ -176,6 +232,15 @@ CREATE TABLE `question` (
   CONSTRAINT `fk_question_questionnaire_questionnaireid` FOREIGN KEY (`QuestionnaireId`) REFERENCES `questionnaire` (`Id`) ON DELETE RESTRICT
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `question`
+--
+
+LOCK TABLES `question` WRITE;
+/*!40000 ALTER TABLE `question` DISABLE KEYS */;
+/*!40000 ALTER TABLE `question` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `questionnaire`
@@ -196,6 +261,15 @@ CREATE TABLE `questionnaire` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `questionnaire`
+--
+
+LOCK TABLES `questionnaire` WRITE;
+/*!40000 ALTER TABLE `questionnaire` DISABLE KEYS */;
+/*!40000 ALTER TABLE `questionnaire` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `review`
 --
 
@@ -212,6 +286,15 @@ CREATE TABLE `review` (
   CONSTRAINT `fk_review_user_userid` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `review`
+--
+
+LOCK TABLES `review` WRITE;
+/*!40000 ALTER TABLE `review` DISABLE KEYS */;
+/*!40000 ALTER TABLE `review` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `stats`
@@ -233,6 +316,15 @@ CREATE TABLE `stats` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `stats`
+--
+
+LOCK TABLES `stats` WRITE;
+/*!40000 ALTER TABLE `stats` DISABLE KEYS */;
+/*!40000 ALTER TABLE `stats` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `user`
 --
 
@@ -249,8 +341,18 @@ CREATE TABLE `user` (
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Username_UNIQUE` (`Username`),
   UNIQUE KEY `Email_UNIQUE` (`Email`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (4,'user1','password','user1@example.org',0,0),(5,'user2','password','user2@example.org',0,0);
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -261,4 +363,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-03-22 22:38:52
+-- Dump completed on 2021-03-22 22:42:07
