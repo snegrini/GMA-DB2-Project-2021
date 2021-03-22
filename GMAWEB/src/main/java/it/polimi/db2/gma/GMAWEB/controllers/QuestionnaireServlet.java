@@ -3,8 +3,6 @@ package it.polimi.db2.gma.GMAWEB.controllers;
 import it.polimi.db2.gma.GMAEJB.entities.QuestionEntity;
 import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
 import it.polimi.db2.gma.GMAEJB.services.QuestionnaireService;
-import it.polimi.db2.gma.GMAEJB.utils.LeaderboardRow;
-import org.apache.commons.text.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -20,16 +18,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
 @WebServlet(name = "QuestionnaireServlet", value = "/questionnaire")
 public class QuestionnaireServlet extends HttpServlet {
+
+    private final String questionnairePath = "/WEB-INF/questionnaire.html";
+
     private TemplateEngine templateEngine;
 
     @EJB(name = "it.polimi.db2.gma.GMAEJB.services/QuestionnaireService")
     private QuestionnaireService questionnaireService;
+
 
     public void init() {
         ServletContext servletContext = getServletContext();
@@ -42,20 +43,11 @@ public class QuestionnaireServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String date = StringEscapeUtils.escapeJava(req.getParameter("date"));
-        LocalDate localDate = LocalDate.parse(date);
-
-        if (localDate.compareTo(LocalDate.now()) < 0) {
-            resp.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Invalid date. Please select a valid date.");
-            return;
-        }
+        QuestionnaireEntity questionnaire = questionnaireService.findQuestionnaireByDate(LocalDate.now());
 
         List<QuestionEntity> questions;
-        QuestionnaireEntity questionnaire;
-        questionnaire = questionnaireService.findQuestionnaireByDate(Date.valueOf(localDate));
-
         try {
-            questions = questionnaireService.getQuestionList(questionnaire.getId());
+            questions = questionnaireService.findAllQuestionsByQuestionnaire(questionnaire.getId());
         } catch (PersistenceException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not retrieve the questions.");
             return;
@@ -65,21 +57,21 @@ public class QuestionnaireServlet extends HttpServlet {
 
         ServletContext servletContext = getServletContext();
         WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
+
         ctx.setVariable("questions", questions);
         ctx.setVariable("questionnaireId", questionnaire.getId());
-        String path = "/WEB-INF/questionnaire.html";
 
-        templateEngine.process(path, ctx, resp.getWriter());
+        templateEngine.process(questionnairePath, ctx, resp.getWriter());
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String path;
 
-        if (req.getParameter("submit") != null) {
-            path = "/submit";
-        } else if (req.getParameter("cancel") != null) {
+        if (req.getParameter("cancel") != null) {
             path = "/cancel";
+        } else if (req.getParameter("submit") != null) {
+            path = "/submit";
         } else {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad submit action.");
             return;

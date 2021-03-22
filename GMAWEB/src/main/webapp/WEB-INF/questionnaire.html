@@ -4,58 +4,59 @@
     <meta charset="UTF-8">
     <title>Questionnaire</title>
 
-    <script src="../../questionnaire.js" data-th-src="@{/js/questionnaire.js}"></script>
+    <script data-th-src="@{/js/questionnaire.js}" src="../../questionnaire.js"></script>
 </head>
 <body>
 <header>
     <p><span>Product of the day</span></p>
 
-    <div data-th-if="${questPage}">
-        <form method="post" data-th-action="@{'/questionnaire'}">
-            <fieldset>
-                <!-- Mandatory questions -->
-                <div id="mandatory-questions">
-                    <h3>Questions</h3>
+    // TODO: SHOW THE PRODUCT.
 
-                    <input type="hidden" id="questionnaireId" name="questionnaireId" value="${questionnaireId}">
+    <form data-th-action="@{'/questionnaire'}" method="post">
+        <fieldset>
+            <!-- Mandatory questions -->
+            <div id="mandatory-questions">
+                <h3>Questions</h3>
 
-                    <div data-th-each="question,iter : ${questions}">
-                        <label for="answer+${iter}" data-th-text="${questions.question}">Question 1: </label>
-                        <input type="text" name="answer[]" id="answer+${iter}" size="200" required>
-                    </div>
-
-                    <br><br>
-
-                    <input type="submit" id="nextBtn" name="next" value="Next">
-                    <input type="submit" name="cancel" value="Cancel">
+                <div data-th-each="question,iter : ${questions}">
+                    <label data-th-for="answer + ${iter}" data-th-text="${questions.question}" for="answer1">Question 1: </label>
+                    <input data-th-id="answer + ${iter}" id="answer1" name="answer[]" required size="200" type="text">
                 </div>
 
-                <!-- Optional questions -->
-                <div id="optional-questions">
-                    <h3>Stats</h3>
-                    <label for="age">Age:</label>
-                    <input type="text" id="age" name="age">
+                <br><br>
 
-                    <br>
+                <input id="nextBtn" name="next" type="submit" value="Next">
+                <input name="cancel" type="submit" value="Cancel">
+            </div>
 
-                    <label for="sex">Sex:</label>
-                    <input type="text" name="sex" id="sex">
+            <!-- Optional questions -->
+            <div id="optional-questions">
+                <h3>Stats</h3>
 
-                    <br>
+                <label for="age">Age:</label>
+                <input id="age" name="age" type="text">
 
-                    <label for="expLevel">Expertise Level:</label>
-                    <input type="text" name="eLevel" id="expLevel"><br>
+                <br>
 
-                    <br>
+                <label for="sex">Sex:</label>
+                <input id="sex" name="sex" type="text">
 
-                    <input type="submit" id="prevBtn" name="previous" value="Previous">
-                    <input type="submit" name="cancel" value="Cancel">
-                    <input type="submit" name="submit" value="Submit">
-                </div>
-            </fieldset>
+                <br>
 
-        </form>
-    </div>
+                <label for="expLevel">Expertise Level:</label>
+                <input id="expLevel" name="expLevel" type="text"><br>
+
+                <br>
+
+                <input id="prevBtn" name="previous" type="submit" value="Previous">
+                <input name="cancel" type="submit" value="Cancel">
+                <input name="submit" type="submit" value="Submit">
+            </div>
+        </fieldset>
+
+        <input data-th-value="${questionnaireId}" id="questionnaireId" name="questionnaireId" type="hidden" value="1">
+
+    </form>
 
 </header>
 </body>

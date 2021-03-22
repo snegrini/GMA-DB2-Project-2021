@@ -40,7 +40,6 @@ public class QuestionnaireSubmitServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        // TODO retrieve all answers
 
         String[] ans = req.getParameterValues("answer[]");
 
@@ -56,11 +55,13 @@ public class QuestionnaireSubmitServlet extends HttpServlet {
         String sex = StringEscapeUtils.escapeJava(req.getParameter("sex"));
         String expLevel = StringEscapeUtils.escapeJava(req.getParameter("expLevel"));
 
-        // TODO retrieve from session
         UserEntity user = (UserEntity) session.getAttribute("user");
         String questionnaireId = req.getParameter("questionnaireId");
 
-        // TODO Add entry
+        // TODO check parameters.
+        
+        // TODO control that the questionnaireId is the valid one of the day.
+
         try {
             entryService.addNewEntry(user.getId(), questionnaireId, answers, age, sex, expLevel);
         } catch (PersistenceException e) {

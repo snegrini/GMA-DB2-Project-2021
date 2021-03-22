@@ -57,7 +57,7 @@ public class EntryService {
 
         QuestionnaireEntity newQuestionnaire = new QuestionnaireEntity();
         newQuestionnaire.setId(questionnaireId);
-        newQuestionnaire.addEntries(newEntry);
+        newQuestionnaire.addEntry(newEntry);
 
         em.persist(newEntry);
         return newEntry;

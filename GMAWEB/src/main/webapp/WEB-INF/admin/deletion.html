@@ -11,53 +11,53 @@
 
     <br>
 
-    <div>
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Date</th>
-                <th>Product</th>
-                <th>Operation</th>
-            </tr>
-            </thead>
-            <tbody data-th-remove="all-but-first">
-            <tr data-th-each="questionnaire : ${questionnaires}">
-                <td data-th-text="${questionnaire.id}">1</td>
-                <td data-th-text="${questionnaire.date}">01/01/2021</td>
-                <td data-th-text="${questionnaire.product.name}">Chair</td>
-                <td>
-                    <form action="#" method="post" data-th-action="@{/admin/deletion}">
-                        <input type="hidden" name="questionnaireId" value="1" data-th-value="${questionnaire.id}">
-                        <input type="submit" value="Delete">
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>02/01/2021</td>
-                <td>Desk</td>
-                <td>
-                    <form action="#" method="post">
-                        <input type="hidden" name="questionnaireId" value="2">
-                        <input type="submit" value="Delete">
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>03/01/2021</td>
-                <td>Lamp</td>
-                <td>
-                    <form action="#" method="post">
-                        <input type="hidden" name="questionnaireId" value="3">
-                        <input type="submit" value="Delete">
-                    </form>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+    <div data-th-if="${#lists.isEmpty(questionnaires)}">Wow, such empty</div>
+
+    <table data-th-unless="${#lists.isEmpty(questionnaires)}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Product</th>
+            <th>Operation</th>
+        </tr>
+        </thead>
+        <tbody data-th-remove="all-but-first">
+        <tr data-th-each="questionnaire : ${questionnaires}">
+            <td data-th-text="${questionnaire.id}">1</td>
+            <td data-th-text="${questionnaire.date}">01/01/2021</td>
+            <td data-th-text="${questionnaire.product.name}">Chair</td>
+            <td>
+                <form action="#" method="post" data-th-action="@{/admin/deletion}">
+                    <input type="hidden" name="questionnaireId" value="1" data-th-value="${questionnaire.id}">
+                    <input type="submit" value="Delete">
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>02/01/2021</td>
+            <td>Desk</td>
+            <td>
+                <form action="#" method="post">
+                    <input type="hidden" name="questionnaireId" value="2">
+                    <input type="submit" value="Delete">
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>03/01/2021</td>
+            <td>Lamp</td>
+            <td>
+                <form action="#" method="post">
+                    <input type="hidden" name="questionnaireId" value="3">
+                    <input type="submit" value="Delete">
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
 </body>
 </html>

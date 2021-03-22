@@ -28,9 +28,9 @@ public class QuestionnaireService {
                 .getResultList();
     }
 
-    public QuestionnaireEntity findQuestionnaireByDate(Date date) {
+    public QuestionnaireEntity findQuestionnaireByDate(LocalDate localDate) {
         return em.createNamedQuery("QuestionnaireEntity.findByDate", QuestionnaireEntity.class)
-                .setParameter("date", date)
+                .setParameter("date", Date.valueOf(localDate))
                 .setMaxResults(1)
                 .getResultStream()
                 .findFirst()
@@ -81,8 +81,8 @@ public class QuestionnaireService {
         em.remove(questionnaire);
     }
 
-    public List<QuestionEntity> getQuestionList(int questionnaireId) {
-        return em.createNamedQuery("QuestionEntity.getQuestionList", QuestionEntity.class)
+    public List<QuestionEntity> findAllQuestionsByQuestionnaire(int questionnaireId) {
+        return em.createNamedQuery("QuestionEntity.findAllByQuestionnaire", QuestionEntity.class)
                 .setParameter("questionnaireId", questionnaireId)
                 .getResultList();
     }

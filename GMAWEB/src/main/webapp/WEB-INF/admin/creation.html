@@ -19,7 +19,7 @@
                 <legend>Add a new questionnaire for a product of the day.</legend>
 
                 <label for="date">Date:</label>
-                <input type="date" name="date" id="date" required>
+                <input type="date" name="date" id="date" data-th-min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" required>
 
                 <br><br>
 

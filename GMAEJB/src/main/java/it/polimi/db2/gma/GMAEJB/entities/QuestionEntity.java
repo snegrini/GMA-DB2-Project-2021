@@ -6,7 +6,7 @@ import java.util.List;
 @Entity
 @Table(name = "question")
 @NamedQueries({
-        @NamedQuery(name = "QuestionEntity.getQuestionList", query = "SELECT q FROM QuestionEntity q WHERE q.id = :questionnaireId")
+        @NamedQuery(name = "QuestionEntity.findAllByQuestionnaire", query = "SELECT q FROM QuestionEntity q WHERE q.id = :questionnaireId")
 })
 public class QuestionEntity {
     @Id

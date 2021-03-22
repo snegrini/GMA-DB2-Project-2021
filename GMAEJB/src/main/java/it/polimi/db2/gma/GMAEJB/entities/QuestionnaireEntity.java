@@ -81,8 +81,12 @@ public class QuestionnaireEntity {
         getQuestions().remove(question);
     }
 
-    public void addEntries(EntryEntity entry) {
+    public void addEntry(EntryEntity entry) {
         getEntries().add(entry);
         entry.setQuestionnaireEntity(this);
+    }
+
+    public void removeEntry(EntryEntity entry) {
+        getEntries().remove(entry);
     }
 }
