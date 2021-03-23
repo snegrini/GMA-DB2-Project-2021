@@ -1,17 +1,11 @@
 package it.polimi.db2.gma.GMAWEB.controllers;
 
-import it.polimi.db2.gma.GMAEJB.entities.LoginlogEntity;
 import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
 import it.polimi.db2.gma.GMAEJB.entities.UserEntity;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadEntryException;
-import it.polimi.db2.gma.GMAEJB.exceptions.BadProductException;
-import it.polimi.db2.gma.GMAEJB.exceptions.BadQuestionnaireException;
 import it.polimi.db2.gma.GMAEJB.services.EntryService;
-import it.polimi.db2.gma.GMAEJB.services.LoginlogService;
 import it.polimi.db2.gma.GMAEJB.services.QuestionnaireService;
-import org.eclipse.persistence.internal.oxm.mappings.Login;
 import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
@@ -26,9 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.Date;
 import java.time.LocalDate;
-import java.util.List;
 
 
 @WebServlet(name = "QuestionnaireCancelServlet", value = "/cancel")
@@ -58,7 +50,7 @@ public class QuestionnaireCancelServlet extends HttpServlet {
         QuestionnaireEntity questionnaire = questionnaireService.findQuestionnaireByDate(LocalDate.now());
 
         try {
-            entryService.addEmptyEntry(user, questionnaire);
+            entryService.addEmptyEntry(user.getId(), questionnaire.getId());
         } catch(BadEntryException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         } catch (PersistenceException e) {
@@ -66,6 +58,9 @@ public class QuestionnaireCancelServlet extends HttpServlet {
             return;
         }
 
-        resp.sendRedirect(getServletContext().getContextPath() + "/homepage");
+        String path = "/homepage";
+        RequestDispatcher dispatcher = getServletContext()
+                .getRequestDispatcher(path);
+        dispatcher.forward(req, resp);
     }
 }

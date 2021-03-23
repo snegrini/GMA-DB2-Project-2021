@@ -19,10 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @WebServlet(name = "AdminCreationServlet", value = "/admin/creation")
 public class CreationServlet extends HttpServlet {
@@ -70,8 +68,8 @@ public class CreationServlet extends HttpServlet {
             return;
         }
 
-        List<String> questions = Arrays.asList(ques);
-        questions = questions.stream().filter(Predicate.not(String::isEmpty)).collect(Collectors.toList());
+        List<String> questions = new ArrayList<>(List.of(ques));
+        questions.removeIf(String::isEmpty);
         questions.forEach(StringEscapeUtils::escapeJava);
 
         if (date == null || product == null || date.isEmpty() || product.isEmpty() || questions.isEmpty()) {

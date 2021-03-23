@@ -1,10 +1,8 @@
 package it.polimi.db2.gma.GMAWEB.controllers;
 
 import it.polimi.db2.gma.GMAEJB.entities.ProductEntity;
-import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
 import it.polimi.db2.gma.GMAEJB.entities.ReviewEntity;
 import it.polimi.db2.gma.GMAEJB.services.ProductService;
-import it.polimi.db2.gma.GMAEJB.services.QuestionnaireService;
 import it.polimi.db2.gma.GMAEJB.utils.ProductOfDay;
 import it.polimi.db2.gma.GMAEJB.utils.Review;
 import org.thymeleaf.TemplateEngine;

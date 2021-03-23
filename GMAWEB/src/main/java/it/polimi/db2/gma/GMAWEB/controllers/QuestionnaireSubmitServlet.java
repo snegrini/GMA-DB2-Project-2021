@@ -15,6 +15,7 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import javax.ejb.EJB;
 import javax.ejb.EJBTransactionRolledbackException;
 import javax.persistence.PersistenceException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -48,7 +48,7 @@ public class QuestionnaireSubmitServlet extends HttpServlet {
         templateResolver.setSuffix(".html");
     }
 
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         HttpSession session = req.getSession();
         UserEntity user = (UserEntity) session.getAttribute("user");
 
@@ -107,7 +107,10 @@ public class QuestionnaireSubmitServlet extends HttpServlet {
             return;
         }
 
-        //resp.sendRedirect(getServletContext().getContextPath() + "/greetings");
+        String path = "/greetings";
+        RequestDispatcher dispatcher = getServletContext()
+                .getRequestDispatcher(path);
+        dispatcher.forward(req, resp);
     }
 
 }

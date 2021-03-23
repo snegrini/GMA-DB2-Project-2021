@@ -1,10 +1,7 @@
 package it.polimi.db2.gma.GMAWEB.controllers.admin;
 
-import it.polimi.db2.gma.GMAEJB.entities.ProductEntity;
 import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
-import it.polimi.db2.gma.GMAEJB.exceptions.BadProductException;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadQuestionnaireException;
-import it.polimi.db2.gma.GMAEJB.services.ProductService;
 import it.polimi.db2.gma.GMAEJB.services.QuestionnaireService;
 import org.apache.commons.text.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
@@ -20,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 @WebServlet(name = "AdminDeletionServlet", value = "/admin/deletion")

@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Questionnaire</title>
 
+    <link href="../../css/questionnaire.css" data-th-href="@{/css/questionnaire.css}" rel="stylesheet">
+
     <script data-th-src="@{/js/questionnaire.js}" src="../../questionnaire.js"></script>
 </head>
 <body>
@@ -18,55 +20,53 @@
     <br>
 
     <form data-th-action="@{'/questionnaire'}" method="post">
-        <fieldset>
-            <!-- Mandatory questions -->
-            <div id="mandatory-questions">
-                <h3>Questions</h3>
+        <!-- Mandatory questions -->
+        <fieldset id="mandatory-questions">
+            <legend>Questions</legend>
 
-                <div data-th-each="question,iter : ${questions}">
-                    <label data-th-for="answer + ${iter}" data-th-text="${question.question}" for="answer1">Question 1: </label>
-                    <input data-th-id="answer + ${iter}" id="answer1" name="answer[]" required size="200" type="text">
-                </div>
-
-                <br><br>
-
-                <input id="nextBtn" name="next" type="submit" value="Next">
-                <input name="cancel" type="submit" value="Cancel">
+            <div data-th-each="question,iter : ${questions}">
+                <label data-th-for="answer + ${iter.index + 1}" data-th-text="${question.question}" for="answer1">Question 1: </label>
+                <input data-th-id="answer + ${iter.index + 1}" id="answer1" name="answer[]" required size="200" type="text">
             </div>
 
-            <!-- Optional questions -->
-            <div id="optional-questions">
-                <h3>Stats</h3>
+            <br><br>
 
-                <label for="age">Age:</label>
-                <input id="age" name="age" type="number" min="0" max="130">
+            <input id="nextBtn" name="next" type="button" value="Next">
+            <input name="cancel" type="submit" value="Cancel">
+        </fieldset>
 
-                <br>
+        <!-- Optional questions -->
+        <fieldset id="optional-questions">
+            <legend>Stats</legend>
 
-                <label for="sex">Sex:</label>
-                <select data-th-remove="all-but-first" name="sex" id="sex">
-                    <option value="volvo" data-th-each="sex : ${sexs}" data-th-value="${sex.name}" data-th-text="${sex.name}">Volvo</option>
-                    <option value="saab">Saab</option>
-                    <option value="mercedes">Mercedes</option>
-                    <option value="audi">Audi</option>
-                </select>
+            <label for="age">Age:</label>
+            <input id="age" name="age" type="number" min="0" max="130">
 
-                <br>
+            <br>
 
-                <label for="expLevel">Expertise Level:</label>
-                <select data-th-remove="all-but-first" name="expLevel" id="expLevel">
-                    <option value="volvo" data-th-each="expLevel : ${expLevels}" data-th-value="${expLevel.name}" data-th-text="${expLevel.name}">Volvo</option>
-                    <option value="saab">Saab</option>
-                    <option value="mercedes">Mercedes</option>
-                    <option value="audi">Audi</option>
-                </select>
+            <label for="sex">Sex:</label>
+            <select data-th-remove="all-but-first" name="sex" id="sex">
+                <option value="volvo" data-th-each="sex : ${sexs}" data-th-value="${sex.name}" data-th-text="${sex.name}">Volvo</option>
+                <option value="saab">Saab</option>
+                <option value="mercedes">Mercedes</option>
+                <option value="audi">Audi</option>
+            </select>
 
-                <br>
+            <br>
 
-                <input id="prevBtn" name="previous" type="submit" value="Previous">
-                <input name="cancel" type="submit" value="Cancel">
-                <input name="submit" type="submit" value="Submit">
-            </div>
+            <label for="expLevel">Expertise Level:</label>
+            <select data-th-remove="all-but-first" name="expLevel" id="expLevel">
+                <option value="volvo" data-th-each="expLevel : ${expLevels}" data-th-value="${expLevel.name}" data-th-text="${expLevel.name}">Volvo</option>
+                <option value="saab">Saab</option>
+                <option value="mercedes">Mercedes</option>
+                <option value="audi">Audi</option>
+            </select>
+
+            <br>
+
+            <input id="prevBtn" name="previous" type="button" value="Previous">
+            <input name="cancel" type="submit" value="Cancel">
+            <input name="submit" type="submit" value="Submit">
         </fieldset>
     </form>
 

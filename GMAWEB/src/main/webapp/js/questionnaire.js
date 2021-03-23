@@ -3,14 +3,30 @@
     window.onload = function() { // Wait for the document to finish loading
         document.getElementById("nextBtn").addEventListener("click", nextBtnClicked, false);
         document.getElementById("prevBtn").addEventListener("click", prevBtnClicked, false);
+
+        document.getElementById("optional-questions").classList.add("display-none");
     }
 
     function nextBtnClicked() {
-        // TODO hide mandatory div and show optional div
+        let answerInputList = document.getElementsByName("answer[]");
+        let fieldSetValid = true;
+
+        answerInputList.forEach(answer => {
+            if (!answer.checkValidity()) {
+                answer.reportValidity();
+                fieldSetValid = false;
+            }
+        });
+
+        if (fieldSetValid) {
+            document.getElementById("mandatory-questions").classList.add("display-none");
+            document.getElementById("optional-questions").classList.remove("display-none");
+        }
     }
 
     function prevBtnClicked() {
-        // TODO hide optional div and show mandatory div
+        document.getElementById("mandatory-questions").classList.remove("display-none");
+        document.getElementById("optional-questions").classList.add("display-none");
     }
 
 })();

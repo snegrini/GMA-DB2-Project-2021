@@ -1,8 +1,6 @@
 package it.polimi.db2.gma.GMAWEB.controllers.admin;
 
-import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
 import it.polimi.db2.gma.GMAEJB.services.EntryService;
-import it.polimi.db2.gma.GMAEJB.services.QuestionnaireService;
 import it.polimi.db2.gma.GMAEJB.services.UserService;
 import it.polimi.db2.gma.GMAEJB.utils.Entry;
 import it.polimi.db2.gma.GMAEJB.utils.UserInfo;

@@ -49,7 +49,10 @@ public class EntryService {
         return new Entry(statsAnswers, questionAnswerList);
     }
 
-    public EntryEntity addEmptyEntry(UserEntity user, QuestionnaireEntity questionnaire) throws BadEntryException {
+    public EntryEntity addEmptyEntry(int userId, int questionnaireId) throws BadEntryException {
+        UserEntity user = em.find(UserEntity.class, userId);
+        QuestionnaireEntity questionnaire = em.find(QuestionnaireEntity.class, questionnaireId);
+
         if (user == null || questionnaire == null) {
             throw new BadEntryException("User or questionnaire not found.");
         }
