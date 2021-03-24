@@ -39,13 +39,9 @@ public class GreetingsServlet extends HttpServlet {
         templateEngine.process(path, ctx, resp.getWriter());
     }
 
-<<<<<<< HEAD
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        doGet(req,resp);
-=======
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         doGet(req, resp);
->>>>>>> 5108feaab3ad288fce386a3ebc0d4b4e72707704
     }
 }
