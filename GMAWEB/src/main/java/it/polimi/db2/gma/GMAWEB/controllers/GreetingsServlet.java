@@ -29,16 +29,23 @@ public class GreetingsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("text/html");
+        String points = "1";
 
         ServletContext servletContext = getServletContext();
         WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
+        ctx.setVariable("points", points);
         String path = "/WEB-INF/greetings.html";
 
         templateEngine.process(path, ctx, resp.getWriter());
     }
 
+<<<<<<< HEAD
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        doGet(req,resp);
+=======
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         doGet(req, resp);
+>>>>>>> 5108feaab3ad288fce386a3ebc0d4b4e72707704
     }
 }
