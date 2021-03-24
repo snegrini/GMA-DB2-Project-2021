@@ -1,8 +1,5 @@
 package it.polimi.db2.gma.GMAEJB.entities;
 
-import it.polimi.db2.gma.GMAEJB.enums.ExpertiseLevel;
-import it.polimi.db2.gma.GMAEJB.enums.Sex;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
