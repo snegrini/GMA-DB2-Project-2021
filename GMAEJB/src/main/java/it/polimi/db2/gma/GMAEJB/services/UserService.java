@@ -102,4 +102,11 @@ public class UserService {
                 .setParameter("submitted", isSubmitted)
                 .getResultList();
     }
+
+    public void blockUser(int userId) {
+        UserEntity user = em.find(UserEntity.class, userId);
+        user.setIsBlocked((byte) 1);
+
+        em.merge(user);
+    }
 }
