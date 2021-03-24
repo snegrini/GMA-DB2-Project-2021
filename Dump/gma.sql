@@ -30,7 +30,7 @@ CREATE TABLE `admin` (
   `Password` varchar(45) NOT NULL,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Username_UNIQUE` (`Username`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `admin` (
 
 LOCK TABLES `admin` WRITE;
 /*!40000 ALTER TABLE `admin` DISABLE KEYS */;
-INSERT INTO `admin` VALUES (2,'admin','password');
+INSERT INTO `admin` VALUES (1,'admin','password');
 /*!40000 ALTER TABLE `admin` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -99,9 +99,9 @@ DELIMITER ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`dev`@`localhost`*/ /*!50003 TRIGGER `answer_AFTER_INSERT` AFTER INSERT ON `answer` FOR EACH ROW BEGIN
-	UPDATE `user` u
-    SET u.Points = u.Points + 1
-    WHERE u.Id = (SELECT e.UserId FROM `entry` e WHERE e.Id = NEW.EntryId);
+    UPDATE `entry` e
+    SET e.Points = e.Points + 1
+    WHERE e.Id = NEW.EntryId;
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -127,7 +127,7 @@ CREATE TABLE `entry` (
   KEY `UserFK_idx` (`UserId`),
   CONSTRAINT `fk_entry_questionnaire_questionnaireid` FOREIGN KEY (`QuestionnaireId`) REFERENCES `questionnaire` (`Id`) ON DELETE RESTRICT,
   CONSTRAINT `fk_entry_user_userid` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -138,6 +138,27 @@ LOCK TABLES `entry` WRITE;
 /*!40000 ALTER TABLE `entry` DISABLE KEYS */;
 /*!40000 ALTER TABLE `entry` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`dev`@`localhost`*/ /*!50003 TRIGGER `entry_AFTER_UPDATE` AFTER UPDATE ON `entry` FOR EACH ROW BEGIN
+    IF NEW.Points <> OLD.Points THEN
+		UPDATE `user` u
+		SET u.Points = u.Points - OLD.Points + NEW.Points
+		WHERE u.Id = NEW.UserId;
+	END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -173,7 +194,7 @@ CREATE TABLE `loginlog` (
   PRIMARY KEY (`Id`),
   KEY `fk_loginlog_user_userid_idx` (`UserId`),
   CONSTRAINT `fk_loginlog_user_userid` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -197,7 +218,7 @@ CREATE TABLE `offensiveword` (
   `Word` varchar(45) NOT NULL,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Word_UNIQUE` (`Word`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -206,6 +227,7 @@ CREATE TABLE `offensiveword` (
 
 LOCK TABLES `offensiveword` WRITE;
 /*!40000 ALTER TABLE `offensiveword` DISABLE KEYS */;
+INSERT INTO `offensiveword` VALUES (1,'apple'),(3,'banana'),(8,'blackberry'),(7,'blueberry'),(9,'kiwi'),(2,'orange'),(5,'peach'),(4,'pear'),(10,'pineapple'),(6,'strawberry');
 /*!40000 ALTER TABLE `offensiveword` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -222,7 +244,7 @@ CREATE TABLE `product` (
   `Image` varchar(45) NOT NULL,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Name_UNIQUE` (`Name`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -231,7 +253,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (4,'Rasoio','rasoio.png'),(5,'Schiuma','schiuma.png'),(6,'Pennello','pennello.png');
+INSERT INTO `product` VALUES (1,'Razor','razor.png'),(2,'Foam','foam.png'),(3,'Brush','brush.png');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -249,7 +271,7 @@ CREATE TABLE `question` (
   PRIMARY KEY (`Id`),
   KEY `QuestionnaireFK_idx` (`QuestionnaireId`),
   CONSTRAINT `fk_question_questionnaire_questionnaireid` FOREIGN KEY (`QuestionnaireId`) REFERENCES `questionnaire` (`Id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -276,7 +298,7 @@ CREATE TABLE `questionnaire` (
   UNIQUE KEY `Date_UNIQUE` (`Date`),
   KEY `ProductFK2_idx` (`ProductId`),
   CONSTRAINT `fk_questionnaire_product_productid` FOREIGN KEY (`ProductId`) REFERENCES `product` (`Id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -312,6 +334,7 @@ CREATE TABLE `review` (
 
 LOCK TABLES `review` WRITE;
 /*!40000 ALTER TABLE `review` DISABLE KEYS */;
+INSERT INTO `review` VALUES (1,1,'What a great razor. I was buying Harry’s Razors before, however, his blades are attached to the blade cartridge with rubber, which began to stretch in a few weeks. Great product!'),(1,2,'The Best razor brand around in my opinion, I will not use anything else, you can always depend on a close, nick free shave. I would highly recommend this set, great price and excellent performance.'),(2,1,'Been using this for a few weeks. It comes out a little too fast. But I love it. I trim a permanent 5 o\'clock shadow, so I only shave twice a week, in the shower.'),(3,2,'This device makes it much easier to apply shaving cream to my face. I also have noticed that I use half as much shaving cream than before.');
 /*!40000 ALTER TABLE `review` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -331,7 +354,7 @@ CREATE TABLE `stats` (
   PRIMARY KEY (`Id`),
   KEY `fk_stats_entry_entryid_idx` (`EntryId`),
   CONSTRAINT `fk_stats_entry_entryid` FOREIGN KEY (`EntryId`) REFERENCES `entry` (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -352,9 +375,9 @@ UNLOCK TABLES;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`dev`@`localhost`*/ /*!50003 TRIGGER `stats_AFTER_INSERT` AFTER INSERT ON `stats` FOR EACH ROW BEGIN
-	UPDATE `user` u
-    SET u.Points = u.Points + 2 * ((NOT ISNULL(NEW.Age)) + (NOT ISNULL(NEW.Sex)) + (NOT ISNULL(NEW.ExpertiseLevel)))
-    WHERE u.Id = (SELECT e.UserId FROM `entry` e WHERE e.Id = NEW.EntryId);
+    UPDATE `entry` e
+    SET e.Points = e.Points + 2 * ((NOT ISNULL(NEW.Age)) + (NOT ISNULL(NEW.Sex)) + (NOT ISNULL(NEW.ExpertiseLevel)))
+    WHERE e.Id = NEW.EntryId;
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -379,7 +402,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Username_UNIQUE` (`Username`),
   UNIQUE KEY `Email_UNIQUE` (`Email`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -388,7 +411,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (4,'user1','password','user1@example.org',0,0),(5,'user2','password','user2@example.org',0,0);
+INSERT INTO `user` VALUES (1,'user1','password','user1@example.org',0,0),(2,'user2','password','user2@example.org',0,0);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -401,4 +424,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-03-24 21:41:00
+-- Dump completed on 2021-03-24 22:57:41
