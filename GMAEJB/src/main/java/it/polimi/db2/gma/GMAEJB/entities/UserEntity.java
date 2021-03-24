@@ -13,7 +13,7 @@ import java.util.List;
         @NamedQuery(name = "UserEntity.getLeaderboardByDate", query = "SELECT NEW it.polimi.db2.gma.GMAEJB.utils.LeaderboardRow(u.username, e.points) " +
                 "FROM UserEntity u INNER JOIN u.entries e INNER JOIN e.questionnaire q WHERE q.date = :date AND e.isSubmitted = 1 ORDER BY e.points DESC"),
         @NamedQuery(name = "UserEntity.getEntriesUserInfo", query = "SELECT NEW it.polimi.db2.gma.GMAEJB.utils.UserInfo(u.id, u.username)" +
-                "FROM UserEntity u INNER JOIN u.entries e INNER JOIN e.questionnaire q WHERE q.id = :id AND e.isSubmitted = :submitted")
+                "FROM UserEntity u INNER JOIN u.entries e WHERE e.questionnaire.id = :id AND e.isSubmitted = :submitted")
 })
 public class UserEntity {
     @Id
@@ -42,7 +42,7 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<LoginlogEntity> loginlogs = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = { CascadeType.REMOVE }, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
     private List<EntryEntity> entries = new ArrayList<>();
 
     public UserEntity(String username, String password, String email) {

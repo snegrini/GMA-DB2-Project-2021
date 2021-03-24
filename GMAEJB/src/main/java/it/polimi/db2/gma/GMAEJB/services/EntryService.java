@@ -66,7 +66,7 @@ public class EntryService {
         return entry;
     }
 
-    public EntryEntity addNewEntry(int userId, int questionnaireId, List<String> strAnswers, int age, Sex sex, ExpertiseLevel expLevel) throws BadEntryException {
+    public EntryEntity addNewEntry(int userId, int questionnaireId, List<String> strAnswers, Integer age, Sex sex, ExpertiseLevel expLevel) throws BadEntryException {
         UserEntity user = em.find(UserEntity.class, userId);
         QuestionnaireEntity questionnaire = em.find(QuestionnaireEntity.class, questionnaireId);
 
@@ -74,8 +74,22 @@ public class EntryService {
             throw new BadEntryException("User or questionnaire not found.");
         }
 
+        // Check if user has already submitted the questionnaire.
+        EntryEntity result = em.createNamedQuery("EntryEntity.findByUserAndQuestionnaire", EntryEntity.class)
+                .setParameter("userId", user.getId())
+                .setParameter("questionnaireId", questionnaire.getId())
+                .setMaxResults(1)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+
+        if (result != null) {
+            throw new BadEntryException("User has already submitted this questionnaire.");
+        }
+
         List<QuestionEntity> questions = questionnaire.getQuestions();
 
+        // Check number of answers
         if (strAnswers.size() != questions.size()) {
             throw new BadEntryException("Answers do not match questions.");
         }
@@ -96,9 +110,19 @@ public class EntryService {
 
         // Build new StatsEntity object and set it to the entry.
         StatsEntity stats = new StatsEntity();
-        stats.setAge(age);
-        stats.setSex(sex);
-        stats.setExpertiseLevel(expLevel);
+
+        if (age != null) {
+            stats.setAge(age);
+        }
+
+        if (sex != null) {
+            stats.setSex(sex);
+        }
+
+        if (expLevel != null) {
+            stats.setExpertiseLevel(expLevel);
+        }
+
         entry.setStats(stats);
 
         em.persist(entry);
