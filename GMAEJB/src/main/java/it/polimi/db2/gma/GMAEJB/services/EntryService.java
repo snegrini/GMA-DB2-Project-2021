@@ -4,7 +4,6 @@ import it.polimi.db2.gma.GMAEJB.entities.*;
 import it.polimi.db2.gma.GMAEJB.enums.ExpertiseLevel;
 import it.polimi.db2.gma.GMAEJB.enums.Sex;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadEntryException;
-import it.polimi.db2.gma.GMAEJB.exceptions.BadProductException;
 import it.polimi.db2.gma.GMAEJB.utils.Entry;
 import it.polimi.db2.gma.GMAEJB.utils.QuestionAnswer;
 import it.polimi.db2.gma.GMAEJB.utils.StatsAnswers;
@@ -12,7 +11,6 @@ import it.polimi.db2.gma.GMAEJB.utils.StatsAnswers;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.sql.Date;
 import java.util.List;
 
 @Stateless
@@ -49,7 +47,7 @@ public class EntryService {
         return new Entry(statsAnswers, questionAnswerList);
     }
 
-    public EntryEntity addEmptyEntry(int userId, int questionnaireId) throws BadEntryException {
+    public void addEmptyEntry(int userId, int questionnaireId) throws BadEntryException {
         UserEntity user = em.find(UserEntity.class, userId);
         QuestionnaireEntity questionnaire = em.find(QuestionnaireEntity.class, questionnaireId);
 
@@ -63,10 +61,9 @@ public class EntryService {
         entry.setIsSubmitted((byte) 0);
 
         em.persist(entry);
-        return entry;
     }
 
-    public EntryEntity addNewEntry(int userId, int questionnaireId, List<String> strAnswers, Integer age, Sex sex, ExpertiseLevel expLevel) throws BadEntryException {
+    public void addNewEntry(int userId, int questionnaireId, List<String> strAnswers, Integer age, Sex sex, ExpertiseLevel expLevel) throws BadEntryException {
         UserEntity user = em.find(UserEntity.class, userId);
         QuestionnaireEntity questionnaire = em.find(QuestionnaireEntity.class, questionnaireId);
 
@@ -126,6 +123,5 @@ public class EntryService {
         entry.setStats(stats);
 
         em.persist(entry);
-        return entry;
     }
 }

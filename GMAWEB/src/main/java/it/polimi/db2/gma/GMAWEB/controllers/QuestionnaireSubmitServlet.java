@@ -7,7 +7,9 @@ import it.polimi.db2.gma.GMAEJB.enums.Sex;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadEntryException;
 import it.polimi.db2.gma.GMAEJB.services.EntryService;
 import it.polimi.db2.gma.GMAEJB.services.QuestionnaireService;
+import it.polimi.db2.gma.GMAEJB.services.UserService;
 import org.apache.commons.text.StringEscapeUtils;
+import org.eclipse.persistence.exceptions.DatabaseException;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
@@ -35,6 +37,9 @@ public class QuestionnaireSubmitServlet extends HttpServlet {
 
     @EJB(name = "it.polimi.db2.gma.GMAEJB.services/EntryService")
     private EntryService entryService;
+
+    @EJB(name = "it.polimi.db2.gma.GMAEJB.services/UserService")
+    private UserService userService;
 
     @EJB(name = "it.polimi.db2.gma.GMAEJB.services/QuestionnaireService")
     private QuestionnaireService questionnaireService;
@@ -75,7 +80,6 @@ public class QuestionnaireSubmitServlet extends HttpServlet {
         ExpertiseLevel expLevel = null;
 
         try {
-
             if (ageStr != null && !ageStr.isEmpty()) {
                 age = Integer.parseInt(StringEscapeUtils.escapeJava(ageStr));
             }
@@ -107,8 +111,10 @@ public class QuestionnaireSubmitServlet extends HttpServlet {
         } catch (PersistenceException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not submit your answers.");
             return;
-        } catch (EJBTransactionRolledbackException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Offensive word detected.");
+        } catch (Exception e) {
+            userService.blockUser(user.getId());
+
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Offensive word detected. You will be banned!");
             return;
         }
 
