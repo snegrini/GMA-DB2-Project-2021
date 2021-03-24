@@ -128,4 +128,19 @@ public class EntryService {
         em.persist(entry);
         return entry;
     }
+
+    public EntryEntity getEntryByIds(int questionnaireID, int userID) {
+        QuestionnaireEntity questionnaire = em.find(QuestionnaireEntity.class, questionnaireID);
+        UserEntity user = em.find(UserEntity.class, userID);
+
+        EntryEntity result = em.createNamedQuery("EntryEntity.findByUserAndQuestionnaire", EntryEntity.class)
+                .setParameter("userId", user.getId())
+                .setParameter("questionnaireId", questionnaire.getId())
+                .setMaxResults(1)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+
+        return result;
+    }
 }
