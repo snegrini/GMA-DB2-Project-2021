@@ -12,9 +12,13 @@
 
 <div>
 
-    <div>Thank you!</div>
+    <div>Thank you for filling the questionnaire</div>
 
-    // TODO: SET LINK TO GO BACK TO SOMETHING
+    <br>
+
+    <div data-th-text="'You scored ' + ${points} + ' points!'"></div>
+
+    <p>Bring me to the Homepage <a href="#" data-th-href="@{/homepage}">CLICK HERE</a></p>
 
 </div>
 

@@ -26,13 +26,20 @@ public class GreetingsServlet extends HttpServlet {
         templateResolver.setSuffix(".html");
     }
 
+    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("text/html");
+        String points = "1";
 
         ServletContext servletContext = getServletContext();
         WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
+        ctx.setVariable("points", points);
         String path = "/WEB-INF/greetings.html";
 
         templateEngine.process(path, ctx, resp.getWriter());
+    }
+
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        doGet(req,resp);
     }
 }
