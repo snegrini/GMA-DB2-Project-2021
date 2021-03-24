@@ -13,7 +13,8 @@ import java.util.List;
         @NamedQuery(name = "EntryEntity.getQuestionsAnswers", query = "SELECT NEW it.polimi.db2.gma.GMAEJB.utils.QuestionAnswer(qu.question, a.answer) " +
                 "FROM EntryEntity e INNER JOIN e.questionnaire q INNER JOIN e.user u INNER JOIN e.answers a INNER JOIN a.question qu WHERE q.id = :qid AND u.id = :uid ORDER BY qu.id"),
         @NamedQuery(name = "EntryEntity.getStatsAnswers", query = "SELECT NEW it.polimi.db2.gma.GMAEJB.utils.StatsAnswers(s.age, s.sex, s.expertiseLevel) " +
-                "FROM EntryEntity e INNER JOIN e.stats s INNER JOIN e.questionnaire q INNER JOIN e.user u WHERE q.id = :qid AND u.id = :uid")
+                "FROM EntryEntity e INNER JOIN e.stats s INNER JOIN e.questionnaire q INNER JOIN e.user u WHERE q.id = :qid AND u.id = :uid"),
+        @NamedQuery(name = "EntryEntity.findByUserAndQuestionnaire", query = "SELECT e FROM EntryEntity e WHERE e.user.id = :userId AND e.questionnaire.id = :questionnaireId")
 })
 public class EntryEntity {
     @Id

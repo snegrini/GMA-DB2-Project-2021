@@ -48,6 +48,7 @@ public class QuestionnaireSubmitServlet extends HttpServlet {
         templateResolver.setSuffix(".html");
     }
 
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         HttpSession session = req.getSession();
         UserEntity user = (UserEntity) session.getAttribute("user");
@@ -64,6 +65,10 @@ public class QuestionnaireSubmitServlet extends HttpServlet {
 
         // TODO check parameters. Check number of answers expected (only mandatory questions).
 
+        String ageStr = req.getParameter("age");
+        String sexStr = req.getParameter("sex");
+        String expLevelStr = req.getParameter("expLevel");
+
         // Retrieve optional answers and cast to right type.
         Integer age = null;
         Sex sex = null;
@@ -71,16 +76,16 @@ public class QuestionnaireSubmitServlet extends HttpServlet {
 
         try {
 
-            if (req.getParameter("age") != null) {
-                age = Integer.parseInt(StringEscapeUtils.escapeJava(req.getParameter("age")));
+            if (ageStr != null && !ageStr.isEmpty()) {
+                age = Integer.parseInt(StringEscapeUtils.escapeJava(ageStr));
             }
 
-            if (req.getParameter("sex") != null) {
-                sex = Sex.valueOf(StringEscapeUtils.escapeJava(req.getParameter("sex")));
+            if (sexStr != null && !sexStr.isEmpty()) {
+                sex = Sex.valueOf(StringEscapeUtils.escapeJava(sexStr));
             }
 
-            if (req.getParameter("expLevel") != null) {
-                expLevel = ExpertiseLevel.valueOf(StringEscapeUtils.escapeJava(req.getParameter("expLevel")));
+            if (expLevelStr != null && !expLevelStr.isEmpty()) {
+                expLevel = ExpertiseLevel.valueOf(StringEscapeUtils.escapeJava(expLevelStr));
             }
 
         } catch (NumberFormatException e) {

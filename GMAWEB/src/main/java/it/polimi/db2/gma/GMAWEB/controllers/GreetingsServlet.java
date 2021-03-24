@@ -26,6 +26,7 @@ public class GreetingsServlet extends HttpServlet {
         templateResolver.setSuffix(".html");
     }
 
+    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("text/html");
 
@@ -34,5 +35,10 @@ public class GreetingsServlet extends HttpServlet {
         String path = "/WEB-INF/greetings.html";
 
         templateEngine.process(path, ctx, resp.getWriter());
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        doGet(req, resp);
     }
 }
