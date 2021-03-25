@@ -106,21 +106,13 @@ public class EntryService {
         }
 
         // Build new StatsEntity object and set it to the entry.
-        StatsEntity stats = new StatsEntity();
-
-        if (age != null) {
+        if (age != null || sex != null || expLevel != null) {
+            StatsEntity stats = new StatsEntity();
             stats.setAge(age);
-        }
-
-        if (sex != null) {
             stats.setSex(sex);
-        }
-
-        if (expLevel != null) {
             stats.setExpertiseLevel(expLevel);
+            entry.setStats(stats);
         }
-
-        entry.setStats(stats);
 
         em.persist(entry);
     }
