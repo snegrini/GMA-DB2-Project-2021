@@ -58,6 +58,7 @@ public class EntryService {
         // Build new EntryEntity object and set the questionnaire to it.
         EntryEntity entry = new EntryEntity();
         entry.setQuestionnaire(questionnaire);
+        entry.setUser(user);
         entry.setIsSubmitted((byte) 0);
 
         em.persist(entry);
@@ -117,11 +118,15 @@ public class EntryService {
         em.persist(entry);
     }
 
-    public EntryEntity getEntryByIds(int questionnaireID, int userID) {
-        QuestionnaireEntity questionnaire = em.find(QuestionnaireEntity.class, questionnaireID);
-        UserEntity user = em.find(UserEntity.class, userID);
+    public EntryEntity getEntryByIds(int questionnaireId, int userId) throws BadEntryException {
+        QuestionnaireEntity questionnaire = em.find(QuestionnaireEntity.class, questionnaireId);
+        UserEntity user = em.find(UserEntity.class, userId);
 
-        EntryEntity result = em.createNamedQuery("EntryEntity.findByUserAndQuestionnaire", EntryEntity.class)
+        if (user == null || questionnaire == null) {
+            throw new BadEntryException("User or questionnaire not found.");
+        }
+
+        EntryEntity entry = em.createNamedQuery("EntryEntity.findByUserAndQuestionnaire", EntryEntity.class)
                 .setParameter("userId", user.getId())
                 .setParameter("questionnaireId", questionnaire.getId())
                 .setMaxResults(1)
@@ -129,6 +134,9 @@ public class EntryService {
                 .findFirst()
                 .orElse(null);
 
-        return result;
+        // Pull fresh data from DB.
+        em.refresh(entry);
+
+        return entry;
     }
 }

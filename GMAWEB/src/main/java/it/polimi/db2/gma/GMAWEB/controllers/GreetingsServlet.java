@@ -3,6 +3,7 @@ package it.polimi.db2.gma.GMAWEB.controllers;
 import it.polimi.db2.gma.GMAEJB.entities.EntryEntity;
 import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
 import it.polimi.db2.gma.GMAEJB.entities.UserEntity;
+import it.polimi.db2.gma.GMAEJB.exceptions.BadEntryException;
 import it.polimi.db2.gma.GMAEJB.services.EntryService;
 import it.polimi.db2.gma.GMAEJB.services.QuestionnaireService;
 import org.thymeleaf.TemplateEngine;
@@ -44,13 +45,19 @@ public class GreetingsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("text/html");
 
-        // TODO retrieve Ids
         HttpSession session = req.getSession();
         UserEntity user = (UserEntity) session.getAttribute("user");
 
         QuestionnaireEntity questionnaire = questionnaireService.findQuestionnaireByDate(LocalDate.now());
 
-        EntryEntity entry = entryService.getEntryByIds(questionnaire.getId(), user.getId());
+        EntryEntity entry;
+        try {
+            entry = entryService.getEntryByIds(questionnaire.getId(), user.getId());
+        } catch (BadEntryException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            return;
+        }
+
         int points = entry.getPoints();
 
         ServletContext servletContext = getServletContext();
