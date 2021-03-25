@@ -111,7 +111,7 @@ public class QuestionnaireSubmitServlet extends HttpServlet {
         } catch (PersistenceException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not submit your answers.");
             return;
-        } catch (Exception e) {
+        } catch (EJBTransactionRolledbackException e) {
             userService.blockUser(user.getId());
 
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Offensive word detected. You will be banned!");
