@@ -18,7 +18,8 @@
 
         <h2 data-th-text="${productOfDay.name}"></h2>
 
-        <img src="https://via.placeholder.com/200x200?text=product" width="200" height="200" data-th-src="@{'/images/'+${productOfDay.image}}" alt="Product Image" data-th-alt="${productOfDay.name}">
+        <img src="https://via.placeholder.com/200x200?text=product" width="200" height="200"
+             data-th-src="@{'/images/'+${productOfDay.image}}" alt="Product Image" data-th-alt="${productOfDay.name}">
 
         <br>
         <h3>Reviews</h3>
@@ -30,7 +31,13 @@
 
         <br>
 
-        <p>Wanna fill the questionnaire? <a href="#" data-th-href="@{/questionnaire}">CLICK HERE</a></p>
+        <fieldset data-th-if="${entry == null}">
+            <p>Wanna fill the questionnaire? <a href="#" data-th-href="@{/questionnaire}">CLICK HERE</a></p>
+        </fieldset>
+
+        <fieldset data-th-unless="${entry == null}">
+            <p>You have already filled the questionnaire of the day!</p>
+        </fieldset>
 
     </fieldset>
 

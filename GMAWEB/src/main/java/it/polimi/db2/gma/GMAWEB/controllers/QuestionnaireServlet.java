@@ -66,6 +66,7 @@ public class QuestionnaireServlet extends HttpServlet {
         templateEngine.process(questionnairePath, ctx, resp.getWriter());
     }
 
+    /*
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String path;
@@ -82,5 +83,5 @@ public class QuestionnaireServlet extends HttpServlet {
         RequestDispatcher dispatcher = getServletContext()
                 .getRequestDispatcher(path);
         dispatcher.forward(req, resp);
-    }
+    }*/
 }
