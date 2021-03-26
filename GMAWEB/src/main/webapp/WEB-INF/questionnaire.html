@@ -19,7 +19,7 @@
 
     <br>
 
-    <form data-th-action="@{'/questionnaire'}" method="post">
+    <form data-th-action="@{'/submit'}" method="post">
         <!-- Mandatory questions -->
         <fieldset id="mandatory-questions">
             <legend>Questions</legend>
@@ -32,7 +32,6 @@
             <br><br>
 
             <input id="nextBtn" name="next" type="button" value="Next">
-            <input name="cancel" type="submit" value="Cancel">
         </fieldset>
 
         <!-- Optional questions -->
@@ -61,9 +60,14 @@
             <br>
 
             <input id="prevBtn" name="previous" type="button" value="Previous">
-            <input name="cancel" type="submit" value="Cancel">
             <input name="submit" type="submit" value="Submit">
         </fieldset>
+    </form>
+
+    <br>
+
+    <form data-th-action="@{'/cancel'}" method="get">
+        <input name="cancel" type="submit" value="Cancel">
     </form>
 
 </header>
