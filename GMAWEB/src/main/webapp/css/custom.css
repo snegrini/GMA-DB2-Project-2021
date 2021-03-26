@@ -1,0 +1,7 @@
+html, body {
+    overflow-y: auto;
+}
+
+.vh100 {
+    height: 100vh;
+}

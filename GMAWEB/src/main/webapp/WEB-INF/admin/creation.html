@@ -2,52 +2,88 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Creation Page</title>
-
-    <script src="../../creation.js" data-th-src="@{/js/creation.js}"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Creation</title>
+    <link href="../../css/bulma.min.css" data-th-href="@{/css/bulma.min.css}" rel="stylesheet">
+    <link href="../../css/custom.css" data-th-href="@{/css/custom.css}" rel="stylesheet">
+    <script src="../../js/creation.js" data-th-src="@{/js/creation.js}"></script>
 </head>
-<body>
-    <header>
-        <h1>Admin Creation Page</h1>
-    </header>
+<body class="has-background-light">
+<section class="container py-5 vh100">
+    <div class="has-text-right">
+        <a data-th-href="@{/admin/logout}">Logout</a>
+    </div>
 
-    <br>
+    <div class="column">
+        <div class="has-text-centered mb-6">
+            <h1 class="title">Admin Creation Page</h1>
+        </div>
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li><a data-th-href="@{/admin/homepage}">Admin</a></li>
+                <li class="is-active"><a data-th-href="@{/admin/creation}">Creation</a></li>
+            </ul>
+        </nav>
 
-    <div>
+        <h2 class="is-size-3 mb-2">Add a new questionnaire</h2>
+
         <form method="post" action="creation" data-th-action="@{/admin/creation}">
             <fieldset>
-                <legend>Add a new questionnaire for a product of the day.</legend>
-
-                <label for="date">Date:</label>
-                <input type="date" name="date" id="date" data-th-min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" required>
-
-                <br><br>
-
-                <label for="product">Product:</label>
-                <select data-th-remove="all-but-first" name="product" id="product">
-                    <option value="volvo" data-th-each="product : ${products}" data-th-value="${product.id}" data-th-text="${product.name}">Volvo</option>
-                    <option value="saab">Saab</option>
-                    <option value="mercedes">Mercedes</option>
-                    <option value="audi">Audi</option>
-                </select>
-
-                <div id="questions">
-                    <label for="question1">Question 1: </label>
-                    <input type="text" name="question[]" id="question1" size="45" required>
+                <div class="columns">
+                    <div class="column field is-3">
+                        <label class="label" for="date">Date:</label>
+                        <div class="control">
+                            <input class="input" type="date" name="date" id="date"
+                                   data-th-min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" required>
+                        </div>
+                    </div>
                 </div>
 
-                <input type="button" id="addQuestionBtn" value="Add">
-                <input type="button" id="removeQuestionBtn" value="Remove">
+                <div class="columns">
+                    <div class="column field">
+                        <label class="label" for="product">Product:</label>
+                        <div class="select">
+                            <select data-th-remove="all-but-first" name="product" id="product">
+                                <option value="volvo" data-th-each="product : ${products}" data-th-value="${product.id}"
+                                        data-th-text="${product.name}">Volvo
+                                </option>
+                                <option value="saab">Saab</option>
+                                <option value="mercedes">Mercedes</option>
+                                <option value="audi">Audi</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
 
-                <div data-th-text="${errorMessage}"></div>
+                <div id="questions">
+                    <div class="columns" id="questionDiv1">
+                        <div class="column field is-5">
+                            <label class="label" for="question1">Question 1</label>
+                            <div class="control">
+                                <input class="input" type="text" name="question[]" id="question1" maxlength="45"
+                                       required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                <br><br>
+                <div class="columns">
+                    <div class="column">
+                        <button id="addQuestionBtn" class="button is-link is-outlined">Add question</button>
+                        <button id="removeQuestionBtn" class="button is-link is-outlined">Remove question</button>
+                    </div>
+                </div>
 
-                <input type="submit">
+
+                <div data-th-if="${errorMessage != null}" class="notification is-danger my-3"
+                     data-th-text="${errorMessage}">Test error
+                </div>
+
+
+                <input class="button is-link" type="submit" value="Create">
             </fieldset>
         </form>
     </div>
-
-
+</section>
 </body>
 </html>

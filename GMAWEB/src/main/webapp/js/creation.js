@@ -12,39 +12,47 @@
 
         questionNumber.increment();
 
-        // Create <br> tag
-        let lineBreak = document.createElement("br");
+        // Create new question divs
+        let columnsDiv = document.createElement("div");
+        columnsDiv.setAttribute("class", "columns");
+        columnsDiv.setAttribute("id", "questionDiv" + questionNumber.value());
+
+        let columnDiv = document.createElement("div");
+        columnDiv.setAttribute("class", "column field is-5");
+        columnsDiv.appendChild(columnDiv);
 
         // Create new text label
         let questionLabel = document.createElement("label");
         questionLabel.setAttribute("for", "question" + questionNumber.value());
-        questionLabel.textContent = "Question " + questionNumber.value() + ": ";
+        questionLabel.setAttribute("class", "label");
+        questionLabel.textContent = "Question " + questionNumber.value();
+        columnDiv.appendChild(questionLabel);
 
         // Create new input field
+        let controlDiv = document.createElement("div");
+        controlDiv.setAttribute("class", "control");
+        columnDiv.appendChild(controlDiv);
+
         let questionField = document.createElement("input");
         questionField.setAttribute("type", "text");
+        questionField.setAttribute("class", "input");
         questionField.setAttribute("name", "question[]");
         questionField.setAttribute("id", "question" + questionNumber.value());
-        questionField.setAttribute("size", "45");
+        questionField.setAttribute("maxlength", "45");
         questionField.required = true;
+        controlDiv.appendChild(questionField);
 
-        questions.appendChild(lineBreak);
-        questions.appendChild(lineBreak.cloneNode());
-        questions.appendChild(questionLabel);
-        questions.appendChild(questionField);
+        questions.appendChild(columnsDiv);
     }
 
     function removeQuestionField() {
         if (questionNumber.value() > 1) {
             let questions = document.getElementById("questions");
+            let question = document.getElementById("questionDiv" + questionNumber.value());
 
             questionNumber.decrement();
 
-            // One for the label, one for the input and two for the br
-            questions.removeChild(questions.lastChild);
-            questions.removeChild(questions.lastChild);
-            questions.removeChild(questions.lastChild);
-            questions.removeChild(questions.lastChild);
+            questions.removeChild(question);
         }
     }
 
