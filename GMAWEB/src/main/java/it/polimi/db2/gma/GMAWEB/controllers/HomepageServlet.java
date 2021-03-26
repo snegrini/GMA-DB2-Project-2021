@@ -1,8 +1,10 @@
 package it.polimi.db2.gma.GMAWEB.controllers;
 
-import it.polimi.db2.gma.GMAEJB.entities.ProductEntity;
-import it.polimi.db2.gma.GMAEJB.entities.ReviewEntity;
+import it.polimi.db2.gma.GMAEJB.entities.*;
+import it.polimi.db2.gma.GMAEJB.exceptions.BadEntryException;
+import it.polimi.db2.gma.GMAEJB.services.EntryService;
 import it.polimi.db2.gma.GMAEJB.services.ProductService;
+import it.polimi.db2.gma.GMAEJB.services.QuestionnaireService;
 import it.polimi.db2.gma.GMAEJB.utils.ProductOfDay;
 import it.polimi.db2.gma.GMAEJB.utils.Review;
 import org.thymeleaf.TemplateEngine;
@@ -17,8 +19,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +32,12 @@ public class HomepageServlet extends HttpServlet {
 
     @EJB(name = "it.polimi.db2.gma.GMAEJB.services/ProductService")
     private ProductService productService;
+
+    @EJB(name = "it.polimi.db2.gma.GMAEJB.services/EntryService")
+    private EntryService entryService;
+
+    @EJB(name = "it.polimi.db2.gma.GMAEJB.services/QuestionnaireService")
+    private QuestionnaireService questionnaireService;
 
 
     public void init() {
@@ -60,11 +70,23 @@ public class HomepageServlet extends HttpServlet {
             productOfDay = new ProductOfDay(product.getName(), product.getImage(), reviewList);
         }
 
+        HttpSession session = req.getSession();
+        UserEntity user = (UserEntity) session.getAttribute("user");
+        QuestionnaireEntity questionnaire = questionnaireService.findQuestionnaireByDate(LocalDate.now());
+
+        EntryEntity entry = null;
+        try {
+            entry = entryService.getEntryByIds(questionnaire.getId(), user.getId());
+        } catch (BadEntryException e) {
+            e.printStackTrace();
+        }
+
         resp.setContentType("text/html");
 
         ServletContext servletContext = getServletContext();
         WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
         ctx.setVariable("productOfDay", productOfDay);
+        ctx.setVariable("entry", entry);
         String path = "/WEB-INF/homepage.html";
 
         templateEngine.process(path, ctx, resp.getWriter());
