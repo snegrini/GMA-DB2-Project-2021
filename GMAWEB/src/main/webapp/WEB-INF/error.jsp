@@ -16,6 +16,10 @@
         </div>
 
         <div class="is-size-5 has-text-centered my-5"><%= request.getAttribute("javax.servlet.error.message") %></div>
+
+        <div class="has-text-centered mt-6">
+            Go to the <a href="#" data-th-href="@{/homepage}">homepage</a>
+        </div>
     </div>
 </section>
 </body>
