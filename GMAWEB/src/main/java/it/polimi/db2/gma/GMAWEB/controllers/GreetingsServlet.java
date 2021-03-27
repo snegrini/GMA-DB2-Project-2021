@@ -50,6 +50,12 @@ public class GreetingsServlet extends HttpServlet {
 
         QuestionnaireEntity questionnaire = questionnaireService.findQuestionnaireByDate(LocalDate.now());
 
+        // Redirect if user access via hotlink
+        if (questionnaire == null) {
+            resp.sendRedirect( getServletContext().getContextPath() + "/homepage");
+            return;
+        }
+
         EntryEntity entry;
         try {
             entry = entryService.getEntryByIds(questionnaire.getId(), user.getId());

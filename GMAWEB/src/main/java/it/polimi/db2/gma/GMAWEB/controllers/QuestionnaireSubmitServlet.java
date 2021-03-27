@@ -68,8 +68,6 @@ public class QuestionnaireSubmitServlet extends HttpServlet {
         List<String> answers = Arrays.asList(ans);
         answers.forEach(StringEscapeUtils::escapeJava);
 
-        // TODO check parameters. Check number of answers expected (only mandatory questions).
-
         String ageStr = req.getParameter("age");
         String sexStr = req.getParameter("sex");
         String expLevelStr = req.getParameter("expLevel");
@@ -118,10 +116,7 @@ public class QuestionnaireSubmitServlet extends HttpServlet {
             return;
         }
 
-        String path = "/greetings";
-        RequestDispatcher dispatcher = getServletContext()
-                .getRequestDispatcher(path);
-        dispatcher.forward(req, resp);
+        resp.sendRedirect(getServletContext().getContextPath() + "/greetings");
     }
 
 }
