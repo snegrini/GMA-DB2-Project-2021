@@ -50,7 +50,7 @@ public class GreetingsServlet extends HttpServlet {
 
         QuestionnaireEntity questionnaire = questionnaireService.findQuestionnaireByDate(LocalDate.now());
 
-        // Redirect if user access via hotlink
+        // Redirect if user try to access via hotlink and no questionnaire are available.
         if (questionnaire == null) {
             resp.sendRedirect( getServletContext().getContextPath() + "/homepage");
             return;

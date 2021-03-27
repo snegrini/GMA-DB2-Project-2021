@@ -11,6 +11,7 @@ import it.polimi.db2.gma.GMAEJB.utils.StatsAnswers;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.sql.SQLException;
 import java.util.List;
 
 @Stateless
