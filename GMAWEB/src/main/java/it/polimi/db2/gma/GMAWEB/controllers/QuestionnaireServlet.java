@@ -65,23 +65,4 @@ public class QuestionnaireServlet extends HttpServlet {
 
         templateEngine.process(questionnairePath, ctx, resp.getWriter());
     }
-
-    /*
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        String path;
-
-        if (req.getParameter("cancel") != null) {
-            path = "/cancel";
-        } else if (req.getParameter("submit") != null) {
-            path = "/submit";
-        } else {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad submit action.");
-            return;
-        }
-
-        RequestDispatcher dispatcher = getServletContext()
-                .getRequestDispatcher(path);
-        dispatcher.forward(req, resp);
-    }*/
 }

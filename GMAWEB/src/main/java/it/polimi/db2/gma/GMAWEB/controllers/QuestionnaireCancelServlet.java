@@ -43,12 +43,17 @@ public class QuestionnaireCancelServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         UserEntity user = (UserEntity) session.getAttribute("user");
 
         // Retrieve questionnaire of the day
         QuestionnaireEntity questionnaire = questionnaireService.findQuestionnaireByDate(LocalDate.now());
+
+        if (questionnaire == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST,"Could not retrieve the questionnaire.");
+            return;
+        }
 
         try {
             entryService.addEmptyEntry(user.getId(), questionnaire.getId());
@@ -59,9 +64,6 @@ public class QuestionnaireCancelServlet extends HttpServlet {
             return;
         }
 
-        String path = "/homepage";
-        RequestDispatcher dispatcher = getServletContext()
-                .getRequestDispatcher(path);
-        dispatcher.forward(req, resp);
+        resp.sendRedirect(getServletContext().getContextPath() + "/homepage");
     }
 }
