@@ -8,6 +8,21 @@
         <param-value>/gma/uploads</param-value>
     </context-param>
 
+    <error-page>
+        <error-code>400</error-code>
+        <location>/WEB-INF/error.jsp</location>
+    </error-page>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/error.jsp</location>
+    </error-page>
+
+    <error-page>
+        <error-code>412</error-code>
+        <location>/WEB-INF/error.jsp</location>
+    </error-page>
+
     <filter-mapping>
         <filter-name>AuthFilter</filter-name>
         <url-pattern>/homepage</url-pattern>
@@ -17,6 +32,7 @@
         <url-pattern>/cancel</url-pattern>
         <url-pattern>/submit</url-pattern>
         <url-pattern>/greetings</url-pattern>
+        <url-pattern>/banned</url-pattern>
 
         <url-pattern>/logout</url-pattern>
         <url-pattern>/images/*</url-pattern>

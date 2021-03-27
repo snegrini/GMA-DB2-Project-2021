@@ -4,18 +4,25 @@ import it.polimi.db2.gma.GMAEJB.entities.*;
 import it.polimi.db2.gma.GMAEJB.enums.ExpertiseLevel;
 import it.polimi.db2.gma.GMAEJB.enums.Sex;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadEntryException;
+import it.polimi.db2.gma.GMAEJB.exceptions.BadWordException;
 import it.polimi.db2.gma.GMAEJB.utils.Entry;
 import it.polimi.db2.gma.GMAEJB.utils.QuestionAnswer;
 import it.polimi.db2.gma.GMAEJB.utils.StatsAnswers;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.eclipse.persistence.exceptions.DatabaseException;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
+import javax.xml.crypto.Data;
 import java.sql.SQLException;
 import java.util.List;
 
 @Stateless
 public class EntryService {
+    private static final String TRIGGER_SIGNAL = "45000";
+
     @PersistenceContext(unitName = "GMAEJB")
     private EntityManager em;
 
@@ -68,7 +75,7 @@ public class EntryService {
         em.persist(entry);
     }
 
-    public void addNewEntry(int userId, int questionnaireId, List<String> strAnswers, Integer age, Sex sex, ExpertiseLevel expLevel) throws BadEntryException {
+    public void addNewEntry(int userId, int questionnaireId, List<String> strAnswers, Integer age, Sex sex, ExpertiseLevel expLevel) throws BadEntryException, BadWordException {
         UserEntity user = em.find(UserEntity.class, userId);
         QuestionnaireEntity questionnaire = em.find(QuestionnaireEntity.class, questionnaireId);
 
@@ -120,6 +127,22 @@ public class EntryService {
         }
 
         em.persist(entry);
+
+        // Graceful exception handling on bad word trigger.
+        try {
+            em.flush();
+        } catch (PersistenceException e) {
+            Throwable t = ExceptionUtils.getRootCause(e);
+
+            if (t instanceof SQLException) {
+                SQLException exception = (SQLException) t;
+
+                if (exception.getSQLState().equals(TRIGGER_SIGNAL)) {
+                    throw new BadWordException("Offensive word detected.");
+                }
+            }
+
+        }
     }
 
     public EntryEntity getEntryByIds(int questionnaireId, int userId) throws BadEntryException {

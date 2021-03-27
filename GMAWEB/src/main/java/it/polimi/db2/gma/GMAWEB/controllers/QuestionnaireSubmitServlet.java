@@ -5,6 +5,7 @@ import it.polimi.db2.gma.GMAEJB.entities.UserEntity;
 import it.polimi.db2.gma.GMAEJB.enums.ExpertiseLevel;
 import it.polimi.db2.gma.GMAEJB.enums.Sex;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadEntryException;
+import it.polimi.db2.gma.GMAEJB.exceptions.BadWordException;
 import it.polimi.db2.gma.GMAEJB.services.EntryService;
 import it.polimi.db2.gma.GMAEJB.services.QuestionnaireService;
 import it.polimi.db2.gma.GMAEJB.services.UserService;
@@ -111,10 +112,10 @@ public class QuestionnaireSubmitServlet extends HttpServlet {
         } catch (PersistenceException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not submit your answers.");
             return;
-        } catch (EJBTransactionRolledbackException e) {
+        } catch (BadWordException e) {
             userService.blockUser(user.getId());
 
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Offensive word detected. You will be banned!");
+            resp.sendRedirect(getServletContext().getContextPath() + "/banned");
             return;
         }
 
