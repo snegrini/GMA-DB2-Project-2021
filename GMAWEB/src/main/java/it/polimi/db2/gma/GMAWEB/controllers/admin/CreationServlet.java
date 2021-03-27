@@ -99,7 +99,12 @@ public class CreationServlet extends HttpServlet {
             return;
         }
 
-        // TODO Add success message
-        resp.sendRedirect(getServletContext().getContextPath() + "/admin/creation");
+        resp.setContentType("text/html");
+        ServletContext servletContext = getServletContext();
+        WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
+        ctx.setVariable("success", true);
+        String path = "/WEB-INF/admin/creation.html";
+
+        templateEngine.process(path, ctx, resp.getWriter());
     }
 }

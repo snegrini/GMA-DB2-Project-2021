@@ -11,6 +11,7 @@
 <body class="has-background-light">
 <section class="container py-5 vh100">
     <div class="has-text-right">
+        <div data-th-text="'Signed in as ' + ${session.admin.username}">Signed in as pippo</div>
         <a data-th-href="@{/admin/logout}">Logout</a>
     </div>
 
@@ -26,6 +27,9 @@
         </nav>
 
         <h2 class="is-size-3 mb-2">Add a new questionnaire</h2>
+
+        <div data-th-if="${success}" class="notification is-success my-3">The questionnaire was created successfully!
+        </div>
 
         <form method="post" action="creation" data-th-action="@{/admin/creation}">
             <fieldset>
