@@ -2,62 +2,80 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Deletion Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Deletion</title>
+    <link href="../../css/bulma.min.css" data-th-href="@{/css/bulma.min.css}" rel="stylesheet">
+    <link href="../../css/custom.css" data-th-href="@{/css/custom.css}" rel="stylesheet">
 </head>
-<body>
-    <header>
-        <h1>Admin Deletion Page</h1>
-    </header>
+<body class="has-background-light">
+<section class="container py-5 vh100">
+    <div class="has-text-right">
+        <div data-th-text="'Signed in as ' + ${session.admin.username}">Signed in as pippo</div>
+        <a data-th-href="@{/admin/logout}">Logout</a>
+    </div>
 
-    <br>
+    <div class="column">
+        <div class="has-text-centered mb-6">
+            <h1 class="title">Admin Deletion Page</h1>
+        </div>
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li><a data-th-href="@{/admin/homepage}">Admin</a></li>
+                <li class="is-active"><a data-th-href="@{/admin/deletion}">Deletion</a></li>
+            </ul>
+        </nav>
 
-    <div data-th-if="${#lists.isEmpty(questionnaires)}">Wow, such empty</div>
+        <h2 class="is-size-3 mb-2">Delete a questionnaire</h2>
+        <div data-th-if="${#lists.isEmpty(questionnaires)}" class="is-size-5 has-text-centered my-5">
+            Wow, such empty<br>There are no deletable questionnaires!
+        </div>
 
-    <table data-th-unless="${#lists.isEmpty(questionnaires)}">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Date</th>
-            <th>Product</th>
-            <th>Operation</th>
-        </tr>
-        </thead>
-        <tbody data-th-remove="all-but-first">
-        <tr data-th-each="questionnaire : ${questionnaires}">
-            <td data-th-text="${questionnaire.id}">1</td>
-            <td data-th-text="${questionnaire.date}">01/01/2021</td>
-            <td data-th-text="${questionnaire.product.name}">Chair</td>
-            <td>
-                <form action="#" method="post" data-th-action="@{/admin/deletion}">
-                    <input type="hidden" name="questionnaireId" value="1" data-th-value="${questionnaire.id}">
-                    <input type="submit" value="Delete">
-                </form>
-            </td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>02/01/2021</td>
-            <td>Desk</td>
-            <td>
-                <form action="#" method="post">
-                    <input type="hidden" name="questionnaireId" value="2">
-                    <input type="submit" value="Delete">
-                </form>
-            </td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td>03/01/2021</td>
-            <td>Lamp</td>
-            <td>
-                <form action="#" method="post">
-                    <input type="hidden" name="questionnaireId" value="3">
-                    <input type="submit" value="Delete">
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
+        <table data-th-unless="${#lists.isEmpty(questionnaires)}" class="table is-fullwidth my-5 has-text-centered">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Product</th>
+                <th>Operation</th>
+            </tr>
+            </thead>
+            <tbody data-th-remove="all-but-first">
+            <tr data-th-each="questionnaire : ${questionnaires}">
+                <td data-th-text="${questionnaire.id}">1</td>
+                <td data-th-text="${questionnaire.date}">01/01/2021</td>
+                <td data-th-text="${questionnaire.product.name}">Chair</td>
+                <td>
+                    <form action="#" method="post" data-th-action="@{/admin/deletion}">
+                        <input type="hidden" name="questionnaireId" value="1" data-th-value="${questionnaire.id}">
+                        <input type="submit" class="button is-primary" value="Delete">
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>02/01/2021</td>
+                <td>Desk</td>
+                <td>
+                    <form action="#" method="post">
+                        <input type="hidden" name="questionnaireId" value="2">
+                        <input type="submit" class="button is-primary" value="Delete">
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>03/01/2021</td>
+                <td>Lamp</td>
+                <td>
+                    <form action="#" method="post">
+                        <input type="hidden" name="questionnaireId" value="3">
+                        <input type="submit" class="button is-primary" value="Delete">
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
 </body>
 </html>

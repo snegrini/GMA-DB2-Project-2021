@@ -5,3 +5,7 @@ html, body {
 .vh100 {
     height: 100vh;
 }
+
+.per100 {
+    height: 100%;
+}

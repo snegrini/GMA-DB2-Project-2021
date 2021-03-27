@@ -19,10 +19,13 @@ public class EntryService {
     private EntityManager em;
 
     public Entry getUserQuestionnaireAnswers(int questionnaireID, int userID) throws BadEntryException {
+        String username;
         List<QuestionAnswer> questionAnswerList;
         StatsAnswers statsAnswers;
 
         try {
+            username = em.find(UserEntity.class, userID).getUsername();
+
             questionAnswerList = em.createNamedQuery("EntryEntity.getQuestionsAnswers", QuestionAnswer.class)
                     .setParameter("qid", questionnaireID)
                     .setParameter("uid", userID)
@@ -44,7 +47,7 @@ public class EntryService {
             throw new BadEntryException("Could not fetch the entry");
         }
 
-        return new Entry(statsAnswers, questionAnswerList);
+        return new Entry(username, statsAnswers, questionAnswerList);
     }
 
     public void addEmptyEntry(int userId, int questionnaireId) throws BadEntryException {
@@ -136,7 +139,7 @@ public class EntryService {
 
         // Pull fresh data from DB.
         if (entry != null)
-        em.refresh(entry);
+            em.refresh(entry);
 
         return entry;
     }

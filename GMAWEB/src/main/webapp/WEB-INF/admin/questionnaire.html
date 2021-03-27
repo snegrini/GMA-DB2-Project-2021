@@ -2,76 +2,95 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Inspection Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Inspection</title>
+    <link href="../../css/bulma.min.css" data-th-href="@{/css/bulma.min.css}" rel="stylesheet">
+    <link href="../../css/custom.css" data-th-href="@{/css/custom.css}" rel="stylesheet">
 </head>
-<body>
-<header>
-    <h1>Inspection page</h1>
-</header>
-<fieldset>
-    <h2>Users who submitted</h2>
-    <div data-th-if="${#lists.isEmpty(submittedUsers)}">Wow, such empty</div>
-
-    <table data-th-unless="${#lists.isEmpty(submittedUsers)}">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Username</th>
-            <th>Answers</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr data-th-each="user : ${submittedUsers}">
-            <td data-th-text="${user.id}">1</td>
-            <td data-th-text="${user.username}">asd</td>
-            <td><a data-th-href="@{'/admin/questionnaire?id='+${questionnaireId}+'&user='+${user.id}}">Inspect</a></td>
-        </tr>
-        </tbody>
-    </table>
-</fieldset>
-<br>
-<fieldset>
-    <h2>Users who did not submit</h2>
-    <div data-th-if="${#lists.isEmpty(notSubmittedUsers)}">Wow, such empty</div>
-
-    <table data-th-unless="${#lists.isEmpty(notSubmittedUsers)}">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Username</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr data-th-each="user : ${notSubmittedUsers}">
-            <td data-th-text="${user.id}">1</td>
-            <td data-th-text="${user.username}">asd</td>
-        </tr>
-        </tbody>
-    </table>
-</fieldset>
-
-<fieldset data-th-if="${entry != null}">
-    <h2>Answers</h2>
-
-    <h3>Marketing Questions</h3>
-
-    <div data-th-each="qa : ${entry.answerList}">
-        <strong>Question: </strong><span data-th-text="${qa.question}"></span><br>
-        <strong>Answer: </strong><span data-th-text="${qa.answer}"></span>
+<body class="has-background-light">
+<section class="container py-5 vh100">
+    <div class="has-text-right">
+        <div data-th-text="'Signed in as ' + ${session.admin.username}">Signed in as pippo</div>
+        <a data-th-href="@{/admin/logout}">Logout</a>
     </div>
 
-    <div data-th-if="${entry.statsAnswers != null}">
-        <h3>Statistical Questions</h3>
-        <div data-th-if="${entry.statsAnswers.age != null}">
-            <strong>Age: </strong><span data-th-text="${entry.statsAnswers.age}"></span>
+    <div class="column">
+        <div class="has-text-centered mb-6">
+            <h1 class="title" data-th-text="'Questionnaire ' + ${questionnaireId}">Questionnaire #n</h1>
         </div>
-        <div data-th-if="${entry.statsAnswers.sex != null}">
-            <strong>Sex: </strong><span data-th-text="${entry.statsAnswers.sex}"></span>
+        <div class="columns">
+            <div class="column">
+                <div class="box has-text-centered per100">
+                    <h2 class="is-size-4">Users who submitted</h2>
+                    <div data-th-if="${#lists.isEmpty(submittedUsers)}" class="my-5">Wow, such empty<br>There are no users who submitted!</div>
+
+                    <table data-th-unless="${#lists.isEmpty(submittedUsers)}" class="table is-fullwidth my-5 has-text-centered">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Answers</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-th-each="user : ${submittedUsers}">
+                            <td data-th-text="${user.id}">1</td>
+                            <td data-th-text="${user.username}">asd</td>
+                            <td>
+                                <a data-th-href="@{'/admin/questionnaire?id='+${questionnaireId}+'&user='+${user.id}}">Inspect</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="column">
+                <div class="box has-text-centered per100">
+                    <h2 class="is-size-4">Users who didn't submit</h2>
+                    <div data-th-if="${#lists.isEmpty(notSubmittedUsers)}" class="my-5">Wow, such empty<br>There are no users who didn't submit!</div>
+
+                    <table data-th-unless="${#lists.isEmpty(notSubmittedUsers)}" class="table is-fullwidth my-5 has-text-centered">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-th-each="user : ${notSubmittedUsers}">
+                            <td data-th-text="${user.id}">1</td>
+                            <td data-th-text="${user.username}">asd</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <div data-th-if="${entry.statsAnswers.expertiseLevel != null}">
-            <strong>Expertise Level: </strong><span data-th-text="${entry.statsAnswers.expertiseLevel}"></span>
-        </div>
+
+
+        <fieldset data-th-if="${entry != null}">
+            <h2 class="is-size-3" data-th-text="'Answers of ' + ${entry.username}">Answers of username</h2>
+
+            <h3 class="is-size-4 mt-1">Marketing Questions</h3>
+            <div data-th-each="qa : ${entry.answerList}" class="my-2">
+                <strong>Question: </strong><span data-th-text="${qa.question}">Domanda</span><br>
+                <strong>Answer: </strong><span data-th-text="${qa.answer}">Risposta</span>
+            </div>
+
+            <div data-th-if="${entry.statsAnswers != null}" class="mt-2">
+                <h3 class="is-size-4">Statistical Questions</h3>
+                <div data-th-if="${entry.statsAnswers.age != null}" class="my-2">
+                    <strong>Age: </strong><span data-th-text="${entry.statsAnswers.age}"></span>
+                </div>
+                <div data-th-if="${entry.statsAnswers.sex != null}" class="my-2">
+                    <strong>Sex: </strong><span data-th-text="${entry.statsAnswers.sex}"></span>
+                </div>
+                <div data-th-if="${entry.statsAnswers.expertiseLevel != null}" class="my-2">
+                    <strong>Expertise Level: </strong><span data-th-text="${entry.statsAnswers.expertiseLevel}"></span>
+                </div>
+            </div>
+        </fieldset>
     </div>
-</fieldset>
+</section>
 </body>
 </html>
