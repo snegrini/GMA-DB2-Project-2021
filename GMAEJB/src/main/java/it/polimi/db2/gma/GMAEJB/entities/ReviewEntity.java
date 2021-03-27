@@ -15,11 +15,13 @@ public class ReviewEntity {
     private String review;
 
     @ManyToOne
-    @JoinColumn(name = "ProductId", insertable = false, updatable = false)
+    @JoinColumn(name = "ProductId")
+    @MapsId("productId")
     private ProductEntity product;
 
     @ManyToOne
-    @JoinColumn(name = "UserId", insertable = false, updatable = false)
+    @JoinColumn(name = "UserId")
+    @MapsId("userId")
     private UserEntity user;
 
     public ReviewEntityPK getReviewEntityPK() {

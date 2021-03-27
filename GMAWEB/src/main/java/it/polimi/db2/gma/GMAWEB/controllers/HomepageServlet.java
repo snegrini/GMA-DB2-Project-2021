@@ -51,6 +51,9 @@ public class HomepageServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        HttpSession session = req.getSession();
+        UserEntity user = (UserEntity) session.getAttribute("user");
+
         ProductEntity product;
         try {
             product = productService.findProductByDay(new Date(new java.util.Date().getTime()));
@@ -70,15 +73,17 @@ public class HomepageServlet extends HttpServlet {
             productOfDay = new ProductOfDay(product.getName(), product.getImage(), reviewList);
         }
 
-        HttpSession session = req.getSession();
-        UserEntity user = (UserEntity) session.getAttribute("user");
         QuestionnaireEntity questionnaire = questionnaireService.findQuestionnaireByDate(LocalDate.now());
+
 
         EntryEntity entry = null;
         try {
-            entry = entryService.getEntryByIds(questionnaire.getId(), user.getId());
+            if (questionnaire != null) {
+                entry = entryService.getEntryByIds(questionnaire.getId(), user.getId());
+            }
         } catch (BadEntryException e) {
-            e.printStackTrace();
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not retrieve the questionnaire.");
+            return;
         }
 
         resp.setContentType("text/html");

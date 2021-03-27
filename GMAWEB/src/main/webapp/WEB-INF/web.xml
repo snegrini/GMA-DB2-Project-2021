@@ -8,11 +8,18 @@
         <param-value>/gma/uploads</param-value>
     </context-param>
 
-
     <filter-mapping>
         <filter-name>AuthFilter</filter-name>
         <url-pattern>/homepage</url-pattern>
         <url-pattern>/leaderboard</url-pattern>
+
+        <url-pattern>/questionnaire</url-pattern>
+        <url-pattern>/cancel</url-pattern>
+        <url-pattern>/submit</url-pattern>
+        <url-pattern>/greetings</url-pattern>
+
+        <url-pattern>/logout</url-pattern>
+        <url-pattern>/images/*</url-pattern>
     </filter-mapping>
 
     <filter-mapping>
@@ -31,5 +38,12 @@
     <filter-mapping>
         <filter-name>AdminFilter</filter-name>
         <url-pattern>/admin/homepage</url-pattern>
+
+        <url-pattern>/admin/creation</url-pattern>
+        <url-pattern>/admin/deletion</url-pattern>
+        <url-pattern>/admin/inspection</url-pattern>
+        <url-pattern>/admin/questionnaire</url-pattern>
+
+        <url-pattern>/admin/logout</url-pattern>
     </filter-mapping>
 </web-app>
