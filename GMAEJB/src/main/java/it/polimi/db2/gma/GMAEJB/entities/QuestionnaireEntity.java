@@ -26,10 +26,12 @@ public class QuestionnaireEntity {
     @JoinColumn(name = "ProductId")
     private ProductEntity product;
 
-    @OneToMany(mappedBy = "questionnaire", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "questionnaire", fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE,
+            CascadeType.REFRESH, CascadeType.MERGE }, orphanRemoval = true)
     private List<QuestionEntity> questions = new ArrayList<>();
 
-    @OneToMany(mappedBy = "questionnaire", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "questionnaire", cascade = { CascadeType.PERSIST, CascadeType.REMOVE,
+            CascadeType.REFRESH, CascadeType.MERGE }, orphanRemoval = true)
     private List<EntryEntity> entries = new ArrayList<>();
 
     public QuestionnaireEntity(Date date, ProductEntity product) {

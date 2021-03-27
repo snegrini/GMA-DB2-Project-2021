@@ -36,13 +36,13 @@ public class UserEntity {
     @Column(name = "IsBlocked", nullable = true)
     private Byte isBlocked;
 
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST }, orphanRemoval = true)
     private List<ReviewEntity> reviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST }, orphanRemoval = true)
     private List<LoginlogEntity> loginlogs = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EntryEntity> entries = new ArrayList<>();
 
     public UserEntity(String username, String password, String email) {

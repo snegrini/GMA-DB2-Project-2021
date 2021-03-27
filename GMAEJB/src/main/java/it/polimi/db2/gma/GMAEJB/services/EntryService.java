@@ -162,8 +162,9 @@ public class EntryService {
                 .orElse(null);
 
         // Pull fresh data from DB.
-        if (entry != null)
+        if (entry != null) {
             em.refresh(entry);
+        }
 
         return entry;
     }

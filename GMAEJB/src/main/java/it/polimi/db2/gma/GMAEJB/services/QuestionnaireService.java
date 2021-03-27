@@ -72,6 +72,9 @@ public class QuestionnaireService {
             throw new BadQuestionnaireException("Questionnaire not found.");
         }
 
+        // Pull fresh data from DB.
+        em.refresh(questionnaire);
+
         if (questionnaire.getDate().toLocalDate().compareTo(LocalDate.now()) >= 0) {
             throw new BadQuestionnaireException("Cannot delete the selected questionnaire.");
         }
@@ -95,6 +98,7 @@ public class QuestionnaireService {
     public List<QuestionnaireEntity> findQuestionnairesUntil(LocalDate localDate) {
         return em.createNamedQuery("QuestionnaireEntity.findAllUntilDate", QuestionnaireEntity.class)
                 .setParameter("date", Date.valueOf(localDate))
+                .setHint("javax.persistence.cache.storeMode", "REFRESH")
                 .getResultList();
     }
 }

@@ -33,10 +33,14 @@ public class EntryEntity {
     @JoinColumn(name = "QuestionnaireId")
     private QuestionnaireEntity questionnaire;
 
-    @OneToOne(mappedBy = "entry", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    // FIXME fetchType
+    @OneToOne(mappedBy = "entry", fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE,
+            CascadeType.REFRESH, CascadeType.MERGE }, orphanRemoval = true)
     private StatsEntity stats;
 
-    @OneToMany(mappedBy = "entry", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    // FIXME fetchType
+    @OneToMany(mappedBy = "entry", fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE,
+            CascadeType.REFRESH, CascadeType.MERGE }, orphanRemoval = true)
     private List<AnswerEntity> answers = new ArrayList<>();
 
 

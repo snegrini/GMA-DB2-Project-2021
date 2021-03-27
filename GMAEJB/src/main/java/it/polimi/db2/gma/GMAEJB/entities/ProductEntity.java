@@ -22,7 +22,7 @@ public class ProductEntity {
     @Column(name = "Image", nullable = false, length = 45)
     private String image;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     private List<ReviewEntity> reviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "product")
