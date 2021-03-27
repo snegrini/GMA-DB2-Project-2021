@@ -2,50 +2,65 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Register - Gamified Marketing Application</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Register</title>
+    <link href="../css/bulma.min.css" data-th-href="@{/css/bulma.min.css}" rel="stylesheet">
 </head>
-<body>
-<header>
-    <h1>Registration Form</h1>
-</header>
-<br>
+<body class="has-background-light">
+<section class="hero is-fullheight">
+    <div class="hero-body">
+        <div class="container">
+            <div class="column is-4 is-offset-4">
+                <div class="has-text-centered mb-5">
+                    <h1 class="title">Register Page</h1>
+                </div>
+                <div class="box">
+                    <form method="post" data-th-action="@{'/register'}">
+                        <fieldset>
+                            <div class="field">
+                                <label class="label" for="username">Username</label>
+                                <div class="control">
+                                    <input class="input" type="text" name="username" id="username"
+                                           placeholder="Username" required>
+                                </div>
+                            </div>
 
+                            <div class="field">
+                                <label class="label" for="email">Email</label>
+                                <div class="control">
+                                    <input class="input" type="email" name="email" id="email"
+                                           placeholder="Email" required>
+                                </div>
+                            </div>
 
-<div class="container">
+                            <div class="field">
+                                <label class="label" for="password">Password</label>
+                                <div class="control">
+                                    <input class="input" type="password" name="password" id="password"
+                                           placeholder="Password" required>
+                                </div>
+                            </div>
 
-    <form method="post" data-th-action="@{'/register'}">
-        <fieldset>
-            <legend>Register</legend>
+                            <div class="field">
+                                <label class="label" for="confirm_password">Password</label>
+                                <div class="control">
+                                    <input class="input" type="password" name="confirm_password" id="confirm_password"
+                                           placeholder="Confirm Password" required>
+                                </div>
+                            </div>
 
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required><br><br>
+                            <div data-th-if="${errorMessage != null}" class="notification is-danger"
+                                 data-th-text="${errorMessage}">Test error
+                            </div>
 
-            <br><br>
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required><br><br>
-
-            <br><br>
-
-            <label for="password">Password:</label>
-            <input type="password" name="password" id="password" required><br><br>
-
-            <br><br>
-
-            <label for="confirm_password">Confirm Password:</label>
-            <input type="password" name="confirm_password" id="confirm_password" required><br>
-
-            <br><br>
-
-            <div data-th-text="${errorMessage}"></div>
-
-            <br><br>
-
-            <input type="submit">
-        </fieldset>
-    </form>
-
-</div>
-
+                            <div class="has-text-centered"><input type="submit" class="button is-primary is-medium"
+                                                                  value="Register"></div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 </body>
 </html>

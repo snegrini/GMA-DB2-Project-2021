@@ -4,7 +4,7 @@
         document.getElementById("nextBtn").addEventListener("click", nextBtnClicked, false);
         document.getElementById("prevBtn").addEventListener("click", prevBtnClicked, false);
 
-        document.getElementById("optional-questions").classList.add("display-none");
+        document.getElementById("optional-questions").classList.add("is-hidden");
     }
 
     function nextBtnClicked() {
@@ -19,14 +19,14 @@
         });
 
         if (fieldSetValid) {
-            document.getElementById("mandatory-questions").classList.add("display-none");
-            document.getElementById("optional-questions").classList.remove("display-none");
+            document.getElementById("mandatory-questions").classList.add("is-hidden");
+            document.getElementById("optional-questions").classList.remove("is-hidden");
         }
     }
 
     function prevBtnClicked() {
-        document.getElementById("mandatory-questions").classList.remove("display-none");
-        document.getElementById("optional-questions").classList.add("display-none");
+        document.getElementById("mandatory-questions").classList.remove("is-hidden");
+        document.getElementById("optional-questions").classList.add("is-hidden");
     }
 
 })();

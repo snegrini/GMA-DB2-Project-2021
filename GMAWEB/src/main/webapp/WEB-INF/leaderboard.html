@@ -2,36 +2,56 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Leaderboard</title>
+    <link href="../css/bulma.min.css" data-th-href="@{/css/bulma.min.css}" rel="stylesheet">
+    <link href="../css/custom.css" data-th-href="@{/css/custom.css}" rel="stylesheet">
 </head>
-<body>
-<header>
-    <h1>Leaderboard</h1>
-</header>
-<div data-th-if="${#lists.isEmpty(rows)}">Wow, such empty</div>
+<body class="has-background-light">
+<section class="container py-5 vh100">
+    <div class="has-text-right">
+        <div data-th-text="'Signed in as ' + ${session.user.username}">Signed in as pippo</div>
+        <a data-th-href="@{/logout}">Logout</a>
+    </div>
 
-<table data-th-unless="${#lists.isEmpty(rows)}">
-    <thead>
-    <tr>
-        <th>Username</th>
-        <th>Points</th>
-    </tr>
-    </thead>
-    <tbody data-th-remove="all-but-first">
-    <tr data-th-each="row : ${rows}">
-        <td data-th-text="${row.username}">Pippo</td>
-        <td data-th-text="${row.points}">0</td>
-    </tr>
-    <tr>
-        <td>Piero</td>
-        <td>15</td>
-    </tr>
-    <tr>
-        <td>Franco</td>
-        <td>10</td>
-    </tr>
-    </tbody>
-</table>
+    <div class="column">
+        <div class="has-text-centered mb-6">
+            <h1 class="title">Leaderboard Page</h1>
+        </div>
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li><a data-th-href="@{/homepage}">Product of day</a></li>
+                <li class="is-active"><a data-th-href="@{/leaderboard}">Leaderboard</a></li>
+            </ul>
+        </nav>
 
+        <div data-th-if="${#lists.isEmpty(rows)}" class="is-size-5 has-text-centered my-5">Wow, such empty
+            <br>No one submitted the questionnaire of today!
+        </div>
+
+        <table data-th-unless="${#lists.isEmpty(rows)}" class="table is-fullwidth my-5 has-text-centered">
+            <thead>
+            <tr>
+                <th>Username</th>
+                <th>Points</th>
+            </tr>
+            </thead>
+            <tbody data-th-remove="all-but-first">
+            <tr data-th-each="row : ${rows}">
+                <td data-th-text="${row.username}">Pippo</td>
+                <td data-th-text="${row.points}">15</td>
+            </tr>
+            <tr>
+                <td>Piero</td>
+                <td>10</td>
+            </tr>
+            <tr>
+                <td>Franco</td>
+                <td>5</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
 </body>
 </html>

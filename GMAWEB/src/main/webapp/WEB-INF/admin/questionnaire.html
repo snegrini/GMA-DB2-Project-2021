@@ -18,6 +18,13 @@
         <div class="has-text-centered mb-6">
             <h1 class="title" data-th-text="'Questionnaire ' + ${questionnaireId}">Questionnaire #n</h1>
         </div>
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li><a data-th-href="@{/admin/homepage}">Admin</a></li>
+                <li><a data-th-href="@{/admin/inspection}">Inspection</a></li>
+                <li class="is-active"><a data-th-href="@{/admin/questionnaire}">Questionnaire</a></li>
+            </ul>
+        </nav>
         <div class="columns">
             <div class="column">
                 <div class="box has-text-centered per100">
