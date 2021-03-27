@@ -26,6 +26,13 @@
         <filter-name>BannedFilter</filter-name>
         <url-pattern>/homepage</url-pattern>
         <url-pattern>/leaderboard</url-pattern>
+
+        <url-pattern>/questionnaire</url-pattern>
+        <url-pattern>/cancel</url-pattern>
+        <url-pattern>/submit</url-pattern>
+        <url-pattern>/greetings</url-pattern>
+
+        <url-pattern>/images/*</url-pattern>
     </filter-mapping>
 
     <filter-mapping>

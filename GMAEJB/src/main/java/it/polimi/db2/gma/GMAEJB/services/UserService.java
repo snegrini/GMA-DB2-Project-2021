@@ -20,6 +20,10 @@ public class UserService {
     @PersistenceContext(unitName = "GMAEJB")
     private EntityManager em;
 
+    public UserEntity findUserById(int userId) {
+        return em.find(UserEntity.class, userId);
+    }
+
     public UserEntity findUserByUsername(String username) {
         return em.createNamedQuery("UserEntity.findByUsername", UserEntity.class)
                 .setParameter("username", username)

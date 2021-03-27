@@ -99,10 +99,16 @@ public class CreationServlet extends HttpServlet {
             return;
         }
 
+        // Show success and give the possibility to create other questionnaires.
+        List<ProductEntity> products = productService.findAllProducts();
+
         resp.setContentType("text/html");
         ServletContext servletContext = getServletContext();
         WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
+
         ctx.setVariable("success", true);
+        ctx.setVariable("products", products);
+
         String path = "/WEB-INF/admin/creation.html";
 
         templateEngine.process(path, ctx, resp.getWriter());
