@@ -30,10 +30,10 @@ public class UserEntity {
     @Column(name = "Email", nullable = false, length = 90)
     private String email;
 
-    @Column(name = "Points", nullable = true)
+    @Column(name = "Points", nullable = false)
     private Integer points;
 
-    @Column(name = "IsBlocked", nullable = true)
+    @Column(name = "IsBlocked", nullable = false)
     private Byte isBlocked;
 
     @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST }, orphanRemoval = true)
@@ -45,10 +45,12 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EntryEntity> entries = new ArrayList<>();
 
-    public UserEntity(String username, String password, String email) {
+    public UserEntity(String username, String password, String email, Integer points, Byte isBlocked) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.points = points;
+        this.isBlocked = isBlocked;
     }
 
     public UserEntity() {
