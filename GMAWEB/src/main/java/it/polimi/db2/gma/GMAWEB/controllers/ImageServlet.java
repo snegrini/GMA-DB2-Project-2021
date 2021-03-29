@@ -13,13 +13,13 @@ import java.nio.file.Path;
 @WebServlet(name = "ImageServlet", value = "/images/*")
 public class ImageServlet extends HttpServlet {
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // Checks URL is well formed.
         String filename;
         try {
-            filename = request.getPathInfo().substring(1);
+            filename = req.getPathInfo().substring(1);
         } catch (NullPointerException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not find the requested image.");
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not find the requested image.");
             return;
         }
 
@@ -28,19 +28,19 @@ public class ImageServlet extends HttpServlet {
         Path fullPath = Path.of(uploadLocation + "/" + filename);
 
         if (!Files.exists(Path.of(uploadLocation)) ) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not find the image folder. Please fix the specified folder in the web.xml file.");
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not find the image folder. Please fix the specified folder in the web.xml file.");
             return;
         }
         if (filename.isEmpty() || !Files.exists(fullPath)) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not find the requested image.");
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not find the requested image.");
             return;
         }
 
         File file = new File(uploadLocation, filename);
 
-        response.setHeader("Content-Type", getServletContext().getMimeType(filename));
-        response.setHeader("Content-Length", String.valueOf(file.length()));
-        response.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
-        Files.copy(file.toPath(), response.getOutputStream());
+        resp.setHeader("Content-Type", getServletContext().getMimeType(filename));
+        resp.setHeader("Content-Length", String.valueOf(file.length()));
+        resp.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
+        Files.copy(file.toPath(), resp.getOutputStream());
     }
 }
