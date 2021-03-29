@@ -85,10 +85,7 @@ public class UserService {
             throw new CredentialsException("Email already in use!");
         }
 
-        Integer points = 0;
-        Byte isBlocked = 0;
-
-        UserEntity newUser = new UserEntity(username, password, email, points, isBlocked);
+        UserEntity newUser = new UserEntity(username, password, email);
         em.persist(newUser);
 
         return newUser;

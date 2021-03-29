@@ -19,10 +19,10 @@ public class EntryEntity {
     @Column(name = "Id", nullable = false)
     private int id;
 
-    @Column(name = "Points", nullable = true)
+    @Column(name = "Points", nullable = false)
     private Integer points = 0;
 
-    @Column(name = "IsSubmitted", nullable = true)
+    @Column(name = "IsSubmitted", nullable = false)
     private Byte isSubmitted = 0;
 
     @ManyToOne
