@@ -48,10 +48,6 @@ public class ProductEntity {
         return image;
     }
 
-    public void setImage(String image) {
-        this.image = image;
-    }
-
     public List<ReviewEntity> getReviews() {
         return reviews;
     }

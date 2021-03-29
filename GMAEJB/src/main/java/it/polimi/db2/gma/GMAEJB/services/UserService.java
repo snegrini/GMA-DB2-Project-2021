@@ -1,8 +1,10 @@
 package it.polimi.db2.gma.GMAEJB.services;
 
+import it.polimi.db2.gma.GMAEJB.entities.LoginlogEntity;
 import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
 import it.polimi.db2.gma.GMAEJB.entities.UserEntity;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadQuestionnaireException;
+import it.polimi.db2.gma.GMAEJB.exceptions.BadUserException;
 import it.polimi.db2.gma.GMAEJB.exceptions.CredentialsException;
 import it.polimi.db2.gma.GMAEJB.utils.LeaderboardRow;
 import it.polimi.db2.gma.GMAEJB.utils.UserInfo;
@@ -12,6 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import java.sql.Timestamp;
 import java.util.*;
 import java.sql.Date;
 
@@ -112,5 +115,20 @@ public class UserService {
         user.setIsBlocked((byte) 1);
 
         em.merge(user);
+    }
+
+    public void addLoginLog(int userId) throws BadUserException {
+        UserEntity user = em.find(UserEntity.class, userId);
+
+        if (user == null) {
+            throw new BadUserException("User not found.");
+        }
+
+        Timestamp sqlTimestamp = new Timestamp(System.currentTimeMillis());
+
+        LoginlogEntity loginlog = new LoginlogEntity(sqlTimestamp);
+        user.addLoginlog(loginlog);
+
+        em.persist(user);
     }
 }

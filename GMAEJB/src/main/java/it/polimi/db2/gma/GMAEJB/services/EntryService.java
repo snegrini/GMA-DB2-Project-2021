@@ -68,9 +68,10 @@ public class EntryService {
 
         // Build new EntryEntity object and set the questionnaire to it.
         EntryEntity entry = new EntryEntity();
-        entry.setQuestionnaire(questionnaire);
-        entry.setUser(user);
         entry.setIsSubmitted((byte) 0);
+
+        questionnaire.addEntry(entry);
+        user.addEntry(entry);
 
         em.persist(entry);
     }
@@ -105,15 +106,17 @@ public class EntryService {
 
         // Build new EntryEntity object and set the questionnaire and the user to it.
         EntryEntity entry = new EntryEntity();
-        entry.setQuestionnaire(questionnaire);
-        entry.setUser(user);
-
         entry.setIsSubmitted((byte) 1);
+
+        questionnaire.addEntry(entry);
+        user.addEntry(entry);
+
+
 
         // Build new AnswerEntity objects and add them to the entry.
         for (int i = 0; i < strAnswers.size(); i++) {
             AnswerEntity answer = new AnswerEntity(strAnswers.get(i));
-            answer.setQuestion(questions.get(i));
+            questions.get(i).addAnswer(answer);
             entry.addAnswer(answer);
         }
 
@@ -161,7 +164,7 @@ public class EntryService {
                 .findFirst()
                 .orElse(null);
 
-        // Pull fresh data from DB.
+        // Pull fresh data from DB, in order to get the points updated from the trigger.
         if (entry != null) {
             em.refresh(entry);
         }

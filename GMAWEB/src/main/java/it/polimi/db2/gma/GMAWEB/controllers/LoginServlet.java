@@ -1,8 +1,8 @@
 package it.polimi.db2.gma.GMAWEB.controllers;
 
 import it.polimi.db2.gma.GMAEJB.entities.UserEntity;
+import it.polimi.db2.gma.GMAEJB.exceptions.BadUserException;
 import it.polimi.db2.gma.GMAEJB.exceptions.CredentialsException;
-import it.polimi.db2.gma.GMAEJB.services.LoginlogService;
 import it.polimi.db2.gma.GMAEJB.services.UserService;
 import org.apache.commons.text.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
@@ -25,9 +25,6 @@ public class LoginServlet extends HttpServlet {
 
     @EJB(name = "it.polimi.db2.gma.GMAEJB.services/UserService")
     private UserService userService;
-
-    @EJB(name = "it.polimi.db2.gma.GMAEJB.services/LoginlogService")
-    private LoginlogService loginlogService;
 
     @Override
     public void init() {
@@ -71,7 +68,13 @@ public class LoginServlet extends HttpServlet {
 
             templateEngine.process("/WEB-INF/index.html", ctx, resp.getWriter());
         } else {
-            loginlogService.addLoginLog(user);
+
+            try {
+                userService.addLoginLog(user.getId());
+            } catch (BadUserException e) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+                return;
+            }
 
             req.getSession().setAttribute("user", user);
             resp.sendRedirect(getServletContext().getContextPath() + "/homepage");

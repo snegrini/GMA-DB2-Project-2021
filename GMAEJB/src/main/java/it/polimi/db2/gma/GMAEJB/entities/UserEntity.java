@@ -39,7 +39,7 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST }, orphanRemoval = true)
     private List<ReviewEntity> reviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST }, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST })
     private List<LoginlogEntity> loginlogs = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -71,36 +71,21 @@ public class UserEntity {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Integer getPoints() {
-        return points;
-    }
-
-    public void setPoints(Integer points) {
-        this.points = points;
-    }
-
     public Byte getIsBlocked() {
         return isBlocked;
     }
 
     public void setIsBlocked(Byte isBlocked) {
         this.isBlocked = isBlocked;
+    }
+
+    public List<LoginlogEntity> getLoginlogs() {
+        return loginlogs;
+    }
+
+    public void addLoginlog(LoginlogEntity loginlog) {
+        getLoginlogs().add(loginlog);
+        loginlog.setUser(this);
     }
 
     public List<EntryEntity> getEntries() {

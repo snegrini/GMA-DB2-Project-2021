@@ -11,7 +11,7 @@ public class LoginlogEntity {
     @Column(name = "Id", nullable = false)
     private int id;
 
-    @Column(name = "LogTime", nullable = true)
+    @Column(name = "LogTime")
     private Timestamp logTime;
 
     @ManyToOne
@@ -21,16 +21,15 @@ public class LoginlogEntity {
     public LoginlogEntity() {
     }
 
-    public LoginlogEntity(Timestamp logTime, UserEntity user) {
+    public LoginlogEntity(Timestamp logTime) {
         this.logTime = logTime;
-        this.user = user;
     }
 
     public int getId() {
         return id;
     }
 
-    public Timestamp getLogTime() {
-        return logTime;
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 }

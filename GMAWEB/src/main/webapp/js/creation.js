@@ -1,6 +1,6 @@
 (function() { // Avoid variables ending up in the global scope
 
-    let questionNumber = createCounter("questions");
+    let questionNumber = createCounter();
 
     window.onload = function() { // Wait for the document to finish loading
         document.getElementById("addQuestionBtn").addEventListener("click", addQuestionField, false);
@@ -56,7 +56,7 @@
         }
     }
 
-    function createCounter(counterName) {
+    function createCounter() {
         let counter = 1;
 
         // ONLY FOR DEBUG PURPOSE.
