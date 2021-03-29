@@ -8,14 +8,14 @@ import it.polimi.db2.gma.GMAEJB.exceptions.BadWordException;
 import it.polimi.db2.gma.GMAEJB.utils.Entry;
 import it.polimi.db2.gma.GMAEJB.utils.QuestionAnswer;
 import it.polimi.db2.gma.GMAEJB.utils.StatsAnswers;
+import it.polimi.db2.gma.GMAEJB.utils.UserInfo;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.eclipse.persistence.exceptions.DatabaseException;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import javax.xml.crypto.Data;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -25,6 +25,9 @@ public class EntryService {
 
     @PersistenceContext(unitName = "GMAEJB")
     private EntityManager em;
+
+    @EJB(name = "it.polimi.db2.gma.GMAEJB.services/UserService")
+    private UserService userService;
 
     public Entry getUserQuestionnaireAnswers(int questionnaireID, int userID) throws BadEntryException {
         String username;
@@ -46,6 +49,45 @@ public class EntryService {
             statsAnswers = em.createNamedQuery("EntryEntity.getStatsAnswers", StatsAnswers.class)
                     .setParameter("qid", questionnaireID)
                     .setParameter("uid", userID)
+                    .setMaxResults(1)
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
+
+        } catch (Exception e) {
+            throw new BadEntryException("Could not fetch the entry");
+        }
+
+        return new Entry(username, statsAnswers, questionAnswerList);
+    }
+
+    public Entry getDefaultQuestionnaireAnswers(int questionnaireID) throws BadEntryException {
+        String username;
+        List<QuestionAnswer> questionAnswerList;
+        StatsAnswers statsAnswers;
+
+        try {
+            List<UserInfo> questionnaireUsers = userService.getQuestionnaireUserInfo(questionnaireID, 1);
+            UserInfo userInfo = (questionnaireUsers.isEmpty()) ? null : questionnaireUsers.get(0);
+
+            if (userInfo == null) {
+                return null;
+            }
+
+            username = userInfo.getUsername();
+
+            questionAnswerList = em.createNamedQuery("EntryEntity.getQuestionsAnswers", QuestionAnswer.class)
+                    .setParameter("qid", questionnaireID)
+                    .setParameter("uid", userInfo.getId())
+                    .getResultList();
+
+            if (questionAnswerList.isEmpty()) {
+                throw new Exception();
+            }
+
+            statsAnswers = em.createNamedQuery("EntryEntity.getStatsAnswers", StatsAnswers.class)
+                    .setParameter("qid", questionnaireID)
+                    .setParameter("uid", userInfo.getId())
                     .setMaxResults(1)
                     .getResultStream()
                     .findFirst()

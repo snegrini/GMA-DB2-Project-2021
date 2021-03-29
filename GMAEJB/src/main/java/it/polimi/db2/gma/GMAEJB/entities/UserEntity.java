@@ -13,7 +13,7 @@ import java.util.List;
         @NamedQuery(name = "UserEntity.getLeaderboardByDate", query = "SELECT NEW it.polimi.db2.gma.GMAEJB.utils.LeaderboardRow(u.username, e.points) " +
                 "FROM UserEntity u INNER JOIN u.entries e INNER JOIN e.questionnaire q WHERE q.date = :date AND e.isSubmitted = 1 ORDER BY e.points DESC"),
         @NamedQuery(name = "UserEntity.getEntriesUserInfo", query = "SELECT NEW it.polimi.db2.gma.GMAEJB.utils.UserInfo(u.id, u.username)" +
-                "FROM UserEntity u INNER JOIN u.entries e WHERE e.questionnaire.id = :id AND e.isSubmitted = :submitted")
+                "FROM UserEntity u INNER JOIN u.entries e WHERE e.questionnaire.id = :id AND e.isSubmitted = :submitted ORDER BY u.id")
 })
 public class UserEntity {
     @Id
