@@ -42,7 +42,7 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST })
     private List<LoginlogEntity> loginlogs = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH }, orphanRemoval = true)
     private List<EntryEntity> entries = new ArrayList<>();
 
     public UserEntity(String username, String password, String email, Integer points, Byte isBlocked) {
