@@ -13,7 +13,7 @@ import java.util.List;
         @NamedQuery(name = "UserEntity.getLeaderboardByDate", query = "SELECT NEW it.polimi.db2.gma.GMAEJB.utils.LeaderboardRow(u.username, e.points) " +
                 "FROM UserEntity u INNER JOIN u.entries e INNER JOIN e.questionnaire q WHERE q.date = :date AND e.isSubmitted = 1 ORDER BY e.points DESC"),
         @NamedQuery(name = "UserEntity.getEntriesUserInfo", query = "SELECT NEW it.polimi.db2.gma.GMAEJB.utils.UserInfo(u.id, u.username)" +
-                "FROM UserEntity u INNER JOIN u.entries e WHERE e.questionnaire.id = :id AND e.isSubmitted = :submitted")
+                "FROM UserEntity u INNER JOIN u.entries e WHERE e.questionnaire.id = :id AND e.isSubmitted = :submitted ORDER BY u.id")
 })
 public class UserEntity {
     @Id
@@ -30,10 +30,10 @@ public class UserEntity {
     @Column(name = "Email", nullable = false, length = 90)
     private String email;
 
-    @Column(name = "Points", nullable = true)
+    @Column(name = "Points", nullable = false)
     private Integer points;
 
-    @Column(name = "IsBlocked", nullable = true)
+    @Column(name = "IsBlocked", nullable = false)
     private Byte isBlocked;
 
     @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST }, orphanRemoval = true)
@@ -45,10 +45,12 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EntryEntity> entries = new ArrayList<>();
 
-    public UserEntity(String username, String password, String email) {
+    public UserEntity(String username, String password, String email, Integer points, Byte isBlocked) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.points = points;
+        this.isBlocked = isBlocked;
     }
 
     public UserEntity() {
