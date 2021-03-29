@@ -26,6 +26,10 @@
         </nav>
 
         <h2 class="is-size-3 mb-2">Delete a questionnaire</h2>
+
+        <div data-th-if="${success}" class="notification is-success my-3">The questionnaire was deleted successfully!
+        </div>
+
         <div data-th-if="${#lists.isEmpty(questionnaires)}" class="is-size-5 has-text-centered my-5">
             Wow, such empty<br>There are no deletable questionnaires!
         </div>

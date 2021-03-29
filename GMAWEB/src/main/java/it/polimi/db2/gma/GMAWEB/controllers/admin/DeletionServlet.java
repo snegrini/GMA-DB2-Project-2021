@@ -57,7 +57,7 @@ public class DeletionServlet extends HttpServlet {
         int questionnaireId;
         try {
             questionnaireId = Integer.parseInt(strQuestionnaireId);
-        } catch (NumberFormatException e)  {
+        } catch (NumberFormatException e) {
             resp.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Invalid questionnaire id.");
             return;
         }
@@ -69,6 +69,18 @@ public class DeletionServlet extends HttpServlet {
             return;
         }
 
-        resp.sendRedirect(getServletContext().getContextPath() + "/admin/deletion");
+        // Show success and give the possibility to delete other questionnaires.
+        List<QuestionnaireEntity> questionnaires = questionnaireService.findQuestionnairesUntil(LocalDate.now());
+
+        resp.setContentType("text/html");
+        ServletContext servletContext = getServletContext();
+        WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
+
+        ctx.setVariable("success", true);
+        ctx.setVariable("questionnaires", questionnaires);
+
+        String path = "/WEB-INF/admin/deletion.html";
+
+        templateEngine.process(path, ctx, resp.getWriter());
     }
 }
