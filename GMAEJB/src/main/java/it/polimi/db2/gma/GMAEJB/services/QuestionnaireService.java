@@ -72,7 +72,7 @@ public class QuestionnaireService {
             throw new BadQuestionnaireException("Questionnaire not found.");
         }
 
-        // Pull fresh data from DB, in order to synchronize any manual DB changes.
+        // Pull fresh data from DB, in order to synchronize any DB changes.
         em.refresh(questionnaire);
 
         if (questionnaire.getDate().toLocalDate().compareTo(LocalDate.now()) >= 0) {
