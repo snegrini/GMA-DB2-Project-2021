@@ -50,16 +50,16 @@ public class QuestionnaireCancelServlet extends HttpServlet {
         QuestionnaireEntity questionnaire = questionnaireService.findQuestionnaireByDate(LocalDate.now());
 
         if (questionnaire == null) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST,"Could not retrieve the questionnaire.");
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not retrieve the questionnaire.");
             return;
         }
 
         try {
             entryService.addEmptyEntry(user.getId(), questionnaire.getId());
-        } catch(BadEntryException e) {
+        } catch (BadEntryException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         } catch (PersistenceException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST,"Could not cancel.");
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not cancel.");
             return;
         }
 

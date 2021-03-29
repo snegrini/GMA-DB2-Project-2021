@@ -52,7 +52,7 @@ public class GreetingsServlet extends HttpServlet {
 
         // Redirect if user try to access via hotlink and no questionnaire are available.
         if (questionnaire == null) {
-            resp.sendRedirect( getServletContext().getContextPath() + "/homepage");
+            resp.sendRedirect(getServletContext().getContextPath() + "/homepage");
             return;
         }
 

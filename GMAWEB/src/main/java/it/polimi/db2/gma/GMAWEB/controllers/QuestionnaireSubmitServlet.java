@@ -101,8 +101,7 @@ public class QuestionnaireSubmitServlet extends HttpServlet {
 
         try {
             entryService.addNewEntry(user.getId(), questionnaire.getId(), answers, age, sex, expLevel);
-        }
-        catch (BadEntryException e) {
+        } catch (BadEntryException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
             return;
         } catch (PersistenceException e) {

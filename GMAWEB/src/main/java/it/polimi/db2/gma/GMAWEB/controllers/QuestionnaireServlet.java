@@ -45,7 +45,7 @@ public class QuestionnaireServlet extends HttpServlet {
         QuestionnaireEntity questionnaire = questionnaireService.findQuestionnaireByDate(LocalDate.now());
 
         if (questionnaire == null) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST,"Could not retrieve the questionnaire.");
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not retrieve the questionnaire.");
             return;
         }
 

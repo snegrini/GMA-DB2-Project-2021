@@ -27,7 +27,7 @@ public class ImageServlet extends HttpServlet {
         String uploadLocation = getServletContext().getInitParameter("upload.location");
         Path fullPath = Path.of(uploadLocation + "/" + filename);
 
-        if (!Files.exists(Path.of(uploadLocation)) ) {
+        if (!Files.exists(Path.of(uploadLocation))) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not find the image folder. Please fix the specified folder in the web.xml file.");
             return;
         }
