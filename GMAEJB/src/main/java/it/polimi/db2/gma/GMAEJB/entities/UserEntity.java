@@ -31,18 +31,18 @@ public class UserEntity {
     private String email;
 
     @Column(name = "Points", nullable = false)
-    private Integer points = 0;
+    private int points = 0;
 
     @Column(name = "IsBlocked", nullable = false)
     private Byte isBlocked = 0;
 
-    @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST }, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST}, orphanRemoval = true)
     private List<ReviewEntity> reviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST })
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST})
     private List<LoginlogEntity> loginlogs = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH }, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH}, orphanRemoval = true)
     private List<EntryEntity> entries = new ArrayList<>();
 
     public UserEntity(String username, String password, String email) {

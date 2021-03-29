@@ -20,7 +20,7 @@ public class EntryEntity {
     private int id;
 
     @Column(name = "Points", nullable = false)
-    private Integer points = 0;
+    private int points = 0;
 
     @Column(name = "IsSubmitted", nullable = false)
     private Byte isSubmitted = 0;
@@ -33,12 +33,12 @@ public class EntryEntity {
     @JoinColumn(name = "QuestionnaireId")
     private QuestionnaireEntity questionnaire;
 
-    @OneToOne(mappedBy = "entry", cascade = { CascadeType.PERSIST, CascadeType.REMOVE,
-            CascadeType.REFRESH, CascadeType.MERGE }, orphanRemoval = true)
+    @OneToOne(mappedBy = "entry", cascade = {CascadeType.PERSIST, CascadeType.REMOVE,
+            CascadeType.REFRESH, CascadeType.MERGE}, orphanRemoval = true)
     private StatsEntity stats;
 
-    @OneToMany(mappedBy = "entry", fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE,
-            CascadeType.REFRESH, CascadeType.MERGE }, orphanRemoval = true)
+    @OneToMany(mappedBy = "entry", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE,
+            CascadeType.REFRESH, CascadeType.MERGE}, orphanRemoval = true)
     private List<AnswerEntity> answers = new ArrayList<>();
 
 

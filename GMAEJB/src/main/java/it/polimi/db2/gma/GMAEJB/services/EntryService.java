@@ -154,7 +154,6 @@ public class EntryService {
         user.addEntry(entry);
 
 
-
         // Build new AnswerEntity objects and add them to the entry.
         for (int i = 0; i < strAnswers.size(); i++) {
             AnswerEntity answer = new AnswerEntity(strAnswers.get(i));

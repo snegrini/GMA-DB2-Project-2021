@@ -4,8 +4,8 @@ import it.polimi.db2.gma.GMAEJB.entities.ProductEntity;
 import it.polimi.db2.gma.GMAEJB.entities.QuestionEntity;
 import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadProductException;
-import it.polimi.db2.gma.GMAEJB.utils.QuestionnaireInfo;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadQuestionnaireException;
+import it.polimi.db2.gma.GMAEJB.utils.QuestionnaireInfo;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

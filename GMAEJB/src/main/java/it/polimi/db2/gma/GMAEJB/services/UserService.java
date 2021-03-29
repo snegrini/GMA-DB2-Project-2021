@@ -14,9 +14,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import java.sql.Timestamp;
-import java.util.*;
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.List;
 
 @Stateless
 public class UserService {

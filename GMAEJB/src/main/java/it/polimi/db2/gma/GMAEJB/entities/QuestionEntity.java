@@ -22,7 +22,7 @@ public class QuestionEntity {
     @JoinColumn(name = "QuestionnaireId")
     private QuestionnaireEntity questionnaire;
 
-    @OneToMany(mappedBy = "question", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, orphanRemoval = true)
+    @OneToMany(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<AnswerEntity> answers = new ArrayList<>();
 
     public QuestionEntity(String question) {
