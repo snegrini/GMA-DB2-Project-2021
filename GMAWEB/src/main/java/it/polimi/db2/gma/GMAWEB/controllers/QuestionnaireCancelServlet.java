@@ -3,8 +3,10 @@ package it.polimi.db2.gma.GMAWEB.controllers;
 import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
 import it.polimi.db2.gma.GMAEJB.entities.UserEntity;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadEntryException;
+import it.polimi.db2.gma.GMAEJB.exceptions.BadQuestionnaireException;
 import it.polimi.db2.gma.GMAEJB.services.EntryService;
 import it.polimi.db2.gma.GMAEJB.services.QuestionnaireService;
+import org.apache.commons.text.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
@@ -46,18 +48,19 @@ public class QuestionnaireCancelServlet extends HttpServlet {
         HttpSession session = req.getSession();
         UserEntity user = (UserEntity) session.getAttribute("user");
 
-        // Retrieve questionnaire of the day
-        QuestionnaireEntity questionnaire = questionnaireService.findQuestionnaireByDate(LocalDate.now());
-
-        if (questionnaire == null) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not retrieve the questionnaire.");
+        int questionnaireId;
+        try {
+            questionnaireId = Integer.parseInt(StringEscapeUtils.escapeJava(req.getParameter("questionnaireId")));
+        } catch (NumberFormatException e) {
+            resp.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Invalid questionnaireId parameter.");
             return;
         }
 
         try {
-            entryService.addEmptyEntry(user.getId(), questionnaire.getId());
-        } catch (BadEntryException e) {
+            entryService.addEmptyEntryToday(user.getId(), questionnaireId);
+        } catch (BadEntryException | BadQuestionnaireException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            return;
         } catch (PersistenceException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not cancel.");
             return;

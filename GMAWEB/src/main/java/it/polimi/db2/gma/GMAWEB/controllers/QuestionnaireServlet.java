@@ -59,6 +59,7 @@ public class QuestionnaireServlet extends HttpServlet {
         ctx.setVariable("sexs", Sex.values());
         ctx.setVariable("expLevels", ExpertiseLevel.values());
         ctx.setVariable("product", questionnaire.getProduct());
+        ctx.setVariable("questionnaireId", questionnaire.getId());
         ctx.setVariable("questions", questions);
 
         templateEngine.process(questionnairePath, ctx, resp.getWriter());

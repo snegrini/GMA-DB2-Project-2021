@@ -5,6 +5,7 @@ import it.polimi.db2.gma.GMAEJB.entities.UserEntity;
 import it.polimi.db2.gma.GMAEJB.enums.ExpertiseLevel;
 import it.polimi.db2.gma.GMAEJB.enums.Sex;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadEntryException;
+import it.polimi.db2.gma.GMAEJB.exceptions.BadQuestionnaireException;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadWordException;
 import it.polimi.db2.gma.GMAEJB.services.EntryService;
 import it.polimi.db2.gma.GMAEJB.services.QuestionnaireService;
@@ -63,6 +64,14 @@ public class QuestionnaireSubmitServlet extends HttpServlet {
             return;
         }
 
+        int questionnaireId;
+        try {
+            questionnaireId = Integer.parseInt(StringEscapeUtils.escapeJava(req.getParameter("questionnaireId")));
+        } catch (NumberFormatException e) {
+            resp.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Invalid questionnaireId parameter.");
+            return;
+        }
+
         List<String> answers = Arrays.asList(ans);
         answers.forEach(StringEscapeUtils::escapeJava);
 
@@ -96,12 +105,9 @@ public class QuestionnaireSubmitServlet extends HttpServlet {
             return;
         }
 
-        // Retrieve questionnaire of the day
-        QuestionnaireEntity questionnaire = questionnaireService.findQuestionnaireByDate(LocalDate.now());
-
         try {
-            entryService.addNewEntry(user.getId(), questionnaire.getId(), answers, age, sex, expLevel);
-        } catch (BadEntryException e) {
+            entryService.addNewEntryToday(user.getId(), questionnaireId, answers, age, sex, expLevel);
+        } catch (BadQuestionnaireException | BadEntryException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
             return;
         } catch (PersistenceException e) {

@@ -4,6 +4,7 @@ import it.polimi.db2.gma.GMAEJB.entities.*;
 import it.polimi.db2.gma.GMAEJB.enums.ExpertiseLevel;
 import it.polimi.db2.gma.GMAEJB.enums.Sex;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadEntryException;
+import it.polimi.db2.gma.GMAEJB.exceptions.BadQuestionnaireException;
 import it.polimi.db2.gma.GMAEJB.exceptions.BadWordException;
 import it.polimi.db2.gma.GMAEJB.utils.Entry;
 import it.polimi.db2.gma.GMAEJB.utils.QuestionAnswer;
@@ -17,6 +18,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Stateless
@@ -28,6 +30,9 @@ public class EntryService {
 
     @EJB(name = "it.polimi.db2.gma.GMAEJB.services/UserService")
     private UserService userService;
+
+    @EJB(name = "it.polimi.db2.gma.GMAEJB.services/QuestionnaireService")
+    private QuestionnaireService questionnaireService;
 
     public Entry getUserQuestionnaireAnswers(int questionnaireID, int userID) throws BadEntryException {
         String username;
@@ -118,6 +123,21 @@ public class EntryService {
         em.persist(entry);
     }
 
+    public void addEmptyEntryToday(int userId, int questionnaireId) throws BadEntryException, BadQuestionnaireException {
+        // Retrieve questionnaire of the day.
+        QuestionnaireEntity questionnaire = questionnaireService.findQuestionnaireByDate(LocalDate.now());
+
+        if (questionnaire == null) {
+            throw new BadQuestionnaireException("Questionnaire not found.");
+        }
+
+        if (questionnaire.getId() != questionnaireId) {
+            throw new BadQuestionnaireException("Invalid questionnaireId parameter.");
+        }
+
+        addEmptyEntry(userId, questionnaireId);
+    }
+
     public void addNewEntry(int userId, int questionnaireId, List<String> strAnswers, Integer age, Sex sex, ExpertiseLevel expLevel) throws BadEntryException, BadWordException {
         UserEntity user = em.find(UserEntity.class, userId);
         QuestionnaireEntity questionnaire = em.find(QuestionnaireEntity.class, questionnaireId);
@@ -189,6 +209,21 @@ public class EntryService {
         }
     }
 
+    public void addNewEntryToday(int userId, int questionnaireId, List<String> strAnswers, Integer age, Sex sex, ExpertiseLevel expLevel) throws BadEntryException, BadWordException, BadQuestionnaireException {
+        // Retrieve questionnaire of the day.
+        QuestionnaireEntity questionnaire = questionnaireService.findQuestionnaireByDate(LocalDate.now());
+
+        if (questionnaire == null) {
+            throw new BadQuestionnaireException("Questionnaire not found.");
+        }
+
+        if (questionnaire.getId() != questionnaireId) {
+            throw new BadQuestionnaireException("Invalid questionnaireId parameter.");
+        }
+
+        addNewEntry(userId, questionnaireId, strAnswers, age, sex, expLevel);
+    }
+
     public EntryEntity getEntryByIds(int questionnaireId, int userId) throws BadEntryException {
         QuestionnaireEntity questionnaire = em.find(QuestionnaireEntity.class, questionnaireId);
         UserEntity user = em.find(UserEntity.class, userId);
@@ -212,4 +247,5 @@ public class EntryService {
 
         return entry;
     }
+
 }
