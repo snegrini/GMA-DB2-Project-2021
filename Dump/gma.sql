@@ -168,11 +168,11 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`dev`@`localhost`*/ /*!50003 TRIGGER `entry_BEFORE_DELETE` BEFORE DELETE ON `entry` FOR EACH ROW BEGIN
+/*!50003 CREATE*/ /*!50017 DEFINER=`dev`@`localhost`*/ /*!50003 TRIGGER `entry_AFTER_DELETE` AFTER DELETE ON `entry` FOR EACH ROW BEGIN
 	UPDATE `user` u
-    SET u.Points = u.Points - OLD.Points
-    WHERE u.Id = OLD.UserId
-		AND OLD.IsSubmitted = 1;
+		SET u.Points = u.Points - OLD.Points
+		WHERE u.Id = OLD.UserId
+			AND OLD.IsSubmitted = 1;
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -424,4 +424,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-03-24 22:57:41
+-- Dump completed on 2021-04-09 23:02:12
