@@ -45,6 +45,7 @@ public class EntryService {
             questionAnswerList = em.createNamedQuery("EntryEntity.getQuestionsAnswers", QuestionAnswer.class)
                     .setParameter("qid", questionnaireID)
                     .setParameter("uid", userID)
+                    .setHint("javax.persistence.cache.storeMode", "REFRESH") // Pull fresh data to bypass the cache and see the correct list.
                     .getResultList();
 
             if (questionAnswerList.isEmpty()) {
@@ -84,6 +85,7 @@ public class EntryService {
             questionAnswerList = em.createNamedQuery("EntryEntity.getQuestionsAnswers", QuestionAnswer.class)
                     .setParameter("qid", questionnaireID)
                     .setParameter("uid", userInfo.getId())
+                    .setHint("javax.persistence.cache.storeMode", "REFRESH") // Pull fresh data to bypass the cache and see the correct list.
                     .getResultList();
 
             if (questionAnswerList.isEmpty()) {

@@ -25,7 +25,7 @@ public class ProductEntity {
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     private List<ReviewEntity> reviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<QuestionnaireEntity> questionnaires = new ArrayList<>();
 
     public int getId() {
@@ -46,6 +46,19 @@ public class ProductEntity {
 
     public String getImage() {
         return image;
+    }
+
+    public List<QuestionnaireEntity> getQuestionnaires() {
+        return questionnaires;
+    }
+
+    public void addQuestionnaire(QuestionnaireEntity questionnaire) {
+        getQuestionnaires().add(questionnaire);
+        questionnaire.setProduct(this);
+    }
+
+    public void removeQuestionnaire(QuestionnaireEntity questionnaire) {
+        getQuestionnaires().remove(questionnaire);
     }
 
     public List<ReviewEntity> getReviews() {

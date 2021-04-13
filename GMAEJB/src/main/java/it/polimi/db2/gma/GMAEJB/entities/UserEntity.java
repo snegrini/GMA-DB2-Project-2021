@@ -36,7 +36,7 @@ public class UserEntity {
     @Column(name = "IsBlocked", nullable = false)
     private Byte isBlocked = 0;
 
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST}, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH, CascadeType.MERGE}, orphanRemoval = true)
     private List<ReviewEntity> reviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST})

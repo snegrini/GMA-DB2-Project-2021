@@ -37,7 +37,7 @@ public class QuestionnaireService {
                 .orElse(null);
     }
 
-    public QuestionnaireEntity addNewQuestionnaire(LocalDate localDate, int productId, List<String> strQuestions) throws BadProductException, BadQuestionnaireException {
+    public void addNewQuestionnaire(LocalDate localDate, int productId, List<String> strQuestions) throws BadProductException, BadQuestionnaireException {
         ProductEntity product = em.find(ProductEntity.class, productId);
 
         if (product == null) {
@@ -61,8 +61,8 @@ public class QuestionnaireService {
             questionnaire.addQuestion(question);
         }
 
-        em.persist(questionnaire);
-        return questionnaire;
+        product.addQuestionnaire(questionnaire);
+        em.persist(product);
     }
 
     public void deleteQuestionnaire(int questionnaireId) throws BadQuestionnaireException {
@@ -72,8 +72,7 @@ public class QuestionnaireService {
             throw new BadQuestionnaireException("Questionnaire not found.");
         }
 
-        // Pull fresh data from DB, in order to synchronize any DB changes.
-        em.refresh(questionnaire);
+        ProductEntity product = questionnaire.getProduct();
 
         if (questionnaire.getDate().toLocalDate().compareTo(LocalDate.now()) >= 0) {
             throw new BadQuestionnaireException("Cannot delete the selected questionnaire.");
@@ -81,6 +80,7 @@ public class QuestionnaireService {
 
         // Points are removed by using a trigger.
 
+        product.removeQuestionnaire(questionnaire);
         em.remove(questionnaire);
     }
 
@@ -98,7 +98,7 @@ public class QuestionnaireService {
     public List<QuestionnaireEntity> findQuestionnairesUntil(LocalDate localDate) {
         return em.createNamedQuery("QuestionnaireEntity.findAllUntilDate", QuestionnaireEntity.class)
                 .setParameter("date", Date.valueOf(localDate))
-                .setHint("javax.persistence.cache.storeMode", "REFRESH")
+                .setHint("javax.persistence.cache.storeMode", "REFRESH") // Pull fresh data to bypass the cache and see the correct list.
                 .getResultList();
     }
 }

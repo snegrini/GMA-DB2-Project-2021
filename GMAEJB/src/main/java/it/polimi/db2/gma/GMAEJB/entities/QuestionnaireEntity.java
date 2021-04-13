@@ -70,8 +70,16 @@ public class QuestionnaireEntity {
         return questions;
     }
 
+    public void setQuestions(List<QuestionEntity> questions) {
+        this.questions = questions;
+    }
+
     public List<EntryEntity> getEntries() {
         return entries;
+    }
+
+    public void setEntries(List<EntryEntity> entries) {
+        this.entries = entries;
     }
 
     public void addQuestion(QuestionEntity question) {
