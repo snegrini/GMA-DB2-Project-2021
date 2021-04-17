@@ -75,6 +75,13 @@ public class QuestionnaireSubmitServlet extends HttpServlet {
         List<String> answers = Arrays.asList(ans);
         answers.forEach(StringEscapeUtils::escapeJava);
 
+        for (String answer : answers) {
+            if (answer.isEmpty()) {
+                resp.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Missing answer.");
+                return;
+            }
+        }
+
         String ageStr = req.getParameter("age");
         String sexStr = req.getParameter("sex");
         String expLevelStr = req.getParameter("expLevel");
