@@ -68,7 +68,6 @@ public class LoginServlet extends HttpServlet {
 
             templateEngine.process("/WEB-INF/index.html", ctx, resp.getWriter());
         } else {
-
             try {
                 userService.addLoginLog(user.getId());
             } catch (BadUserException e) {

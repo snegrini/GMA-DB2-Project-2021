@@ -40,6 +40,7 @@ public class LoginServlet extends HttpServlet {
         resp.sendRedirect(getServletContext().getContextPath() + "/admin");
     }
 
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String password = StringEscapeUtils.escapeJava(req.getParameter("password"));
         String username = StringEscapeUtils.escapeJava(req.getParameter("username"));
@@ -67,7 +68,6 @@ public class LoginServlet extends HttpServlet {
             templateEngine.process("/WEB-INF/admin/index.html", ctx, resp.getWriter());
         } else {
             req.getSession().setAttribute("admin", admin);
-
             resp.sendRedirect(getServletContext().getContextPath() + "/admin/homepage");
         }
     }
