@@ -64,6 +64,16 @@ public class GreetingsServlet extends HttpServlet {
             return;
         }
 
+        if (entry == null) {
+            resp.sendRedirect(getServletContext().getContextPath() + "/homepage");
+            return;
+        }
+
+        if (entry.getIsSubmitted() == (byte) 0) {
+            resp.sendRedirect(getServletContext().getContextPath() + "/homepage");
+            return;
+        }
+
         int points = entry.getPoints();
 
         ServletContext servletContext = getServletContext();
