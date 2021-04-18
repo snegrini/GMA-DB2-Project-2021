@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,8 +78,15 @@ public class CreationServlet extends HttpServlet {
             return;
         }
 
+        LocalDate localDate;
         // Checks that date is today or later.
-        LocalDate localDate = LocalDate.parse(date);
+        try {
+            localDate = LocalDate.parse(date);
+        } catch (DateTimeParseException e) {
+            resp.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Invalid date. Please select a valid date.");
+            return;
+        }
+
         if (localDate.compareTo(LocalDate.now()) < 0) {
             resp.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Invalid date. Please select a valid date.");
             return;

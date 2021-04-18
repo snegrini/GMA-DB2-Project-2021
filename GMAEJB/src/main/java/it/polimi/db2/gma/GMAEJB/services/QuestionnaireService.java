@@ -12,21 +12,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @Stateless
 public class QuestionnaireService {
     @PersistenceContext(unitName = "GMAEJB")
     private EntityManager em;
-
-    public QuestionnaireEntity findQuestionnaireById(int id) {
-        return em.find(QuestionnaireEntity.class, id);
-    }
-
-    public List<QuestionnaireEntity> findAllQuestionnaires() {
-        return em.createNamedQuery("QuestionnaireEntity.findAll", QuestionnaireEntity.class)
-                .getResultList();
-    }
 
     public QuestionnaireEntity findQuestionnaireByDate(LocalDate localDate) {
         return em.createNamedQuery("QuestionnaireEntity.findByDate", QuestionnaireEntity.class)
@@ -55,6 +47,7 @@ public class QuestionnaireService {
 
         QuestionnaireEntity questionnaire = new QuestionnaireEntity(Date.valueOf(localDate), product);
 
+        Collections.reverse(strQuestions);
         // Build new QuestionEntity objects and add them to the questionnaire.
         for (String strQuestion : strQuestions) {
             QuestionEntity question = new QuestionEntity(strQuestion);

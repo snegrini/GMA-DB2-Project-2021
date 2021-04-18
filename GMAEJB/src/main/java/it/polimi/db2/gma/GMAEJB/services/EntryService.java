@@ -115,6 +115,19 @@ public class EntryService {
             throw new BadEntryException("User or questionnaire not found.");
         }
 
+        // Check if user has already submitted the questionnaire.
+        EntryEntity result = em.createNamedQuery("EntryEntity.findByUserAndQuestionnaire", EntryEntity.class)
+                .setParameter("userId", user.getId())
+                .setParameter("questionnaireId", questionnaire.getId())
+                .setMaxResults(1)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+
+        if (result != null) {
+            throw new BadEntryException("User has already submitted this questionnaire.");
+        }
+
         // Build new EntryEntity object and set the questionnaire to it.
         EntryEntity entry = new EntryEntity();
         entry.setIsSubmitted((byte) 0);
