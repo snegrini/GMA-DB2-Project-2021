@@ -1,5 +1,7 @@
 package it.polimi.db2.gma.GMAWEB.controllers;
 
+import it.polimi.db2.gma.GMAEJB.entities.QuestionnaireEntity;
+import it.polimi.db2.gma.GMAEJB.services.QuestionnaireService;
 import it.polimi.db2.gma.GMAEJB.services.UserService;
 import it.polimi.db2.gma.GMAEJB.utils.LeaderboardRow;
 import org.thymeleaf.TemplateEngine;
@@ -16,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "LeaderboardServlet", value = "/leaderboard")
@@ -24,6 +28,9 @@ public class LeaderboardServlet extends HttpServlet {
 
     @EJB(name = "it.polimi.db2.gma.GMAEJB.services/UserService")
     private UserService userService;
+
+    @EJB(name = "it.polimi.db2.gma.GMAEJB.services/QuestionnaireService")
+    private QuestionnaireService questionnaireService;
 
     public void init() {
         ServletContext servletContext = getServletContext();
@@ -36,9 +43,15 @@ public class LeaderboardServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        List<LeaderboardRow> rows;
+        List<LeaderboardRow> rows = new ArrayList<>();
+        boolean todayHasQuestionnaire;
+
         try {
-            rows = userService.getLeaderboardByDate(new Date(new java.util.Date().getTime()));
+            todayHasQuestionnaire = questionnaireService.findQuestionnaireByDate(LocalDate.now()) != null;
+
+            if (todayHasQuestionnaire) {
+                rows = userService.getLeaderboardByDate(new Date(new java.util.Date().getTime()));
+            }
         } catch (PersistenceException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not retrieve the leaderboard.");
             return;
@@ -48,6 +61,7 @@ public class LeaderboardServlet extends HttpServlet {
 
         ServletContext servletContext = getServletContext();
         WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
+        ctx.setVariable("questionnaire", todayHasQuestionnaire);
         ctx.setVariable("rows", rows);
         String path = "/WEB-INF/leaderboard.html";
 
