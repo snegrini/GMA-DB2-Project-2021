@@ -17,7 +17,7 @@ public class LogoutServlet extends HttpServlet {
             session.removeAttribute("admin");
         }
 
-        resp.sendRedirect(getServletContext().getContextPath());
+        resp.sendRedirect(getServletContext().getContextPath() + "/admin");
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {

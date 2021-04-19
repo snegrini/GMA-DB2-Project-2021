@@ -80,7 +80,7 @@ UNLOCK TABLES;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`dev`@`localhost`*/ /*!50003 TRIGGER `answer_BEFORE_INSERT` BEFORE INSERT ON `answer` FOR EACH ROW BEGIN
-    IF ((SELECT COUNT(*) FROM `offensiveword` WHERE NEW.Answer LIKE CONCAT('%', LOWER(word) ,'%')) > 0) THEN
+    IF (SELECT COUNT(*) FROM `offensiveword` WHERE LOWER(NEW.Answer) REGEXP CONCAT('\\b', LOWER(word), '\\b')) THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Offensive word detected!';
     END IF;
 END */;;

@@ -10,6 +10,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.ejb.EJB;
+import javax.persistence.PersistenceException;
 import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -43,7 +44,14 @@ public class DeletionServlet extends HttpServlet {
         ServletContext servletContext = getServletContext();
         WebContext ctx = new WebContext(req, resp, servletContext, req.getLocale());
 
-        List<QuestionnaireEntity> questionnaires = questionnaireService.findQuestionnairesUntil(LocalDate.now());
+        List<QuestionnaireEntity> questionnaires;
+
+        try {
+            questionnaires = questionnaireService.findQuestionnairesUntil(LocalDate.now());
+        } catch (PersistenceException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not retrieve the questionnaires.");
+            return;
+        }
 
         ctx.setVariable("questionnaires", questionnaires);
 

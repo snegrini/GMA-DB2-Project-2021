@@ -21,7 +21,7 @@
         </div>
 
         <div class="has-text-centered mt-6">
-            Go to the <a href="#" data-th-href="@{/homepage}">homepage</a>
+            Go to the <a href="<%=request.getAttribute("javax.servlet.forward.request_uri").toString().contains("/admin") ? request.getContextPath() + "/admin/homepage" : request.getContextPath() + "/homepage"%>">homepage</a>
         </div>
     </div>
 </section>

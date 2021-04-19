@@ -11,7 +11,7 @@ import java.util.List;
         @NamedQuery(name = "QuestionnaireEntity.findByDate", query = "SELECT q FROM QuestionnaireEntity q WHERE q.date = :date"),
         @NamedQuery(name = "QuestionnaireEntity.findAllUntilDate", query = "SELECT q FROM QuestionnaireEntity q WHERE q.date < :date ORDER BY q.date DESC"),
         @NamedQuery(name = "QuestionnaireEntity.findAll", query = "SELECT q FROM QuestionnaireEntity q"),
-        @NamedQuery(name = "QuestionnaireEntity.getQuestionnairesInfos", query = "SELECT NEW it.polimi.db2.gma.GMAEJB.utils.QuestionnaireInfo(q.id, q.date, p.name) FROM QuestionnaireEntity q INNER JOIN q.product p ORDER BY q.date DESC"),
+        @NamedQuery(name = "QuestionnaireEntity.getQuestionnairesInfos", query = "SELECT NEW it.polimi.db2.gma.GMAEJB.utils.QuestionnaireInfo(q.id, q.date, p.name) FROM QuestionnaireEntity q INNER JOIN q.product p WHERE q.date < :date ORDER BY q.date DESC"),
 })
 public class QuestionnaireEntity {
     @Id

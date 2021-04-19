@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @WebServlet(name = "InspectionServlet", value = "/admin/inspection")
@@ -37,7 +38,7 @@ public class InspectionServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         List<QuestionnaireInfo> questionnaires;
         try {
-            questionnaires = questionnaireService.getQuestionnairesInfos();
+            questionnaires = questionnaireService.getQuestionnairesInfosUntil(LocalDate.now());
         } catch (PersistenceException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not retrieve the questionnaires.");
             return;

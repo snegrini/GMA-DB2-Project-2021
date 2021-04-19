@@ -1,6 +1,7 @@
 package it.polimi.db2.gma.GMAWEB.controllers.admin;
 
 import it.polimi.db2.gma.GMAEJB.exceptions.BadEntryException;
+import it.polimi.db2.gma.GMAEJB.exceptions.BadQuestionnaireException;
 import it.polimi.db2.gma.GMAEJB.services.EntryService;
 import it.polimi.db2.gma.GMAEJB.services.UserService;
 import it.polimi.db2.gma.GMAEJB.utils.Entry;
@@ -51,8 +52,11 @@ public class QuestionnaireServlet extends HttpServlet {
 
             submittedUsers = userService.getQuestionnaireUserInfo(questionnaireId, 1);
             notSubmittedUsers = userService.getQuestionnaireUserInfo(questionnaireId, 0);
-        } catch (Exception e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not retrieve the questionnaire.");
+        } catch (NumberFormatException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid Questionnaire ID");
+            return;
+        } catch (BadQuestionnaireException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
             return;
         }
 

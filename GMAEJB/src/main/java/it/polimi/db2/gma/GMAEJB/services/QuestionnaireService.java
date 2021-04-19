@@ -67,12 +67,14 @@ public class QuestionnaireService {
 
         ProductEntity product = questionnaire.getProduct();
 
+        // Refresh the questionnaire in order to have the updated date
+        em.refresh(questionnaire);
+
         if (questionnaire.getDate().toLocalDate().compareTo(LocalDate.now()) >= 0) {
             throw new BadQuestionnaireException("Cannot delete the selected questionnaire.");
         }
 
         // Points are removed by using a trigger.
-
         product.removeQuestionnaire(questionnaire);
         em.remove(questionnaire);
     }
@@ -83,8 +85,10 @@ public class QuestionnaireService {
                 .getResultList();
     }
 
-    public List<QuestionnaireInfo> getQuestionnairesInfos() {
+    public List<QuestionnaireInfo> getQuestionnairesInfosUntil(LocalDate localDate) {
         return em.createNamedQuery("QuestionnaireEntity.getQuestionnairesInfos", QuestionnaireInfo.class)
+                .setParameter("date", Date.valueOf(localDate))
+                .setHint("javax.persistence.cache.storeMode", "REFRESH") // Pull fresh data to bypass the cache and see the correct list.
                 .getResultList();
     }
 

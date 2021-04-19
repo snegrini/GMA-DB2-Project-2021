@@ -16,6 +16,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 @Stateless
@@ -102,6 +103,13 @@ public class UserService {
 
         if (questionnaire == null) {
             throw new BadQuestionnaireException("Invalid questionnaire ID!");
+        }
+
+        // Refresh the questionnaire in order to have the updated date
+        em.refresh(questionnaire);
+
+        if (questionnaire.getDate().toLocalDate().compareTo(LocalDate.now()) >= 0) {
+            throw new BadQuestionnaireException("Cannot inspect the selected questionnaire.");
         }
 
         return em.createNamedQuery("UserEntity.getEntriesUserInfo", UserInfo.class)
