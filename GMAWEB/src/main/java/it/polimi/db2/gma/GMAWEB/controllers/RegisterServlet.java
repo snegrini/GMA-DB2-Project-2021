@@ -1,6 +1,7 @@
 package it.polimi.db2.gma.GMAWEB.controllers;
 
 import it.polimi.db2.gma.GMAEJB.entities.UserEntity;
+import it.polimi.db2.gma.GMAEJB.exceptions.BadUserException;
 import it.polimi.db2.gma.GMAEJB.exceptions.CredentialsException;
 import it.polimi.db2.gma.GMAEJB.services.UserService;
 import it.polimi.db2.gma.GMAWEB.exceptions.InputException;
@@ -82,6 +83,14 @@ public class RegisterServlet extends HttpServlet {
             templateEngine.process(registerPath, ctx, resp.getWriter());
         } else {
             req.getSession().setAttribute("user", user);
+
+            try {
+                userService.addLoginLog(user.getId());
+            } catch (BadUserException e) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+                return;
+            }
+
             resp.sendRedirect(getServletContext().getContextPath() + "/homepage");
         }
     }
