@@ -1,7 +1,7 @@
 # GMA - Gamified Marketing Application - Data Bases 2 Project - A.Y. 2020-2021
 GMA - Gamified Marketing Application is a Java EE project realized for the Data Bases 2 course at Politecnico di Milano.\
-Specification of the project are described inside the [specification document](assignment/specification.pdf).\
-Design choices and implementation are described inside the released [presentation](assignment/presentation.pdf).
+Specification of the project are described inside the [specification document](Assignment/specification.pdf).\
+Design choices and implementation are described inside the released [presentation](Assignment/presentation.pdf).
 
 ## Development
 This project has been developed with the following technologies:
